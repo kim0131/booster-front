@@ -3,8 +3,10 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { jsx, css, Global, ClassNames } from "@emotion/react";
-import Header from "../component/header";
-import Footer from "../component/footer";
+import { useRouter } from "next/router";
+import Header from "../../component/header";
+import Footer from "../../component/footer";
+
 const Home: NextPage = () => {
   return (
     <>
