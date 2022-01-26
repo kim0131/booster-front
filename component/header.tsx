@@ -10,7 +10,7 @@ const Header: NextPage = () => {
       display: flex;
     }
   `;
-  console.log(header_css);
+
   return (
     <>
       <div
