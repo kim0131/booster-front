@@ -13,6 +13,7 @@
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "axios": "^0.25.0",
+    "momnet": "^2.29.1",
     "next": "^10.0.1",
     "next-auth": "^4.1.2",
     "react": "17.0.2",

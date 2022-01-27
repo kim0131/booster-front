@@ -8,7 +8,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 const Header: NextPage = () => {
   const { data: session, status } = useSession();
-
+  // console.log(session)
   return (
     <>
       <div
