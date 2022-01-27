@@ -4,12 +4,10 @@ import Image from "next/image";
 import { jsx, css, Global, ClassNames } from "@emotion/react";
 import Link from "next/link";
 import styled from "@emotion/styled";
+import { signIn, signOut, useSession } from "next-auth/react";
+
 const Header: NextPage = () => {
-  const header_css = css`
-    head_container {
-      display: flex;
-    }
-  `;
+  const { data: session, status } = useSession();
 
   return (
     <>
@@ -66,9 +64,15 @@ const Header: NextPage = () => {
           <Link href="/">
             <a>글쓰기</a>
           </Link>
-          <Link href="/accounts">
-            <a>로그인/회원가입</a>
-          </Link>
+          {status === "authenticated" ? (
+            <div onClick={() => signOut()}>
+              {session?.user?.name}님<a>로그아웃</a>
+            </div>
+          ) : (
+            <Link href="/accounts">
+              <a>로그인/회원가입</a>
+            </Link>
+          )}
         </div>
       </div>
     </>
