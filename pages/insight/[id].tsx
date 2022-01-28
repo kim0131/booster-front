@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import Header from "../../component/header";
 import Footer from "../../component/footer";
 
-const Home: NextPage = () => {
+const InsightId: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
   console.log(id);
@@ -18,4 +18,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default InsightId;

@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import Header from "../../component/header";
 import Footer from "../../component/footer";
 
-const Home: NextPage = () => {
+const MyCategory: NextPage = () => {
   const router = useRouter();
   const { category } = router.query;
   console.log(category);
@@ -18,4 +18,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default MyCategory;

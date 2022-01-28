@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import Header from "../../component/header";
 import Footer from "../../component/footer";
 
-const Home: NextPage = () => {
+const BusinessInfo: NextPage = () => {
   return (
     <>
       <Header />
@@ -16,4 +16,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default BusinessInfo;

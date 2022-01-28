@@ -5,7 +5,7 @@ import Image from "next/image";
 import { jsx, css, Global, ClassNames } from "@emotion/react";
 import Header from "../../component/header";
 import Footer from "../../component/footer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextField from "../../component/input/text-field";
 import SolidButton from "../../component/buttons/solid-button";
 import axios from "axios";
@@ -30,9 +30,8 @@ interface IStateLoginInvalid {
 }
 
 const SignUp: NextPage = () => {
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [stateNum, setStatenum] = useState(1);
-  const nowtime = moment().format("YYYY-MM-DD HH:mm:ss");
-  let newDate = new Date(nowtime);
   const [signUpForm, setsignUpForm] = useState<MemberData>({
     mbId: "",
     mbPw: "",
@@ -42,7 +41,7 @@ const SignUp: NextPage = () => {
     mbNick: "",
     mbPh: "",
     mbPwToken: "",
-    mbDateTime: newDate,
+    mbDateTime: currentDate,
     mbBusinessNum: 0,
   });
 

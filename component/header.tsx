@@ -8,7 +8,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 const Header: NextPage = () => {
   const { data: session, status } = useSession();
-  // console.log(session)
+  // console.log(window.location.origin);
   return (
     <>
       <div
@@ -66,11 +66,12 @@ const Header: NextPage = () => {
           </Link>
           {status === "authenticated" ? (
             <div
-              onClick={() =>
+              onClick={() => {
                 signOut({
-                  callbackUrl: `${window.location.origin}`,
-                })
-              }
+                  // callbackUrl: `${window.location.origin}`,
+                });
+                console.log(window.location.origin);
+              }}
             >
               {session?.user?.name}님<a>로그아웃</a>
             </div>

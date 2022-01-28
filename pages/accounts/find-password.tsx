@@ -4,7 +4,7 @@ import Image from "next/image";
 import { jsx, css, Global, ClassNames } from "@emotion/react";
 import Header from "../../component/header";
 import Footer from "../../component/footer";
-const Home: NextPage = () => {
+const FindPassWord: NextPage = () => {
   return (
     <>
       <Header />
@@ -13,4 +13,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default FindPassWord;
