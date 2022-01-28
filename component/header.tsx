@@ -65,7 +65,13 @@ const Header: NextPage = () => {
             <a>글쓰기</a>
           </Link>
           {status === "authenticated" ? (
-            <div onClick={() => signOut()}>
+            <div
+              onClick={() =>
+                signOut({
+                  callbackUrl: `${window.location.origin}`,
+                })
+              }
+            >
               {session?.user?.name}님<a>로그아웃</a>
             </div>
           ) : (
