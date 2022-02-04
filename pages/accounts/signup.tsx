@@ -3,11 +3,11 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { jsx, css, Global, ClassNames } from "@emotion/react";
-import Header from "../../component/header";
-import Footer from "../../component/footer";
+import Header from "../../components/templates/header";
+import Footer from "../../components/templates/footer";
 import { useState } from "react";
-import TextField from "../../component/input/text-field";
-import SolidButton from "../../component/buttons/solid-button";
+import TextField from "../../components/input/text-field";
+import SolidButton from "../../components/buttons/solid-button";
 import axios from "axios";
 interface MemberData {
   mbId?: string;
