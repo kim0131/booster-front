@@ -288,6 +288,7 @@ interface IPropsTextField {
   error?: React.ReactNode;
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
+  type?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
@@ -306,6 +307,7 @@ const TextField = ({
   prefix,
   suffix,
   placeholder,
+  type,
   onChange,
   onFocus,
 }: IPropsTextField) => (
@@ -313,7 +315,7 @@ const TextField = ({
     {label && <Label size={size}>{label}</Label>}
     <Wrapper width={width} size={size} isDisabled={isDisabled}>
       <Input
-        type="text"
+        type={type ? type : "text"}
         name={name}
         value={value}
         inputSize={size}

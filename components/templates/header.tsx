@@ -127,7 +127,7 @@ const Header = () => {
           <Button variants="solid" size="small">
             글쓰기
           </Button>
-          <Button variants="ghost" size="small">
+          <Button variants="ghost" size="small" onClick={() => signIn()}>
             로그인
           </Button>
           {!isDesktop && (

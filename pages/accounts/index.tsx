@@ -5,6 +5,9 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import Header from "@components/templates/header";
 import Footer from "@components/templates/footer";
+import TextField from "@components/elements/text-field";
+import { IconAdd } from "@components/icons";
+import Button from "@components/elements/button";
 
 const Login: NextPage = () => {
   const router = useRouter();
@@ -18,6 +21,7 @@ const Login: NextPage = () => {
     // Form 안에서 이메일, 패스워드 가져오기
     const username = e.target.username.value;
     const password = e.target.password.value;
+    console.log(username, password);
     const member = await axios
       .post("/api2/login", {
         mbId: username,
@@ -36,7 +40,7 @@ const Login: NextPage = () => {
       .catch(function (error) {
         if (error.response) {
           // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
-          console.log(error.response.data);
+          // console.log(error.response.data);
           alert(error.response.data.msg);
         } else if (error.request) {
           // 요청이 이루어 졌으나 응답을 받지 못했습니다.
@@ -54,30 +58,28 @@ const Login: NextPage = () => {
     <>
       <Header />
       <form onSubmit={login}>
-        <label>
-          이메일 :
-          <input
-            type="text"
-            name="username"
-            placeholder="아이디를 입력하세요"
-          />
-        </label>
-        <label>
-          비밀번호 :
-          <input
-            type="password"
-            name="password"
-            placeholder="비밀번호를 입력하세요"
-          />
-        </label>
-        <div className="button_container">
-          <button type="submit">로그인</button>
-          <Link href="/accounts/signup">
-            <button>
-              <a>회원가입</a>
-            </button>
-          </Link>
-        </div>
+        <TextField
+          label="아이디"
+          placeholder="아이디를 입력하세요"
+          caption="아이디 틀림"
+          name="username"
+          type="text"
+        />
+        <TextField
+          label="비밀번호"
+          placeholder="비밀번호를 입력하세요"
+          caption="비밀번호 틀림"
+          name="password"
+          type="password"
+        />
+        <Button variants="solid" color="primary" size="large">
+          로그인
+        </Button>
+        <Link href="/accounts/signup">
+          <Button variants="solid" color="primary" size="large">
+            <a>회원가입</a>
+          </Button>
+        </Link>
       </form>
       <Footer />
     </>
