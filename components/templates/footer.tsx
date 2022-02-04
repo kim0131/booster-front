@@ -1,4 +1,5 @@
 import { companyInfo } from "@core/config/company-info";
+import { footerNavigationConfig } from "@core/config/navigation";
 import styled from "@emotion/styled";
 import Link from "next/link";
 
@@ -57,11 +58,9 @@ const Footer = () => {
       <Container>
         <Wrapper>
           <Nav>
-            <NavItem>커뮤니티소개</NavItem>
-            <NavItem>이용약관</NavItem>
-            <NavItem>개인정보처리방침</NavItem>
-            <NavItem>도움센터</NavItem>
-            <NavItem>채용</NavItem>
+            {footerNavigationConfig.map(nav => (
+              <NavItem key={nav.id}>{nav.content}</NavItem>
+            ))}
           </Nav>
           <Info>
             {companyInfo.company_name}
