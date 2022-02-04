@@ -7,6 +7,7 @@ import useDesktop from "@core/hook/use-desktop";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 import React from "react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 interface IPropsNavItem {
   isRoute: boolean;
@@ -85,6 +86,7 @@ const Util = styled.div`
 `;
 
 const Header = () => {
+  const { data: session, status } = useSession();
   const router = useRouter();
   const isDesktop = useDesktop();
 

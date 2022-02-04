@@ -16,12 +16,12 @@ const useDesktop = () => {
     const media = window.matchMedia(mediaQuery[2]);
     media.addEventListener("change", e => updateTarget(e));
 
-    // Check on mount (callback is not called until a change occurs)
     if (media.matches) {
       setTargetReached(true);
     }
 
     return () => media.removeEventListener("change", e => updateTarget(e));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return targetReached;
