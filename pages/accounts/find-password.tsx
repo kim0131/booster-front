@@ -1,8 +1,8 @@
+import type { NextPage } from "next";
 import Footer from "@components/templates/footer";
 import Header from "@components/templates/header";
-import type { NextPage } from "next";
 
-const MyBooster: NextPage = () => {
+const FindPassword: NextPage = () => {
   return (
     <>
       <Header />
@@ -11,4 +11,4 @@ const MyBooster: NextPage = () => {
   );
 };
 
-export default MyBooster;
+export default FindPassword;

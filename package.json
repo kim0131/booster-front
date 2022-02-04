@@ -2,7 +2,7 @@
   "name": "booster",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -14,14 +14,16 @@
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "axios": "^0.25.0",
-    "http-proxy-middleware": "^2.0.2",
-    "next": "12.0.8",
+    "momnet": "^2.29.1",
+    "next": "^10.0.1",
+    "next-auth": "^4.1.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-select": "^5.2.2"
   },
   "devDependencies": {
     "@emotion/babel-plugin": "^11.7.2",
+    "@types/next-auth": "^3.15.0",
     "@types/node": "17.0.9",
     "@types/react": "17.0.38",
     "eslint": "8.7.0",

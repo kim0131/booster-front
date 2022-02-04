@@ -8,7 +8,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Header />
-      <Footer />
+
       <div
         style={{
           display: "flex",
@@ -42,6 +42,7 @@ const Home: NextPage = () => {
           caption="아아하하"
         />
       </div>
+      <Footer />
     </>
   );
 };

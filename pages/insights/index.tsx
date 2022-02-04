@@ -2,7 +2,7 @@ import Footer from "@components/templates/footer";
 import Header from "@components/templates/header";
 import type { NextPage } from "next";
 
-const MyBooster: NextPage = () => {
+const Insights: NextPage = () => {
   return (
     <>
       <Header />
@@ -11,4 +11,4 @@ const MyBooster: NextPage = () => {
   );
 };
 
-export default MyBooster;
+export default Insights;

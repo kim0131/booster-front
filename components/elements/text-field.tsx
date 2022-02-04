@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { kMaxLength } from "buffer";
 import React from "react";
 
 // Style
@@ -275,7 +276,10 @@ const Error = styled.div`
 interface IPropsTextField {
   state?: string;
   size?: string;
+  name?: string;
+  value?: string;
   width?: string;
+  maxLength?: number;
   isDisabled?: boolean;
   isRounded?: boolean;
   label?: string;
@@ -291,9 +295,12 @@ interface IPropsTextField {
 const TextField = ({
   label,
   width = "auto",
+  size = "medium",
+  name,
+  value,
   caption,
   error,
-  size = "medium",
+  maxLength,
   isDisabled = false,
   isRounded = false,
   prefix,
@@ -307,9 +314,12 @@ const TextField = ({
     <Wrapper width={width} size={size} isDisabled={isDisabled}>
       <Input
         type="text"
+        name={name}
+        value={value}
         inputSize={size}
         disabled={isDisabled}
         placeholder={placeholder}
+        maxLength={maxLength}
         onChange={onChange}
         onFocus={onFocus}
       />

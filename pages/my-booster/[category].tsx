@@ -1,13 +1,9 @@
 import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
-import { jsx, css, Global, ClassNames } from "@emotion/react";
+import Header from "@components/templates/header";
+import Footer from "@components/templates/footer";
 import { useRouter } from "next/router";
-import Header from "../../components/templates/header";
-import Footer from "../../components/templates/footer";
 
-const Home: NextPage = () => {
+const MyCategory: NextPage = () => {
   const router = useRouter();
   const { category } = router.query;
   console.log(category);
@@ -19,4 +15,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default MyCategory;
