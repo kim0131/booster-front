@@ -15,14 +15,14 @@ export default NextAuth({
       credentials: {
         username: { label: "Username", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
-        nickname:{ label: "nickname", type: "text" },
+        nickname: { label: "nickname", type: "text" },
       },
       async authorize(credentials, req) {
         // Add logic here to look up the user from the credentials supplied
         const username = credentials?.username;
         const nickname = credentials?.nickname;
         //이유를 모르겠으나... 아이디는 email, 닉네임은 name에 할당
-        const user = {email:username,name : nickname };
+        const user = { email: username, name: nickname };
         if (user) {
           // Any object returned will be saved in `user` property of the JWT
 

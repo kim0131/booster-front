@@ -1,7 +1,7 @@
 import Button from "@components/elements/button";
 import Logo from "@components/elements/logo";
 import TextField from "@components/elements/text-field";
-import { IconMenu, IconSearch } from "@components/icons";
+import { IconMenu, IconProfile, IconSearch } from "@components/icons";
 import { globalNavigationConfig } from "@core/config/navigation";
 import useDesktop from "@core/hook/use-desktop";
 import styled from "@emotion/styled";
@@ -87,6 +87,7 @@ const Util = styled.div`
 
 const Header = () => {
   const { data: session, status } = useSession();
+
   const router = useRouter();
   const isDesktop = useDesktop();
 
@@ -127,9 +128,21 @@ const Header = () => {
           <Button variants="solid" size="small">
             글쓰기
           </Button>
-          <Button variants="ghost" size="small" onClick={() => signIn()}>
-            로그인
-          </Button>
+          {status == "authenticated" ? (
+            <div>
+              <Button variants="ghost" size="small">
+                <IconProfile />
+              </Button>
+              <Button variants="ghost" size="small" onClick={() => signOut()}>
+                임시 로그아웃 버튼
+              </Button>
+            </div>
+          ) : (
+            <Button variants="ghost" size="small" onClick={() => signIn()}>
+              로그인
+            </Button>
+          )}
+
           {!isDesktop && (
             <Button variants="ghost" size="small">
               <IconSearch />
