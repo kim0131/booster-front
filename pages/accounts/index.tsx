@@ -1,45 +1,69 @@
 import type { NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
-import Link from "next/link";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Header from "@components/templates/header";
 import Footer from "@components/templates/footer";
 import TextField from "@components/elements/text-field";
-import { IconAdd } from "@components/icons";
 import Button from "@components/elements/button";
+import AccountsLayout from "@components/layouts/accounts/accounts-layout";
+import { Body1, Body2, Header4 } from "@components/elements/types";
+import { accountsDescription } from "@core/config/description";
+import React, { useState } from "react";
+import theme from "@components/styles/theme";
+import { IAccountsData } from "@core/interfaces/accounts";
+import { accountsNavigation } from "@core/config/navigation";
 
-import styled from "@emotion/styled";
-const Container = styled.header`
-  // position: sticky;
-  width: 25rem;
-  top: 0;
-  margin: 0 auto;
-`;
+interface IStateAccounts {
+  data: {
+    mb_id: IAccountsData["mb_id"];
+    mb_pw: IAccountsData["mb_pw"];
+  };
+  invalid?: string;
+  isLoading: boolean;
+}
 
-const ButtonBox = styled.div`
-  display: flex;
-  justify-content: space-around;
-`;
-const Login: NextPage = () => {
+const Accounts: NextPage = () => {
   const router = useRouter();
+  const [state, setState] = useState<IStateAccounts>({
+    data: {
+      mb_id: "",
+      mb_pw: "",
+    },
+    invalid: "",
+    isLoading: false,
+  });
   const { data: session, status } = useSession();
 
   if (status == "authenticated") {
     router.push("/");
   }
-  const login = async (e: any) => {
-    // 원래 실행되는 이벤트 취소
+
+  const onClickLink = (
+    e: React.MouseEvent<HTMLButtonElement | HTMLParagraphElement>,
+  ) => {
     e.preventDefault();
-    // Form 안에서 이메일, 패스워드 가져오기
-    const mb_id = e.target.mb_id.value;
-    const mb_pw = e.target.mb_pw.value;
-    console.log(mb_id, mb_pw);
+    const link = e.currentTarget.dataset.value;
+    link && router.push(link);
+  };
+
+  const onChangeAccounts = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.currentTarget;
+    setState({
+      ...state,
+      data: {
+        ...state.data,
+        [name]: value,
+      },
+      invalid: "",
+    });
+  };
+
+  const onClickLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setState({ ...state, isLoading: true });
     const member = await axios
-      .post("/api2/login", {
-        mb_id: mb_id,
-        mb_pw: mb_pw,
-      })
+      .post("/api2/login", state.data)
       .then((res: any) => {
         const user = res.data.result[0];
         console.log(user);
@@ -70,37 +94,81 @@ const Login: NextPage = () => {
   return (
     <>
       <Header />
-      <Container>
-        <form onSubmit={login}>
-          <TextField
-            label="아이디"
-            placeholder="아이디를 입력하세요"
-            error="아이디 틀림"
-            name="mb_id"
-            type="text"
-          />
-          <TextField
-            label="비밀번호"
-            placeholder="비밀번호를 입력하세요"
-            error="비밀번호 틀림"
-            name="mb_pw"
-            type="password"
-          />
-          <ButtonBox>
-            <Button variants="solid" color="primary" size="large">
-              로그인
+      <AccountsLayout
+        title={
+          <>
+            <Header4>{accountsDescription.accounts.title}</Header4>
+            <Body1>{accountsDescription.accounts.description}</Body1>
+          </>
+        }
+        section1={
+          <>
+            <TextField
+              placeholder="아이디를 입력하세요"
+              name="mb_id"
+              type="text"
+              size="large"
+              width="100%"
+              onChange={onChangeAccounts}
+            />
+            <TextField
+              placeholder="비밀번호를 입력하세요"
+              name="mb_pw"
+              type="password"
+              size="large"
+              onChange={onChangeAccounts}
+            />
+            {state.invalid && (
+              <Body2 color={theme.color.red[600]}>{state.invalid}</Body2>
+            )}
+          </>
+        }
+        section2={
+          <>
+            <Button
+              variants="solid"
+              color="primary"
+              size="large"
+              isDisabled={state.data.mb_id && state.data.mb_pw ? false : true}
+              isLoading={state.isLoading}
+              onClick={onClickLogin}
+            >
+              {accountsNavigation[0].content}
             </Button>
-            <Button variants="solid" color="primary" size="large">
-              <Link href="/accounts/signup">
-                <a>회원가입</a>
-              </Link>
+            <Button
+              variants="light"
+              size="large"
+              onClick={onClickLink}
+              dataValue={accountsNavigation[1].url}
+            >
+              {accountsNavigation[1].content}
             </Button>
-          </ButtonBox>
-        </form>
-      </Container>
+          </>
+        }
+        find={
+          <>
+            <Body2
+              isLink
+              data-value={accountsNavigation[2].url}
+              onClick={onClickLink}
+              color={theme.color.gray[500]}
+            >
+              {accountsNavigation[2].content}
+            </Body2>
+            <Body2
+              isLink
+              data-value={accountsNavigation[3].url}
+              onClick={onClickLink}
+              color={theme.color.gray[500]}
+            >
+              {accountsNavigation[3].content}
+            </Body2>
+          </>
+        }
+      />
       <Footer />
     </>
   );
 };
 
-export default Login;
+export default Accounts;

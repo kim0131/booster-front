@@ -4,7 +4,11 @@ import Footer from "@components/templates/footer";
 import Button from "@components/elements/button";
 import TextField from "@components/elements/text-field";
 import { IconAdd } from "@components/icons";
+import useToast from "@core/hook/use-toast";
+import Callout from "@components/elements/callout";
+
 const Home: NextPage = () => {
+  const toast = useToast();
   return (
     <>
       <Header />
@@ -19,7 +23,7 @@ const Home: NextPage = () => {
       >
         <Button isDisabled>
           <IconAdd />
-          LG 에너지솔루션
+          {toast.message}
         </Button>
         <Button
           variants="ghost"
@@ -29,17 +33,25 @@ const Home: NextPage = () => {
           onClick={() => console.log("ddd")}
         >
           <IconAdd />
-          LG 에너지솔루션
+          ㅠㅠ
         </Button>
-        <Button variants="solid" color="primary" size="large">
+        <Button
+          variants="solid"
+          color="primary"
+          size="large"
+          onClick={() => {
+            toast.mutate("성공");
+          }}
+        >
           <IconAdd />
-          LG 에너지솔루션
+          ㅠㅠ
         </Button>
         <TextField
           label="dada"
           prefix={<IconAdd />}
+          size="large"
           placeholder="test"
-          caption="아아하하"
+          error="아아하하"
         />
       </div>
       <Footer />

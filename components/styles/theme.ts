@@ -1,11 +1,9 @@
-import { mediaQuery } from "@core/config/media-query";
-
 const theme = {
   screen: {
-    xs: `@media ${mediaQuery[0]}`,
-    sm: `@media ${mediaQuery[1]}`,
-    md: `@media ${mediaQuery[2]}`,
-    lg: `@media ${mediaQuery[3]}`,
+    xs: `@media (min-width: 640px)`,
+    sm: `@media (min-width: 768px)`,
+    md: `@media (min-width: 1024px)`,
+    lg: `@media (min-width: 1280px)`,
   },
   fontSize: {
     header1: "4rem",
@@ -84,6 +82,26 @@ const theme = {
       800: "#9f1239",
       900: "#881337",
     },
+  },
+  shadow: {
+    xs: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+    sm: "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)",
+    md: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)",
+    lg: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)",
+    xl: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
+    inset: {
+      top: "inset 0px 1px 0px #d4d4d8",
+      bottom: "inset 0px -1px 0px #d4d4d8",
+    },
+  },
+  rounded: {
+    xs: "0.25rem",
+    sm: "0.375rem",
+    md: "0.5rem",
+    lg: "0.75rem",
+    xl: "1rem",
+    xxl: "1.5rem",
+    full: "9999px",
   },
 };
 

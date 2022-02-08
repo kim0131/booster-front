@@ -28,7 +28,7 @@ const Container = styled.div<IPropsContainer>`
 const Dot = styled.div<IPropsDot>`
   width: ${props => (props.size === "small" ? "0.5rem" : "0.625rem")};
   height: ${props => (props.size === "small" ? "0.5rem" : "0.625rem")};
-  border-radius: 9999px;
+  border-radius: ${props => props.theme.rounded.full};
   background-color: ${props => {
     switch (props.color) {
       case "gray":

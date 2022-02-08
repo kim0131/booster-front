@@ -8,268 +8,263 @@ import Button from "@components/elements/button";
 import Footer from "@components/templates/footer";
 import TextField from "@components/elements/text-field";
 import Header from "@components/templates/header";
-import {
-  mb_id_vaildate,
-  mb_nick_vaildate,
-  mb_pw_vaildate,
-} from "@core/validate/signupvalidate";
+import { IAccountsData } from "@core/interfaces/accounts";
+import AccountsLayout from "@components/layouts/accounts/accounts-layout";
+import { Body1, Body2, Header4 } from "@components/elements/types";
+import { accountsDescription } from "@core/config/description";
+import { mb_id_vaildate, mb_pw_vaildate } from "@core/validate/signupvalidate";
 
-interface MemberData {
-  mb_id?: string;
-  mb_pw?: string;
-  mb_pw2?: string;
-  mb_email?: string;
-  mb_name?: string;
-  mb_nick?: string;
-  mb_ph?: string;
-  mb_pwtoken?: string;
-  mb_datetime?: Date;
-  mb_businessnum?: number;
+interface IStateSignup {
+  data: IAccountsData;
+  invalid: { [key in string]: string };
+  page: number;
+  isLoading: boolean;
 }
 
-interface IStateSignUpInvalid {
-  mb_id_msg?: string;
-  mb_pw_msg?: string;
-  mb_pw2_msg?: string;
-  mb_email_msg?: string;
-  mb_name_msg?: string;
-  mb_nick_msg?: string;
-  mb_ph_msg?: string;
-  mb_pwtoken_msg?: string;
-  mb_datetime_msg?: string;
-  mb_businessnum_msg?: string;
-}
-const Container = styled.header`
-  // position: sticky;
-  width: 25rem;
-  top: 0;
-  margin: 0 auto;
-`;
-const SignUp: NextPage = () => {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [stateNum, setStatenum] = useState(1);
-  const [signUpForm, setsignUpForm] = useState<MemberData>({
-    mb_id: "",
-    mb_pw: "",
-    mb_pw2: "",
-    mb_email: "",
-    mb_name: "",
-    mb_nick: "",
-    mb_ph: "",
-    mb_pwtoken: "",
-    mb_datetime: currentDate,
-    mb_businessnum: 0,
+const Signup: NextPage = () => {
+  const [state, setState] = useState<IStateSignup>({
+    data: {
+      mb_id: "",
+      mb_pw: "",
+      mb_pw2: "",
+      mb_email: "",
+      mb_name: "",
+      mb_nick: "",
+      mb_ph: "",
+      mb_pw_token: "",
+      mb_datetime: new Date(),
+      mb_business_num: "",
+    },
+    invalid: {
+      mb_id: "",
+      mb_pw: "",
+      mb_pw2: "",
+      mb_email: "",
+      mb_name: "",
+      mb_nick: "",
+      mb_ph: "",
+      mb_pw_token: "",
+      mb_datetime: "",
+      mb_business_num: "",
+    },
+    page: 1,
+    isLoading: false,
   });
 
-  const [loginInvalid, setLoginInvalid] = useState<IStateSignUpInvalid>({
-    mb_id_msg: "",
-    mb_pw_msg: "",
-    mb_pw2_msg: "",
-    mb_email_msg: "",
-    mb_name_msg: "",
-    mb_nick_msg: "",
-    mb_ph_msg: "",
-    mb_pwtoken_msg: "",
-    mb_datetime_msg: "",
-    mb_businessnum_msg: "",
-  });
-
-  const onChangeTextField = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeSignup = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
-    setsignUpForm({ ...signUpForm, [name]: value });
+    setState({
+      ...state,
+      data: {
+        ...state.data,
+        [name]: value,
+      },
+      invalid: {
+        ...state.invalid,
+        [name]: "",
+      },
+    });
   };
 
-  const onFocusTextField = (e: React.FocusEvent<HTMLInputElement>) => {
+  const onFocusSignup = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name } = e.currentTarget;
-    const err_meg = name + "_msg";
-
-    setLoginInvalid({ ...loginInvalid, [err_meg]: "" });
+    setState({
+      ...state,
+      invalid: {
+        ...state.invalid,
+        [name]: "",
+      },
+    });
   };
 
-  const onClickLoginButton1 = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-  ) => {
+  const onClickNext = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
-    if (stateNum == 1) {
-      let pass_fail = false;
-      await mb_id_vaildate(signUpForm.mb_id).then(res => {
-        if (res.error) {
-          setLoginInvalid({ ...loginInvalid, mb_id_msg: res.error });
-          pass_fail = false;
-        } else {
-          pass_fail = true;
-        }
-      });
-
-      await mb_pw_vaildate(signUpForm.mb_pw).then(res => {
-        if (res.error) {
-          setLoginInvalid({ ...loginInvalid, mb_pw_msg: res.error });
-          pass_fail = false;
-        } else {
-          pass_fail = true;
-        }
-      });
-      if (signUpForm.mb_pw != signUpForm.mb_pw2) {
-        setLoginInvalid({
-          ...loginInvalid,
-          mb_pw2_msg: "비밀번호가 일치하지 않습니다.",
-        });
-        pass_fail = false;
-      } else {
-        pass_fail = true;
-      }
-      if (pass_fail == true) {
-        setStatenum(stateNum + 1);
-      }
-    }
-
-    if (stateNum == 2) {
-      let pass_fail = false;
-      await mb_nick_vaildate(signUpForm.mb_nick).then(res => {
+    await mb_id_vaildate(state.data.mb_id).then(res => {
+      if (res.error) {
         console.log(res.error);
-        if (res.error) {
-          setLoginInvalid({ ...loginInvalid, mb_nick_msg: res.error });
-          pass_fail = false;
-        } else {
-          pass_fail = true;
-        }
-      });
-      // const signInfo = await axios
-      //   .post("/api2/signup", {
-      //     mbId: signUpForm.mb_id,
-      //     mb_pw: signUpForm.mb_pw,
-      //     mb_email: signUpForm.mb_email,
-      //     mb_name: signUpForm.mb_name,
-      //     mb_ph: signUpForm.mb_ph,
-      //     mb_pwtoken: signUpForm.mb_pwtoken,
-      //     mb_datetime: signUpForm.mb_datetime,
-      //     mb_businessnum: signUpForm.mb_businessnum,
-      //     mb_nick: signUpForm.mb_nick,
-      //   })
-      //   .then((res: any) => {})
-      //   .catch(function (error) {
-      //     if (error.response) {
-      //       // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
-      //       console.log(error.response.data);
-      //       alert(error.response.data.msg);
-      //     } else if (error.request) {
-      //       console.log(error.request);
-      //     } else {
-      //       // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
-      //       console.log("Error", error.message);
-      //     }
-      //   });
-    }
+        setState({ ...state, invalid: { mb_id: res.error } });
+        return;
+      }
+    });
+
+    await mb_pw_vaildate(state.data.mb_pw).then(res => {
+      if (res.error) {
+        console.log(res.error);
+        setState({ ...state, invalid: { mb_pw: res.error } });
+        return;
+      }
+    });
+    setState({ ...state, page: 2 });
   };
 
-  const onClickLoginButton2 = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-  ) => {
+  const onClickConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (stateNum == 1) {
-      router.push("/accounts");
-    }
 
-    if (stateNum == 2) {
-      setStatenum(stateNum - 1);
-    }
-    console.log(signUpForm);
+    // const signInfo = await axios
+    //     .post("/api2/signup", {
+    //       mbId: signUpForm.mb_id,
+    //       mb_pw: signUpForm.mb_pw,
+    //       mb_email: signUpForm.mb_email,
+    //       mb_name: signUpForm.mb_name,
+    //       mb_ph: signUpForm.mb_ph,
+    //       mb_pwtoken: signUpForm.mb_pwtoken,
+    //       mb_datetime: signUpForm.mb_datetime,
+    //       mb_businessnum: signUpForm.mb_businessnum,
+    //       mb_nick: signUpForm.mb_nick,
+    //     })
+    //     .then((res: any) => {})
+    //     .catch(function (error) {
+    //       if (error.response) {
+    //         // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
+    //         console.log(error.response.data);
+    //         alert(error.response.data.msg);
+    //       } else if (error.request) {
+    //         console.log(error.request);
+    //       } else {
+    //         // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
+    //         console.log("Error", error.message);
+    //       }
+    //     });
+  };
+
+  const onClickCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    state.page == 1
+      ? router.push("/accounts")
+      : setState({ ...state, page: 1 });
   };
 
   return (
     <>
       <Header />
-      <Container
-        css={{
-          display: `${stateNum == 1 ? "block" : "none"}`,
-        }}
-      >
-        <TextField
-          name="mb_id"
-          placeholder="아이디을 입력하세요."
-          value={signUpForm.mb_id}
-          maxLength={50}
-          onChange={onChangeTextField}
-          onFocus={onFocusTextField}
-          error={loginInvalid.mb_id_msg}
-        />
-        <TextField
-          name="mb_pw"
-          placeholder="비밀번호를 입력하세요"
-          value={signUpForm.mb_pw}
-          maxLength={50}
-          type="password"
-          onChange={onChangeTextField}
-          onFocus={onFocusTextField}
-          error={loginInvalid.mb_pw_msg}
-        />
-        <TextField
-          name="mb_pw2"
-          placeholder="비밀번호 확인"
-          value={signUpForm.mb_pw2}
-          maxLength={50}
-          type="password"
-          onChange={onChangeTextField}
-          onFocus={onFocusTextField}
-          error={loginInvalid.mb_pw2_msg}
-        />
-      </Container>
-      <Container
-        css={{
-          display: `${stateNum == 2 ? "block" : "none"}`,
-        }}
-      >
-        <TextField
-          name="mb_nick"
-          placeholder="닉네임을 적어주세요"
-          value={signUpForm.mb_nick}
-          maxLength={50}
-          onChange={onChangeTextField}
-          onFocus={onFocusTextField}
-          error={loginInvalid.mb_nick_msg}
-        />
-        <TextField
-          name="mb_email"
-          placeholder="이메일을 입력하세요"
-          value={signUpForm.mb_email}
-          maxLength={50}
-          onChange={onChangeTextField}
-          onFocus={onFocusTextField}
-        />
-        <TextField
-          name="mb_name"
-          placeholder="이름 입력하세요"
-          value={signUpForm.mb_name}
-          maxLength={50}
-          onChange={onChangeTextField}
-          onFocus={onFocusTextField}
-        />
-        <TextField
-          name="mb_ph"
-          placeholder="휴대폰 번호를 입력하세요"
-          value={signUpForm.mb_ph}
-          maxLength={50}
-          onChange={onChangeTextField}
-          onFocus={onFocusTextField}
-        />
-      </Container>
-      <Container
-        css={{
-          display: `flex`,
-          justifyContent: "space-around",
-        }}
-      >
-        <Button onClick={onClickLoginButton1}>
-          {stateNum == 1 ? "다음" : "완료"}
-        </Button>
-        <Button onClick={onClickLoginButton2}>
-          {stateNum == 2 ? "이전" : "취소"}
-        </Button>
-      </Container>
+      <AccountsLayout
+        title={
+          <>
+            <Header4>{accountsDescription.signup.title}</Header4>
+            <Body1>{accountsDescription.signup.description}</Body1>
+          </>
+        }
+        section1={
+          state.page === 1 ? (
+            <>
+              <Body2>아이디 및 비밀번호 정보</Body2>
+              <TextField
+                name="mb_id"
+                placeholder="아이디을 입력하세요."
+                size="large"
+                value={state.data.mb_id}
+                maxLength={50}
+                onChange={onChangeSignup}
+                onFocus={onFocusSignup}
+                error={state.invalid.mb_id}
+              />
+              <TextField
+                name="mb_pw"
+                placeholder="비밀번호를 입력하세요"
+                size="large"
+                value={state.data.mb_pw}
+                maxLength={50}
+                onChange={onChangeSignup}
+                onFocus={onFocusSignup}
+                error={state.invalid.mb_pw}
+              />
+              <TextField
+                name="mb_pw2"
+                placeholder="비밀번호 확인"
+                size="large"
+                value={state.data.mb_pw2}
+                maxLength={50}
+                onChange={onChangeSignup}
+                onFocus={onFocusSignup}
+                error={state.invalid.mb_pw2}
+              />
+            </>
+          ) : (
+            <>
+              <Body2>회원 정보</Body2>
+              <TextField
+                name="mb_nick"
+                placeholder="닉네임을 적어주세요"
+                size="large"
+                value={state.data.mb_nick}
+                error={state.invalid.mb_nick}
+                maxLength={50}
+                onChange={onChangeSignup}
+                onFocus={onFocusSignup}
+              />
+              <TextField
+                name="mb_email"
+                placeholder="이메일을 입력하세요"
+                size="large"
+                value={state.data.mb_email}
+                error={state.invalid.mb_email}
+                maxLength={50}
+                onChange={onChangeSignup}
+                onFocus={onFocusSignup}
+              />
+            </>
+          )
+        }
+        section2={
+          state.page === 2 && (
+            <>
+              <Body2>연락처</Body2>
+              <TextField
+                name="mb_name"
+                placeholder="이름 입력하세요"
+                size="large"
+                value={state.data.mb_name}
+                error={state.invalid.mb_name}
+                maxLength={50}
+                onChange={onChangeSignup}
+                onFocus={onFocusSignup}
+              />
+              <TextField
+                name="mb_ph"
+                placeholder="휴대폰 번호를 입력하세요"
+                size="large"
+                value={state.data.mb_ph}
+                error={state.invalid.mb_ph}
+                maxLength={50}
+                onChange={onChangeSignup}
+                onFocus={onFocusSignup}
+              />
+            </>
+          )
+        }
+        section3={
+          <>
+            {state.page == 1 ? (
+              <Button
+                variants="solid"
+                color="primary"
+                size="large"
+                isLoading={state.isLoading}
+                onClick={onClickNext}
+              >
+                다음
+              </Button>
+            ) : (
+              <Button
+                variants="solid"
+                color="primary"
+                size="large"
+                isLoading={state.isLoading}
+                onClick={onClickConfirm}
+              >
+                완료
+              </Button>
+            )}
+
+            <Button variants="light" size="large" onClick={onClickCancel}>
+              {state.page == 1 ? "취소" : "이전"}
+            </Button>
+          </>
+        }
+      />
       <Footer />
     </>
   );
 };
 
-export default SignUp;
+export default Signup;
