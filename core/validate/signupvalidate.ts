@@ -9,6 +9,11 @@ const id_schema = Joi.object({
 const pw_schema = Joi.object({
   mb_pw: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{8,30}")).required(),
 });
+
+const nick_schema = Joi.object({
+  mb_nick: Joi.string().required(),
+});
+
 export const mb_id_vaildate = async (mb_id: string | undefined) => {
   let { value, error } = id_schema.validate({ mb_id: mb_id });
 
@@ -52,7 +57,7 @@ export const mb_id_vaildate = async (mb_id: string | undefined) => {
 
 export const mb_pw_vaildate = async (mb_pw: string | undefined) => {
   let { value, error } = pw_schema.validate({ mb_pw: mb_pw });
-  console.log(error);
+
   if (
     error ==
     `ValidationError: "mb_pw" with value "${mb_pw}" fails to match the required pattern: /^[a-zA-Z0-9]{8,30}/`
@@ -62,23 +67,27 @@ export const mb_pw_vaildate = async (mb_pw: string | undefined) => {
     error = "비밀번호를 작성해주세요.";
   }
 
-  // await axios
-  //   .post("/api2/mbid-check", {
-  //     mb_id: mb_id,
-  //   })
-  //   .then(res => {
-  //     console.log(res);
-  //   })
-  //   .catch(function (err) {
-  //     if (err.response) {
-  //       // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
-  //       error = err.response.data.msg;
-  //     } else if (err.request) {
-  //       console.log(err.request);
-  //     } else {
-  //       // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
-  //       console.log("Error", err.message);
-  //     }
-  //   });
+  return { value, error };
+};
+
+export const mb_nick_vaildate = async (mb_nick: string | undefined) => {
+  let { value, error } = nick_schema.validate({ mb_nick: mb_nick });
+
+  await axios
+    .post("/api2/mbnick-check", {
+      mb_nick: mb_nick,
+    })
+    .then(res => {})
+    .catch(function (err) {
+      if (err.response) {
+        // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
+        error = err.response.data.msg;
+      } else if (err.request) {
+        console.log(err.request);
+      } else {
+        // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
+        console.log("Error", err.message);
+      }
+    });
   return { value, error };
 };

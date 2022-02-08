@@ -8,7 +8,11 @@ import Button from "@components/elements/button";
 import Footer from "@components/templates/footer";
 import TextField from "@components/elements/text-field";
 import Header from "@components/templates/header";
-import { mb_id_vaildate, mb_pw_vaildate } from "@core/validate/signupvalidate";
+import {
+  mb_id_vaildate,
+  mb_nick_vaildate,
+  mb_pw_vaildate,
+} from "@core/validate/signupvalidate";
 
 interface MemberData {
   mb_id?: string;
@@ -88,50 +92,75 @@ const SignUp: NextPage = () => {
     e.preventDefault();
 
     if (stateNum == 1) {
+      let pass_fail = false;
       await mb_id_vaildate(signUpForm.mb_id).then(res => {
         if (res.error) {
-          console.log(res.error);
           setLoginInvalid({ ...loginInvalid, mb_id_msg: res.error });
+          pass_fail = false;
+        } else {
+          pass_fail = true;
         }
       });
 
       await mb_pw_vaildate(signUpForm.mb_pw).then(res => {
         if (res.error) {
-          console.log(res.error);
           setLoginInvalid({ ...loginInvalid, mb_pw_msg: res.error });
+          pass_fail = false;
+        } else {
+          pass_fail = true;
         }
       });
-
-      // setStatenum(stateNum + 1);
+      if (signUpForm.mb_pw != signUpForm.mb_pw2) {
+        setLoginInvalid({
+          ...loginInvalid,
+          mb_pw2_msg: "비밀번호가 일치하지 않습니다.",
+        });
+        pass_fail = false;
+      } else {
+        pass_fail = true;
+      }
+      if (pass_fail == true) {
+        setStatenum(stateNum + 1);
+      }
     }
 
-    // if (stateNum == 2) {
-    //   const signInfo = await axios
-    //     .post("/api2/signup", {
-    //       mbId: signUpForm.mb_id,
-    //       mb_pw: signUpForm.mb_pw,
-    //       mb_email: signUpForm.mb_email,
-    //       mb_name: signUpForm.mb_name,
-    //       mb_ph: signUpForm.mb_ph,
-    //       mb_pwtoken: signUpForm.mb_pwtoken,
-    //       mb_datetime: signUpForm.mb_datetime,
-    //       mb_businessnum: signUpForm.mb_businessnum,
-    //       mb_nick: signUpForm.mb_nick,
-    //     })
-    //     .then((res: any) => {})
-    //     .catch(function (error) {
-    //       if (error.response) {
-    //         // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
-    //         console.log(error.response.data);
-    //         alert(error.response.data.msg);
-    //       } else if (error.request) {
-    //         console.log(error.request);
-    //       } else {
-    //         // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
-    //         console.log("Error", error.message);
-    //       }
-    //     });
-    // }
+    if (stateNum == 2) {
+      let pass_fail = false;
+      await mb_nick_vaildate(signUpForm.mb_nick).then(res => {
+        console.log(res.error);
+        if (res.error) {
+          setLoginInvalid({ ...loginInvalid, mb_nick_msg: res.error });
+          pass_fail = false;
+        } else {
+          pass_fail = true;
+        }
+      });
+      // const signInfo = await axios
+      //   .post("/api2/signup", {
+      //     mbId: signUpForm.mb_id,
+      //     mb_pw: signUpForm.mb_pw,
+      //     mb_email: signUpForm.mb_email,
+      //     mb_name: signUpForm.mb_name,
+      //     mb_ph: signUpForm.mb_ph,
+      //     mb_pwtoken: signUpForm.mb_pwtoken,
+      //     mb_datetime: signUpForm.mb_datetime,
+      //     mb_businessnum: signUpForm.mb_businessnum,
+      //     mb_nick: signUpForm.mb_nick,
+      //   })
+      //   .then((res: any) => {})
+      //   .catch(function (error) {
+      //     if (error.response) {
+      //       // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
+      //       console.log(error.response.data);
+      //       alert(error.response.data.msg);
+      //     } else if (error.request) {
+      //       console.log(error.request);
+      //     } else {
+      //       // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
+      //       console.log("Error", error.message);
+      //     }
+      //   });
+    }
   };
 
   const onClickLoginButton2 = async (
@@ -198,6 +227,7 @@ const SignUp: NextPage = () => {
           maxLength={50}
           onChange={onChangeTextField}
           onFocus={onFocusTextField}
+          error={loginInvalid.mb_nick_msg}
         />
         <TextField
           name="mb_email"
