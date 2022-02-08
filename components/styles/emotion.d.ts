@@ -86,5 +86,25 @@ declare module "@emotion/react" {
         900: string;
       };
     };
+    shadow: {
+      xs: string;
+      sm: string;
+      md: string;
+      lg: string;
+      xl: string;
+      inset: {
+        top: string;
+        bottom: string;
+      };
+    };
+    rounded: {
+      xs: string;
+      sm: string;
+      md: string;
+      lg: string;
+      xl: string;
+      xxl: string;
+      full: string;
+    };
   }
 }

@@ -1,12 +1,11 @@
 import { companyInfo } from "@core/config/company-info";
-import { footerNavigationConfig } from "@core/config/navigation";
+import { footerNavigation } from "@core/config/navigation";
 import styled from "@emotion/styled";
-import Link from "next/link";
 
 const Container = styled.footer`
   width: 100%;
   background-color: ${props => props.theme.color.white};
-  box-shadow: inset 0px 1px 0px ${props => props.theme.color.gray[300]};
+  box-shadow: ${props => props.theme.shadow.inset.top};
 `;
 
 const Wrapper = styled.div`
@@ -58,7 +57,7 @@ const Footer = () => {
       <Container>
         <Wrapper>
           <Nav>
-            {footerNavigationConfig.map(nav => (
+            {footerNavigation.map(nav => (
               <NavItem key={nav.id}>{nav.content}</NavItem>
             ))}
           </Nav>

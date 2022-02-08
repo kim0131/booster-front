@@ -1,16 +1,22 @@
 import Button from "@components/elements/button";
 import Logo from "@components/elements/logo";
 import TextField from "@components/elements/text-field";
-import { IconMenu, IconSearch } from "@components/icons";
-import { globalNavigationConfig } from "@core/config/navigation";
+import { IconMenu, IconProfile, IconSearch } from "@components/icons";
+import {
+  globalNavigation,
+  globalNavigationMore,
+  globalNavigationMy,
+} from "@core/config/navigation";
 import useDesktop from "@core/hook/use-desktop";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 import React from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
+import Dropdown from "@components/elements/dropdown";
+import { accountsNavigation } from "@core/config/navigation";
 
 interface IPropsNavItem {
-  isRoute: boolean;
+  isRoute?: boolean;
 }
 
 const Container = styled.header`
@@ -18,10 +24,10 @@ const Container = styled.header`
   width: 100%;
   top: 0;
   background-color: ${props => props.theme.color.white};
-  box-shadow: inset 0px -1px 0px ${props => props.theme.color.gray[300]};
+  box-shadow: ${props => props.theme.shadow.inset.bottom};
   display: flex;
   flex-direction: column;
-  margin-bottom: 2rem;
+  z-index: 10;
 `;
 
 const Wrapper = styled.div`
@@ -77,6 +83,41 @@ const NavItem = styled.div<IPropsNavItem>`
       : "none"};
 `;
 
+const NavMore = styled.div`
+  height: 3.5rem;
+  padding: 0 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  box-shadow: none;
+  & > div {
+    display: none;
+  }
+  &:hover {
+    & > div {
+      display: block;
+    }
+  }
+`;
+
+const ProfileWrapper = styled.div`
+  height: 3.5rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  & > div {
+    display: none;
+  }
+  &:hover {
+    & > div {
+      display: block;
+    }
+  }
+`;
+
 const Util = styled.div`
   flex: 1 1 0%;
   display: flex;
@@ -88,9 +129,19 @@ const Util = styled.div`
 const Header = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const isDesktop = useDesktop();
+  const { isDesktop } = useDesktop();
+  console.log(isDesktop);
 
-  const onClickLink = (e: React.MouseEvent<HTMLDivElement | SVGElement>) => {
+  const testMenu = [
+    { id: 0, content: "메뉴1", value: "/" },
+    { id: 1, content: "메뉴2", value: "/" },
+    { id: 2, content: "메뉴3", value: "/" },
+    { id: 3, content: "메뉴4", value: "/" },
+  ];
+
+  const onClickLink = (
+    e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,
+  ) => {
     e.preventDefault();
     const link: string | undefined = e.currentTarget.dataset.value;
     link && router.push(link);
@@ -102,7 +153,7 @@ const Header = () => {
         <Logo onClick={onClickLink} />
         {isDesktop && (
           <Nav>
-            {globalNavigationConfig.map(nav => (
+            {globalNavigation.map(nav => (
               <NavItem
                 key={nav.id}
                 data-value={nav.url}
@@ -112,7 +163,10 @@ const Header = () => {
                 {nav.content}
               </NavItem>
             ))}
-            {/* <NavItem>더보기</NavItem> */}
+            <NavMore>
+              더보기
+              <Dropdown menu={globalNavigationMore} onClick={() => {}} />
+            </NavMore>
           </Nav>
         )}
         <Util>
@@ -127,9 +181,22 @@ const Header = () => {
           <Button variants="solid" size="small">
             글쓰기
           </Button>
-          <Button variants="ghost" size="small" onClick={() => signIn()}>
-            로그인
+          <Button
+            variants="ghost"
+            size="small"
+            onClick={onClickLink}
+            dataValue={accountsNavigation[0].url}
+          >
+            {accountsNavigation[0].content}
           </Button>
+          {isDesktop && (
+            <ProfileWrapper>
+              <Button variants="ghost" size="small">
+                <IconProfile />
+              </Button>
+              <Dropdown menu={globalNavigationMy} isRight onClick={() => {}} />
+            </ProfileWrapper>
+          )}
           {!isDesktop && (
             <Button variants="ghost" size="small">
               <IconSearch />
@@ -140,7 +207,7 @@ const Header = () => {
       {!isDesktop && (
         <MobileWrapper>
           <Nav>
-            {globalNavigationConfig.map(nav => (
+            {globalNavigation.map(nav => (
               <NavItem
                 key={nav.id}
                 data-value={nav.url}
