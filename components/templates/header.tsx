@@ -131,14 +131,6 @@ const Header = () => {
 
   const router = useRouter();
   const { isDesktop } = useDesktop();
-  console.log(isDesktop);
-
-  const testMenu = [
-    { id: 0, content: "메뉴1", value: "/" },
-    { id: 1, content: "메뉴2", value: "/" },
-    { id: 2, content: "메뉴3", value: "/" },
-    { id: 3, content: "메뉴4", value: "/" },
-  ];
 
   const onClickLink = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,

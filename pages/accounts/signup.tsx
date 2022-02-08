@@ -12,10 +12,11 @@ import { IAccountsData } from "@core/interfaces/accounts";
 import AccountsLayout from "@components/layouts/accounts/accounts-layout";
 import { Body1, Body2, Header4 } from "@components/elements/types";
 import { accountsDescription } from "@core/config/description";
+import { mb_id_vaildate, mb_pw_vaildate } from "@core/validate/signupvalidate";
 
 interface IStateSignup {
   data: IAccountsData;
-  invalid: Object;
+  invalid: { [key in string]: string };
   page: number;
   isLoading: boolean;
 }
@@ -76,30 +77,54 @@ const Signup: NextPage = () => {
     });
   };
 
-  const onClickNext = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onClickNext = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    // TODO: id, pw Validate 필요 (로컬)
+    await mb_id_vaildate(state.data.mb_id).then(res => {
+      if (res.error) {
+        console.log(res.error);
+        setState({ ...state, invalid: { mb_id: res.error } });
+        return;
+      }
+    });
+
+    await mb_pw_vaildate(state.data.mb_pw).then(res => {
+      if (res.error) {
+        console.log(res.error);
+        setState({ ...state, invalid: { mb_pw: res.error } });
+        return;
+      }
+    });
     setState({ ...state, page: 2 });
   };
 
   const onClickConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const signInfo = await axios
-      .post("/api2/signup", state.data)
-      .then((res: any) => {})
-      .catch(function (error) {
-        if (error.response) {
-          // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
-          console.log(error.response.data);
-          alert(error.response.data.msg);
-        } else if (error.request) {
-          console.log(error.request);
-        } else {
-          // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
-          console.log("Error", error.message);
-        }
-      });
+    // const signInfo = await axios
+    //     .post("/api2/signup", {
+    //       mbId: signUpForm.mb_id,
+    //       mb_pw: signUpForm.mb_pw,
+    //       mb_email: signUpForm.mb_email,
+    //       mb_name: signUpForm.mb_name,
+    //       mb_ph: signUpForm.mb_ph,
+    //       mb_pwtoken: signUpForm.mb_pwtoken,
+    //       mb_datetime: signUpForm.mb_datetime,
+    //       mb_businessnum: signUpForm.mb_businessnum,
+    //       mb_nick: signUpForm.mb_nick,
+    //     })
+    //     .then((res: any) => {})
+    //     .catch(function (error) {
+    //       if (error.response) {
+    //         // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
+    //         console.log(error.response.data);
+    //         alert(error.response.data.msg);
+    //       } else if (error.request) {
+    //         console.log(error.request);
+    //       } else {
+    //         // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
+    //         console.log("Error", error.message);
+    //       }
+    //     });
   };
 
   const onClickCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -131,6 +156,7 @@ const Signup: NextPage = () => {
                 maxLength={50}
                 onChange={onChangeSignup}
                 onFocus={onFocusSignup}
+                error={state.invalid.mb_id}
               />
               <TextField
                 name="mb_pw"
@@ -140,6 +166,7 @@ const Signup: NextPage = () => {
                 maxLength={50}
                 onChange={onChangeSignup}
                 onFocus={onFocusSignup}
+                error={state.invalid.mb_pw}
               />
               <TextField
                 name="mb_pw2"
@@ -149,6 +176,7 @@ const Signup: NextPage = () => {
                 maxLength={50}
                 onChange={onChangeSignup}
                 onFocus={onFocusSignup}
+                error={state.invalid.mb_pw2}
               />
             </>
           ) : (
@@ -159,6 +187,7 @@ const Signup: NextPage = () => {
                 placeholder="닉네임을 적어주세요"
                 size="large"
                 value={state.data.mb_nick}
+                error={state.invalid.mb_nick}
                 maxLength={50}
                 onChange={onChangeSignup}
                 onFocus={onFocusSignup}
@@ -168,6 +197,7 @@ const Signup: NextPage = () => {
                 placeholder="이메일을 입력하세요"
                 size="large"
                 value={state.data.mb_email}
+                error={state.invalid.mb_email}
                 maxLength={50}
                 onChange={onChangeSignup}
                 onFocus={onFocusSignup}
@@ -184,6 +214,7 @@ const Signup: NextPage = () => {
                 placeholder="이름 입력하세요"
                 size="large"
                 value={state.data.mb_name}
+                error={state.invalid.mb_name}
                 maxLength={50}
                 onChange={onChangeSignup}
                 onFocus={onFocusSignup}
@@ -193,6 +224,7 @@ const Signup: NextPage = () => {
                 placeholder="휴대폰 번호를 입력하세요"
                 size="large"
                 value={state.data.mb_ph}
+                error={state.invalid.mb_ph}
                 maxLength={50}
                 onChange={onChangeSignup}
                 onFocus={onFocusSignup}
