@@ -128,6 +128,7 @@ const Util = styled.div`
 
 const Header = () => {
   const { data: session, status } = useSession();
+
   const router = useRouter();
   const { isDesktop } = useDesktop();
   console.log(isDesktop);
@@ -144,7 +145,9 @@ const Header = () => {
   ) => {
     e.preventDefault();
     const link: string | undefined = e.currentTarget.dataset.value;
-    link && router.push(link);
+    if (link) {
+      link === "logout" ? signOut() : router.push(link);
+    }
   };
 
   return (
@@ -181,21 +184,28 @@ const Header = () => {
           <Button variants="solid" size="small">
             글쓰기
           </Button>
-          <Button
-            variants="ghost"
-            size="small"
-            onClick={onClickLink}
-            dataValue={accountsNavigation[0].url}
-          >
-            {accountsNavigation[0].content}
-          </Button>
-          {isDesktop && (
+          {status == "authenticated" ? (
+            // isDesktop && (
             <ProfileWrapper>
               <Button variants="ghost" size="small">
                 <IconProfile />
               </Button>
-              <Dropdown menu={globalNavigationMy} isRight onClick={() => {}} />
+              <Dropdown
+                menu={globalNavigationMy}
+                isRight
+                onClick={onClickLink}
+              />
             </ProfileWrapper>
+          ) : (
+            // )
+            <Button
+              variants="ghost"
+              size="small"
+              onClick={onClickLink}
+              dataValue={accountsNavigation[0].url}
+            >
+              {accountsNavigation[0].content}
+            </Button>
           )}
           {!isDesktop && (
             <Button variants="ghost" size="small">
