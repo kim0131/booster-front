@@ -126,12 +126,12 @@ const Background = styled.div<IPropsBackground>`
   background-color: ${props => props.theme.color.white};
   border-radius: ${props =>
     props.isRounded
-      ? "9999px"
+      ? props.theme.rounded.full
       : props.size === "large"
-      ? "8px"
+      ? props.theme.rounded.md
       : props.size === "small"
-      ? "4px"
-      : "6px"};
+      ? props.theme.rounded.xs
+      : props.theme.rounded.sm};
   border-width: 1px;
   border-color: ${props => props.theme.color.gray[300]};
   z-index: 1;
@@ -307,7 +307,7 @@ const TextField = ({
   prefix,
   suffix,
   placeholder,
-  type,
+  type = "text",
   onChange,
   onFocus,
 }: IPropsTextField) => (
@@ -315,7 +315,7 @@ const TextField = ({
     {label && <Label size={size}>{label}</Label>}
     <Wrapper width={width} size={size} isDisabled={isDisabled}>
       <Input
-        type={type ? type : "text"}
+        type={type}
         name={name}
         value={value}
         inputSize={size}

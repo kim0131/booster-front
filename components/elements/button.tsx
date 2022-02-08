@@ -6,18 +6,16 @@ import Loader from "./loader";
 interface IPropsContainer {
   variants: string;
   size: string;
+  color: string;
   isLoading: boolean;
 }
 
 const Container = styled.button<IPropsContainer>`
   display: flex;
   align-items: center;
-  cursor: ${props =>
-    props.isLoading
-      ? "wait"
-      : props.disabled
-      ? "not-allowed"
-      : "cursor: pointer"};
+  justify-content: center;
+  position: relative;
+  pointer-events: ${props => (props.isLoading ? "none" : "auto")};
   height: ${props => {
     switch (props.size) {
       case "large":
@@ -156,11 +154,11 @@ const Container = styled.button<IPropsContainer>`
   border-radius: ${props => {
     switch (props.size) {
       case "large":
-        return "8px";
+        return props.theme.rounded.md;
       case "small":
-        return "4px";
+        return props.theme.rounded.xs;
       default:
-        return "6px";
+        return props.theme.rounded.sm;
     }
   }};
   font-weight: 500;
@@ -304,6 +302,7 @@ const Container = styled.button<IPropsContainer>`
   }
   &:disabled {
     opacity: 0.25;
+    pointer-events: none;
   }
   & > svg {
     width: ${props => {
@@ -369,6 +368,7 @@ interface IPropsButton {
   color?: string;
   isDisabled?: boolean;
   isLoading?: boolean;
+  dataValue?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -379,6 +379,7 @@ const Button = ({
   color = "gray",
   isDisabled = false,
   isLoading = false,
+  dataValue = undefined,
   onClick,
 }: IPropsButton) => (
   <Container
@@ -387,6 +388,7 @@ const Button = ({
     color={color}
     disabled={isDisabled}
     isLoading={isLoading}
+    data-value={dataValue}
     onClick={isLoading ? undefined : onClick}
   >
     {isLoading ? (
