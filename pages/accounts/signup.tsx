@@ -19,6 +19,7 @@ import {
   mb_ph_vaildate,
   mb_pw_vaildate,
 } from "@core/validate/signupvalidate";
+import { signIn } from "next-auth/react";
 
 interface IStateSignup {
   data: IAccountsData;
@@ -152,7 +153,15 @@ const Signup: NextPage = () => {
           mb_business_num: state.data.mb_business_num,
           mb_nick: state.data.mb_nick,
         })
-        .then((res: any) => {})
+        .then((res: any) => {
+          signIn("username-password", {
+            mb_id: state.data.mb_id,
+            mb_pw: state.data.mb_pw,
+            mb_nick: state.data.mb_nick,
+            redirect: false,
+          });
+          router.push("/accounts/business-registration");
+        })
         .catch(function (error) {
           if (error.response) {
             // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.

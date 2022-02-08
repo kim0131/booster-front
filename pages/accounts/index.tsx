@@ -57,18 +57,15 @@ const Accounts: NextPage = () => {
       },
       invalid: "",
     });
-    console.log(state);
   };
 
   const onClickLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setState({ ...state, isLoading: true });
-    const member = await axios
+    await axios
       .post("/api2/login", state.data)
       .then((res: any) => {
-        console.log(res);
         const user = res.data.result;
-        console.log(user);
         signIn("username-password", {
           mb_id: user.mb_id,
           mb_pw: user.mb_pw,
