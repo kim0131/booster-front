@@ -137,8 +137,12 @@ const Header = () => {
   ) => {
     e.preventDefault();
     const link: string | undefined = e.currentTarget.dataset.value;
+    const content: string | null = e.currentTarget.textContent;
     if (link) {
-      link === "logout" ? signOut() : router.push(link);
+      link === "logout" ? console.log("logout") : router.push(link);
+    }
+    if (content) {
+      content === "로그아웃" ? signOut() : "";
     }
   };
 

@@ -8,5 +8,5 @@ export interface IAccountsData {
   mb_ph: string;
   mb_pw_token: string;
   mb_datetime: Date;
-  mb_business_num: string;
+  mb_business_num: number;
 }

@@ -57,6 +57,7 @@ const Accounts: NextPage = () => {
       },
       invalid: "",
     });
+    console.log(state);
   };
 
   const onClickLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -65,7 +66,8 @@ const Accounts: NextPage = () => {
     const member = await axios
       .post("/api2/login", state.data)
       .then((res: any) => {
-        const user = res.data.result[0];
+        console.log(res);
+        const user = res.data.result;
         console.log(user);
         signIn("username-password", {
           mb_id: user.mb_id,

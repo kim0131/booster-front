@@ -12,7 +12,13 @@ import { IAccountsData } from "@core/interfaces/accounts";
 import AccountsLayout from "@components/layouts/accounts/accounts-layout";
 import { Body1, Body2, Header4 } from "@components/elements/types";
 import { accountsDescription } from "@core/config/description";
-import { mb_id_vaildate, mb_pw_vaildate } from "@core/validate/signupvalidate";
+import {
+  mb_email_vaildate,
+  mb_id_vaildate,
+  mb_nick_vaildate,
+  mb_ph_vaildate,
+  mb_pw_vaildate,
+} from "@core/validate/signupvalidate";
 
 interface IStateSignup {
   data: IAccountsData;
@@ -33,7 +39,7 @@ const Signup: NextPage = () => {
       mb_ph: "",
       mb_pw_token: "",
       mb_datetime: new Date(),
-      mb_business_num: "",
+      mb_business_num: 0,
     },
     invalid: {
       mb_id: "",
@@ -78,53 +84,88 @@ const Signup: NextPage = () => {
   };
 
   const onClickNext = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    setState({ ...state, isLoading: true });
     e.preventDefault();
+    let pass_fail = true;
     await mb_id_vaildate(state.data.mb_id).then(res => {
       if (res.error) {
         console.log(res.error);
         setState({ ...state, invalid: { mb_id: res.error } });
-        return;
+        pass_fail = false;
       }
     });
-
     await mb_pw_vaildate(state.data.mb_pw).then(res => {
       if (res.error) {
         console.log(res.error);
         setState({ ...state, invalid: { mb_pw: res.error } });
-        return;
+        pass_fail = false;
       }
     });
-    setState({ ...state, page: 2 });
+    if (state.data.mb_pw != state.data.mb_pw2) {
+      setState({
+        ...state,
+        invalid: { mb_pw2: "비밀번호가 일치하지 않습니다." },
+      });
+      pass_fail = false;
+    }
+    if (pass_fail) {
+      setState({ ...state, page: 2, isLoading: false });
+    }
+    setState({ ...state, page: 2, isLoading: false });
   };
 
   const onClickConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
-    // const signInfo = await axios
-    //     .post("/api2/signup", {
-    //       mbId: signUpForm.mb_id,
-    //       mb_pw: signUpForm.mb_pw,
-    //       mb_email: signUpForm.mb_email,
-    //       mb_name: signUpForm.mb_name,
-    //       mb_ph: signUpForm.mb_ph,
-    //       mb_pwtoken: signUpForm.mb_pwtoken,
-    //       mb_datetime: signUpForm.mb_datetime,
-    //       mb_businessnum: signUpForm.mb_businessnum,
-    //       mb_nick: signUpForm.mb_nick,
-    //     })
-    //     .then((res: any) => {})
-    //     .catch(function (error) {
-    //       if (error.response) {
-    //         // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
-    //         console.log(error.response.data);
-    //         alert(error.response.data.msg);
-    //       } else if (error.request) {
-    //         console.log(error.request);
-    //       } else {
-    //         // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
-    //         console.log("Error", error.message);
-    //       }
-    //     });
+    setState({ ...state, isLoading: true });
+    let pass_fail = true;
+    await mb_nick_vaildate(state.data.mb_nick).then(res => {
+      if (res.error) {
+        console.log(res.error);
+        setState({ ...state, invalid: { mb_nick: res.error } });
+        pass_fail = false;
+      }
+    });
+    await mb_email_vaildate(state.data.mb_email).then(res => {
+      if (res.error) {
+        console.log(res.error);
+        setState({ ...state, invalid: { mb_email: res.error } });
+        pass_fail = false;
+      }
+    });
+    await mb_ph_vaildate(state.data.mb_ph).then(res => {
+      if (res.error) {
+        console.log(res.error);
+        setState({ ...state, invalid: { mb_ph: res.error } });
+        pass_fail = false;
+      }
+    });
+    if (pass_fail == true) {
+      await axios
+        .post("/api2/signup", {
+          mb_id: state.data.mb_id,
+          mb_pw: state.data.mb_pw,
+          mb_email: state.data.mb_email,
+          mb_name: state.data.mb_name,
+          mb_ph: state.data.mb_ph,
+          mb_pw_token: state.data.mb_pw_token,
+          mb_datetime: state.data.mb_datetime,
+          mb_business_num: state.data.mb_business_num,
+          mb_nick: state.data.mb_nick,
+        })
+        .then((res: any) => {})
+        .catch(function (error) {
+          if (error.response) {
+            // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
+            console.log(error.response.data);
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
+            console.log("Error", error.message);
+          }
+        });
+    }
+    setState({ ...state, isLoading: false });
   };
 
   const onClickCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -167,6 +208,7 @@ const Signup: NextPage = () => {
                 onChange={onChangeSignup}
                 onFocus={onFocusSignup}
                 error={state.invalid.mb_pw}
+                type="password"
               />
               <TextField
                 name="mb_pw2"
@@ -177,6 +219,7 @@ const Signup: NextPage = () => {
                 onChange={onChangeSignup}
                 onFocus={onFocusSignup}
                 error={state.invalid.mb_pw2}
+                type="password"
               />
             </>
           ) : (
