@@ -68,9 +68,9 @@ const Accounts: NextPage = () => {
         const user = res.data.result[0];
         console.log(user);
         signIn("username-password", {
-          username: user.mb_id,
-          password: user.mb_pw,
-          nickname: user.mb_nick,
+          mb_id: user.mb_id,
+          mb_pw: user.mb_pw,
+          mb_nick: user.mb_nick,
           redirect: false,
         });
       })
