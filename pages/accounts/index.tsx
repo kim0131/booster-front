@@ -32,21 +32,21 @@ const Login: NextPage = () => {
     // 원래 실행되는 이벤트 취소
     e.preventDefault();
     // Form 안에서 이메일, 패스워드 가져오기
-    const username = e.target.username.value;
-    const password = e.target.password.value;
-    console.log(username, password);
+    const mb_id = e.target.mb_id.value;
+    const mb_pw = e.target.mb_pw.value;
+    console.log(mb_id, mb_pw);
     const member = await axios
       .post("/api2/login", {
-        mbId: username,
-        mbPw: password,
+        mb_id: mb_id,
+        mb_pw: mb_pw,
       })
       .then((res: any) => {
         const user = res.data.result[0];
         console.log(user);
         signIn("username-password", {
-          username: user.mb_id,
-          password: user.mb_pw,
-          nickname: user.mb_nick,
+          mb_id: user.mb_id,
+          mb_pw: user.mb_pw,
+          mb_nick: user.mb_nick,
           redirect: false,
         });
       })
@@ -76,14 +76,14 @@ const Login: NextPage = () => {
             label="아이디"
             placeholder="아이디를 입력하세요"
             error="아이디 틀림"
-            name="username"
+            name="mb_id"
             type="text"
           />
           <TextField
             label="비밀번호"
             placeholder="비밀번호를 입력하세요"
             error="비밀번호 틀림"
-            name="password"
+            name="mb_pw"
             type="password"
           />
           <ButtonBox>

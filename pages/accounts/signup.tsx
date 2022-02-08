@@ -8,7 +8,7 @@ import Button from "@components/elements/button";
 import Footer from "@components/templates/footer";
 import TextField from "@components/elements/text-field";
 import Header from "@components/templates/header";
-import { mb_id_vaildate } from "@core/validate/idcheck";
+import { mb_id_vaildate, mb_pw_vaildate } from "@core/validate/signupvalidate";
 
 interface MemberData {
   mb_id?: string;
@@ -73,14 +73,13 @@ const SignUp: NextPage = () => {
   const onChangeTextField = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
     setsignUpForm({ ...signUpForm, [name]: value });
-    console.log(signUpForm);
   };
 
   const onFocusTextField = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name } = e.currentTarget;
     const err_meg = name + "_msg";
+
     setLoginInvalid({ ...loginInvalid, [err_meg]: "" });
-    console.log(name);
   };
 
   const onClickLoginButton1 = async (
@@ -89,52 +88,50 @@ const SignUp: NextPage = () => {
     e.preventDefault();
 
     if (stateNum == 1) {
-      mb_id_vaildate(signUpForm.mb_id).then(res => {
-        console.log(res.value);
+      await mb_id_vaildate(signUpForm.mb_id).then(res => {
         if (res.error) {
           console.log(res.error);
-          setLoginInvalid({ mb_id_msg: res.error });
-
-          return null;
+          setLoginInvalid({ ...loginInvalid, mb_id_msg: res.error });
         }
       });
 
-      // console.log(mb_id_validate);
-      if (signUpForm.mb_pw != signUpForm.mb_pw2) {
-        alert("비밀번호가 일치하지 않음");
-        return null;
-      }
+      await mb_pw_vaildate(signUpForm.mb_pw).then(res => {
+        if (res.error) {
+          console.log(res.error);
+          setLoginInvalid({ ...loginInvalid, mb_pw_msg: res.error });
+        }
+      });
+
       // setStatenum(stateNum + 1);
     }
 
-    if (stateNum == 2) {
-      const signInfo = await axios
-        .post("/api2/signup", {
-          mbId: signUpForm.mb_id,
-          mb_pw: signUpForm.mb_pw,
-          mb_email: signUpForm.mb_email,
-          mb_name: signUpForm.mb_name,
-          mb_ph: signUpForm.mb_ph,
-          mb_pwtoken: signUpForm.mb_pwtoken,
-          mb_datetime: signUpForm.mb_datetime,
-          mb_businessnum: signUpForm.mb_businessnum,
-          mb_nick: signUpForm.mb_nick,
-        })
-        .then((res: any) => {})
-        .catch(function (error) {
-          if (error.response) {
-            // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
-            console.log(error.response.data);
-            alert(error.response.data.msg);
-          } else if (error.request) {
-            console.log(error.request);
-          } else {
-            // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
-            console.log("Error", error.message);
-          }
-        });
-    }
-    console.log(signUpForm);
+    // if (stateNum == 2) {
+    //   const signInfo = await axios
+    //     .post("/api2/signup", {
+    //       mbId: signUpForm.mb_id,
+    //       mb_pw: signUpForm.mb_pw,
+    //       mb_email: signUpForm.mb_email,
+    //       mb_name: signUpForm.mb_name,
+    //       mb_ph: signUpForm.mb_ph,
+    //       mb_pwtoken: signUpForm.mb_pwtoken,
+    //       mb_datetime: signUpForm.mb_datetime,
+    //       mb_businessnum: signUpForm.mb_businessnum,
+    //       mb_nick: signUpForm.mb_nick,
+    //     })
+    //     .then((res: any) => {})
+    //     .catch(function (error) {
+    //       if (error.response) {
+    //         // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
+    //         console.log(error.response.data);
+    //         alert(error.response.data.msg);
+    //       } else if (error.request) {
+    //         console.log(error.request);
+    //       } else {
+    //         // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
+    //         console.log("Error", error.message);
+    //       }
+    //     });
+    // }
   };
 
   const onClickLoginButton2 = async (
@@ -173,16 +170,20 @@ const SignUp: NextPage = () => {
           placeholder="비밀번호를 입력하세요"
           value={signUpForm.mb_pw}
           maxLength={50}
+          type="password"
           onChange={onChangeTextField}
           onFocus={onFocusTextField}
+          error={loginInvalid.mb_pw_msg}
         />
         <TextField
           name="mb_pw2"
           placeholder="비밀번호 확인"
           value={signUpForm.mb_pw2}
           maxLength={50}
+          type="password"
           onChange={onChangeTextField}
           onFocus={onFocusTextField}
+          error={loginInvalid.mb_pw2_msg}
         />
       </Container>
       <Container
