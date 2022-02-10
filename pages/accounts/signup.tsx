@@ -86,33 +86,38 @@ const Signup: NextPage = () => {
 
   const onClickNext = async (e: React.MouseEvent<HTMLButtonElement>) => {
     setState({ ...state, isLoading: true });
+    console.log(1);
+    console.log(state.isLoading);
     e.preventDefault();
     let pass_fail = true;
     await mb_id_vaildate(state.data.mb_id).then(res => {
       if (res.error) {
-        console.log(res.error);
-        setState({ ...state, invalid: { mb_id: res.error } });
+        setState({
+          ...state,
+          invalid: { ...state.invalid, mb_id: res.error },
+        });
         pass_fail = false;
       }
     });
+
     await mb_pw_vaildate(state.data.mb_pw).then(res => {
       if (res.error) {
-        console.log(res.error);
-        setState({ ...state, invalid: { mb_pw: res.error } });
+        setState({ ...state, invalid: { ...state.invalid, mb_pw: res.error } });
         pass_fail = false;
       }
     });
+
     if (state.data.mb_pw != state.data.mb_pw2) {
       setState({
         ...state,
-        invalid: { mb_pw2: "비밀번호가 일치하지 않습니다." },
+        invalid: { ...state.invalid, mb_pw2: "비밀번호가 일치하지 않습니다." },
       });
       pass_fail = false;
     }
+
     if (pass_fail) {
-      setState({ ...state, page: 2, isLoading: false });
+      setState({ ...state, page: 2 });
     }
-    setState({ ...state, page: 2, isLoading: false });
   };
 
   const onClickConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
