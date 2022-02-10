@@ -142,7 +142,12 @@ const Header = () => {
       link === "logout" ? console.log("logout") : router.push(link);
     }
     if (content) {
-      content === "로그아웃" ? signOut() : "";
+      content === "로그아웃"
+        ? signOut({
+            redirect: false,
+            callbackUrl: `/`,
+          })
+        : "";
     }
   };
 
