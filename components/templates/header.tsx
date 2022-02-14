@@ -32,9 +32,9 @@ const Container = styled.header`
 
 const Wrapper = styled.div`
   width: 100%;
-  max-width: 80rem;
+  max-width: 72rem;
   margin: 0 auto;
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem 1.25rem;
   ${props => props.theme.screen.md} {
     padding: 0 3rem;
   }
@@ -45,9 +45,9 @@ const Wrapper = styled.div`
 
 const MobileWrapper = styled.div`
   width: 100%;
-  max-width: 80rem;
+  max-width: 72rem;
   margin: 0 auto;
-  padding-right: 0.75rem;
+  padding-right: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;

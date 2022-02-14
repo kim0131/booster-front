@@ -10,9 +10,9 @@ const Container = styled.footer`
 
 const Wrapper = styled.div`
   width: 100%;
-  max-width: 80rem;
+  max-width: 72rem;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 1.5rem 1.25rem;
   ${props => props.theme.screen.md} {
     padding: 1.5rem 3rem;
   }
