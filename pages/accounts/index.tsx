@@ -88,6 +88,7 @@ const Accounts: NextPage = () => {
           console.log("Error", error.message);
         }
       });
+    setState({ ...state, isLoading: false });
   };
 
   return (
