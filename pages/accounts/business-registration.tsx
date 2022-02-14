@@ -1,6 +1,4 @@
 import type { NextPage } from "next";
-import Header from "@components/templates/header";
-import Footer from "@components/templates/footer";
 import AccountsLayout from "@components/layouts/accounts/accounts-layout";
 import { Body1, Body2, Header4 } from "@components/elements/types";
 import { accountsDescription } from "@core/config/description";
@@ -28,66 +26,60 @@ const BusinessRegistration: NextPage = () => {
   }
 
   return (
-    <>
-      <Header />
-      <AccountsLayout
-        title={
+    <AccountsLayout
+      title={
+        <>
+          <Header4>{accountsDescription.businessRegistration.title}</Header4>
+          <Body1>{accountsDescription.businessRegistration.description}</Body1>
+        </>
+      }
+      section1={
+        status == "authenticated" ? (
           <>
-            <Header4>{accountsDescription.businessRegistration.title}</Header4>
-            <Body1>
-              {accountsDescription.businessRegistration.description}
-            </Body1>
-          </>
-        }
-        section1={
-          status == "authenticated" ? (
-            <>
-              <Button variants="light" size="large">
-                <IconAdd />
-                사업자등록증 첨부하기
+            <Button variants="light" size="large">
+              <IconAdd />
+              사업자등록증 첨부하기
+            </Button>
+            <Callout size="small" icon={<IconDocuments />}>
+              사업자등록증_회사명.pdf
+            </Callout>
+            <ButtonWrapper>
+              <Button variants="light" size="large" color="primary">
+                변경
               </Button>
-              <Callout size="small" icon={<IconDocuments />}>
-                사업자등록증_회사명.pdf
-              </Callout>
-              <ButtonWrapper>
-                <Button variants="light" size="large" color="primary">
-                  변경
-                </Button>
-                <Button variants="light" size="large">
-                  삭제
-                </Button>
-              </ButtonWrapper>
-            </>
-          ) : (
-            <Body1>로그인 상태에서 이용가능 합니다.</Body1>
-          )
-        }
-        section2={
-          status == "authenticated" ? (
-            <Button variants="solid" size="large" color="primary">
-              완료
-            </Button>
-          ) : (
-            <Button
-              variants="solid"
-              size="large"
-              color="primary"
-              onClick={() => {
-                signIn();
-              }}
-            >
-              로그인
-            </Button>
-          )
-        }
-        find={
-          <Body2 isLink color={theme.color.gray[500]}>
-            나중에 하기
-          </Body2>
-        }
-      />
-      <Footer />
-    </>
+              <Button variants="light" size="large">
+                삭제
+              </Button>
+            </ButtonWrapper>
+          </>
+        ) : (
+          <Body1>로그인 상태에서 이용가능 합니다.</Body1>
+        )
+      }
+      section2={
+        status == "authenticated" ? (
+          <Button variants="solid" size="large" color="primary">
+            완료
+          </Button>
+        ) : (
+          <Button
+            variants="solid"
+            size="large"
+            color="primary"
+            onClick={() => {
+              signIn();
+            }}
+          >
+            로그인
+          </Button>
+        )
+      }
+      find={
+        <Body2 isLink color={theme.color.gray[500]}>
+          나중에 하기
+        </Body2>
+      }
+    />
   );
 };
 

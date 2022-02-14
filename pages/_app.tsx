@@ -6,6 +6,8 @@ import theme from "@components/styles/theme";
 import global from "@components/styles/global";
 import { MordalPortal, ToastPortal } from "@components/templates/portal";
 import useToast from "@core/hook/use-toast";
+import Header from "@components/templates/header";
+import Footer from "@components/templates/footer";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { message } = useToast();
@@ -13,7 +15,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ThemeProvider theme={theme}>
       <SessionProvider>
         <Global styles={global} />
+        <Header />
         <Component {...pageProps} />
+        <Footer />
         <div>{message}</div>
       </SessionProvider>
     </ThemeProvider>

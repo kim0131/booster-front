@@ -2,7 +2,6 @@ import styled from "@emotion/styled";
 import Loader from "./loader";
 
 // Style
-
 interface IPropsContainer {
   variants: string;
   size: string;
@@ -36,6 +35,8 @@ const Container = styled.button<IPropsContainer>`
             return props.theme.color.green[50];
           case "danger":
             return props.theme.color.red[50];
+          case "transparent":
+            return "transparent";
           default:
             return props.theme.color.gray[100];
         }
@@ -93,6 +94,8 @@ const Container = styled.button<IPropsContainer>`
             return props.theme.color.green[50];
           case "danger":
             return props.theme.color.red[50];
+          case "transparent":
+            return "transparent";
           default:
             return props.theme.color.gray[100];
         }
@@ -363,7 +366,6 @@ const Container = styled.button<IPropsContainer>`
 interface IPropsButton {
   children?: React.ReactNode;
   variants?: string;
-  state?: string;
   size?: string;
   color?: string;
   isDisabled?: boolean;

@@ -2,8 +2,6 @@ import type { NextPage } from "next";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import axios from "axios";
-import Header from "@components/templates/header";
-import Footer from "@components/templates/footer";
 import TextField from "@components/elements/text-field";
 import Button from "@components/elements/button";
 import AccountsLayout from "@components/layouts/accounts/accounts-layout";
@@ -92,82 +90,78 @@ const Accounts: NextPage = () => {
   };
 
   return (
-    <>
-      <Header />
-      <AccountsLayout
-        title={
-          <>
-            <Header4>{accountsDescription.accounts.title}</Header4>
-            <Body1>{accountsDescription.accounts.description}</Body1>
-          </>
-        }
-        section1={
-          <>
-            <TextField
-              placeholder="아이디를 입력하세요"
-              name="mb_id"
-              type="text"
-              size="large"
-              width="100%"
-              onChange={onChangeAccounts}
-            />
-            <TextField
-              placeholder="비밀번호를 입력하세요"
-              name="mb_pw"
-              type="password"
-              size="large"
-              onChange={onChangeAccounts}
-            />
-            {state.invalid && (
-              <Body2 color={theme.color.red[600]}>{state.invalid}</Body2>
-            )}
-          </>
-        }
-        section2={
-          <>
-            <Button
-              variants="solid"
-              color="primary"
-              size="large"
-              isDisabled={state.data.mb_id && state.data.mb_pw ? false : true}
-              isLoading={state.isLoading}
-              onClick={onClickLogin}
-            >
-              {accountsNavigation[0].content}
-            </Button>
-            <Button
-              variants="light"
-              size="large"
-              onClick={onClickLink}
-              dataValue={accountsNavigation[1].url}
-            >
-              {accountsNavigation[1].content}
-            </Button>
-          </>
-        }
-        find={
-          <>
-            <Body2
-              isLink
-              data-value={accountsNavigation[2].url}
-              onClick={onClickLink}
-              color={theme.color.gray[500]}
-            >
-              {accountsNavigation[2].content}
-            </Body2>
-            <Body2
-              isLink
-              data-value={accountsNavigation[3].url}
-              onClick={onClickLink}
-              color={theme.color.gray[500]}
-            >
-              {accountsNavigation[3].content}
-            </Body2>
-          </>
-        }
-      />
-      <Footer />
-    </>
+    <AccountsLayout
+      title={
+        <>
+          <Header4>{accountsDescription.accounts.title}</Header4>
+          <Body1>{accountsDescription.accounts.description}</Body1>
+        </>
+      }
+      section1={
+        <>
+          <TextField
+            placeholder="아이디를 입력하세요"
+            name="mb_id"
+            type="text"
+            size="large"
+            width="100%"
+            onChange={onChangeAccounts}
+          />
+          <TextField
+            placeholder="비밀번호를 입력하세요"
+            name="mb_pw"
+            type="password"
+            size="large"
+            onChange={onChangeAccounts}
+          />
+          {state.invalid && (
+            <Body2 color={theme.color.red[600]}>{state.invalid}</Body2>
+          )}
+        </>
+      }
+      section2={
+        <>
+          <Button
+            variants="solid"
+            color="primary"
+            size="large"
+            isDisabled={state.data.mb_id && state.data.mb_pw ? false : true}
+            isLoading={state.isLoading}
+            onClick={onClickLogin}
+          >
+            {accountsNavigation[0].content}
+          </Button>
+          <Button
+            variants="light"
+            size="large"
+            onClick={onClickLink}
+            dataValue={accountsNavigation[1].url}
+          >
+            {accountsNavigation[1].content}
+          </Button>
+        </>
+      }
+      find={
+        <>
+          <Body2
+            isLink
+            data-value={accountsNavigation[2].url}
+            onClick={onClickLink}
+            color={theme.color.gray[500]}
+          >
+            {accountsNavigation[2].content}
+          </Body2>
+          <Body2
+            isLink
+            data-value={accountsNavigation[3].url}
+            onClick={onClickLink}
+            color={theme.color.gray[500]}
+          >
+            {accountsNavigation[3].content}
+          </Body2>
+        </>
+      }
+    />
   );
 };
 

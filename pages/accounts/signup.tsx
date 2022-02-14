@@ -5,9 +5,7 @@ import axios from "axios";
 import router from "next/router";
 import moment from "momnet";
 import Button from "@components/elements/button";
-import Footer from "@components/templates/footer";
 import TextField from "@components/elements/text-field";
-import Header from "@components/templates/header";
 import { IAccountsData } from "@core/interfaces/accounts";
 import AccountsLayout from "@components/layouts/accounts/accounts-layout";
 import { Body1, Body2, Header4 } from "@components/elements/types";
@@ -190,137 +188,133 @@ const Signup: NextPage = () => {
   };
 
   return (
-    <>
-      <Header />
-      <AccountsLayout
-        title={
+    <AccountsLayout
+      title={
+        <>
+          <Header4>{accountsDescription.signup.title}</Header4>
+          <Body1>{accountsDescription.signup.description}</Body1>
+        </>
+      }
+      section1={
+        state.page === 1 ? (
           <>
-            <Header4>{accountsDescription.signup.title}</Header4>
-            <Body1>{accountsDescription.signup.description}</Body1>
+            <Body2>아이디 및 비밀번호 정보</Body2>
+            <TextField
+              name="mb_id"
+              placeholder="아이디을 입력하세요."
+              size="large"
+              value={state.data.mb_id}
+              maxLength={50}
+              onChange={onChangeSignup}
+              onFocus={onFocusSignup}
+              error={state.invalid.mb_id}
+            />
+            <TextField
+              name="mb_pw"
+              placeholder="비밀번호를 입력하세요"
+              size="large"
+              value={state.data.mb_pw}
+              maxLength={50}
+              onChange={onChangeSignup}
+              onFocus={onFocusSignup}
+              error={state.invalid.mb_pw}
+              type="password"
+            />
+            <TextField
+              name="mb_pw2"
+              placeholder="비밀번호 확인"
+              size="large"
+              value={state.data.mb_pw2}
+              maxLength={50}
+              onChange={onChangeSignup}
+              onFocus={onFocusSignup}
+              error={state.invalid.mb_pw2}
+              type="password"
+            />
           </>
-        }
-        section1={
-          state.page === 1 ? (
-            <>
-              <Body2>아이디 및 비밀번호 정보</Body2>
-              <TextField
-                name="mb_id"
-                placeholder="아이디을 입력하세요."
-                size="large"
-                value={state.data.mb_id}
-                maxLength={50}
-                onChange={onChangeSignup}
-                onFocus={onFocusSignup}
-                error={state.invalid.mb_id}
-              />
-              <TextField
-                name="mb_pw"
-                placeholder="비밀번호를 입력하세요"
-                size="large"
-                value={state.data.mb_pw}
-                maxLength={50}
-                onChange={onChangeSignup}
-                onFocus={onFocusSignup}
-                error={state.invalid.mb_pw}
-                type="password"
-              />
-              <TextField
-                name="mb_pw2"
-                placeholder="비밀번호 확인"
-                size="large"
-                value={state.data.mb_pw2}
-                maxLength={50}
-                onChange={onChangeSignup}
-                onFocus={onFocusSignup}
-                error={state.invalid.mb_pw2}
-                type="password"
-              />
-            </>
-          ) : (
-            <>
-              <Body2>회원 정보</Body2>
-              <TextField
-                name="mb_nick"
-                placeholder="닉네임을 적어주세요"
-                size="large"
-                value={state.data.mb_nick}
-                error={state.invalid.mb_nick}
-                maxLength={50}
-                onChange={onChangeSignup}
-                onFocus={onFocusSignup}
-              />
-              <TextField
-                name="mb_email"
-                placeholder="이메일을 입력하세요"
-                size="large"
-                value={state.data.mb_email}
-                error={state.invalid.mb_email}
-                maxLength={50}
-                onChange={onChangeSignup}
-                onFocus={onFocusSignup}
-              />
-            </>
-          )
-        }
-        section2={
-          state.page === 2 && (
-            <>
-              <Body2>연락처</Body2>
-              <TextField
-                name="mb_name"
-                placeholder="이름 입력하세요"
-                size="large"
-                value={state.data.mb_name}
-                error={state.invalid.mb_name}
-                maxLength={50}
-                onChange={onChangeSignup}
-                onFocus={onFocusSignup}
-              />
-              <TextField
-                name="mb_ph"
-                placeholder="휴대폰 번호를 입력하세요"
-                size="large"
-                value={state.data.mb_ph}
-                error={state.invalid.mb_ph}
-                maxLength={50}
-                onChange={onChangeSignup}
-                onFocus={onFocusSignup}
-              />
-            </>
-          )
-        }
-        section3={
+        ) : (
           <>
-            {state.page == 1 ? (
-              <Button
-                variants="solid"
-                color="primary"
-                size="large"
-                isLoading={state.isLoading}
-                onClick={onClickNext}
-              >
-                다음
-              </Button>
-            ) : (
-              <Button
-                variants="solid"
-                color="primary"
-                size="large"
-                isLoading={state.isLoading}
-                onClick={onClickConfirm}
-              >
-                완료
-              </Button>
-            )}
-
-            <Button variants="light" size="large" onClick={onClickCancel}>
-              {state.page == 1 ? "취소" : "이전"}
+            <Body2>회원 정보</Body2>
+            <TextField
+              name="mb_nick"
+              placeholder="닉네임을 적어주세요"
+              size="large"
+              value={state.data.mb_nick}
+              error={state.invalid.mb_nick}
+              maxLength={50}
+              onChange={onChangeSignup}
+              onFocus={onFocusSignup}
+            />
+            <TextField
+              name="mb_email"
+              placeholder="이메일을 입력하세요"
+              size="large"
+              value={state.data.mb_email}
+              error={state.invalid.mb_email}
+              maxLength={50}
+              onChange={onChangeSignup}
+              onFocus={onFocusSignup}
+            />
+          </>
+        )
+      }
+      section2={
+        state.page === 2 && (
+          <>
+            <Body2>연락처</Body2>
+            <TextField
+              name="mb_name"
+              placeholder="이름 입력하세요"
+              size="large"
+              value={state.data.mb_name}
+              error={state.invalid.mb_name}
+              maxLength={50}
+              onChange={onChangeSignup}
+              onFocus={onFocusSignup}
+            />
+            <TextField
+              name="mb_ph"
+              placeholder="휴대폰 번호를 입력하세요"
+              size="large"
+              value={state.data.mb_ph}
+              error={state.invalid.mb_ph}
+              maxLength={50}
+              onChange={onChangeSignup}
+              onFocus={onFocusSignup}
+            />
+          </>
+        )
+      }
+      section3={
+        <>
+          {state.page == 1 ? (
+            <Button
+              variants="solid"
+              color="primary"
+              size="large"
+              isLoading={state.isLoading}
+              onClick={onClickNext}
+            >
+              다음
             </Button>
-          </>
-        }
-      />
-      <Footer />
-    </>
+          ) : (
+            <Button
+              variants="solid"
+              color="primary"
+              size="large"
+              isLoading={state.isLoading}
+              onClick={onClickConfirm}
+            >
+              완료
+            </Button>
+          )}
+
+          <Button variants="light" size="large" onClick={onClickCancel}>
+            {state.page == 1 ? "취소" : "이전"}
+          </Button>
+        </>
+      }
+    />
   );
 };
 
