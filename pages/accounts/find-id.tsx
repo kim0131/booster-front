@@ -1,6 +1,4 @@
 import type { NextPage } from "next";
-import Header from "@components/templates/header";
-import Footer from "@components/templates/footer";
 import { Body1, Header4 } from "@components/elements/types";
 import { accountsDescription } from "@core/config/description";
 import AccountsLayout from "@components/layouts/accounts/accounts-layout";
@@ -121,75 +119,71 @@ const FindId: NextPage = () => {
     }
   };
   return (
-    <>
-      <Header />
-      <AccountsLayout
-        title={
-          <>
-            <Header4>{accountsDescription.findId.title}</Header4>
-            <Body1>{accountsDescription.findId.step1}</Body1>
-          </>
-        }
-        section1={
-          <>
-            <TextField
-              name="mb_name"
-              placeholder="이름 입력하세요"
+    <AccountsLayout
+      title={
+        <>
+          <Header4>{accountsDescription.findId.title}</Header4>
+          <Body1>{accountsDescription.findId.step1}</Body1>
+        </>
+      }
+      section1={
+        <>
+          <TextField
+            name="mb_name"
+            placeholder="이름 입력하세요"
+            size="large"
+            onChange={onChangeFindId}
+            error={state.invalid.mb_name}
+            onFocus={onFocusFindId}
+          />
+          <TextField
+            name="mb_ph"
+            placeholder="휴대폰 번호를 입력하세요"
+            size="large"
+            onChange={onChangeFindId}
+            error={state.invalid.mb_ph}
+            onFocus={onFocusFindId}
+          />
+          {state.result.mb_id || state.result.message ? (
+            <Callout
+              title={
+                state.result.mb_id ? state.result.mb_id : state.result.message
+              }
+            >
+              {state.result.date ? state.result.date : ""}
+            </Callout>
+          ) : (
+            ""
+          )}
+        </>
+      }
+      section2={
+        <>
+          {state.result.mb_id ? (
+            <Button
+              variants="solid"
+              color="primary"
               size="large"
-              onChange={onChangeFindId}
-              error={state.invalid.mb_name}
-              onFocus={onFocusFindId}
-            />
-            <TextField
-              name="mb_ph"
-              placeholder="휴대폰 번호를 입력하세요"
-              size="large"
-              onChange={onChangeFindId}
-              error={state.invalid.mb_ph}
-              onFocus={onFocusFindId}
-            />
-            {state.result.mb_id || state.result.message ? (
-              <Callout
-                title={
-                  state.result.mb_id ? state.result.mb_id : state.result.message
-                }
-              >
-                {state.result.date ? state.result.date : ""}
-              </Callout>
-            ) : (
-              ""
-            )}
-          </>
-        }
-        section2={
-          <>
-            {state.result.mb_id ? (
-              <Button
-                variants="solid"
-                color="primary"
-                size="large"
-                onClick={onClickFindPw}
-              >
-                비밀번호 초기화
-              </Button>
-            ) : (
-              <Button
-                variants="solid"
-                color="primary"
-                size="large"
-                onClick={FindId}
-              >
-                다음
-              </Button>
-            )}
-            <Button variants="light" size="large" onClick={onClickCancel}>
-              취소
+              onClick={onClickFindPw}
+            >
+              비밀번호 초기화
             </Button>
-          </>
-        }
-      />
-      <Footer />
-    </>
+          ) : (
+            <Button
+              variants="solid"
+              color="primary"
+              size="large"
+              onClick={FindId}
+            >
+              다음
+            </Button>
+          )}
+          <Button variants="light" size="large" onClick={onClickCancel}>
+            취소
+          </Button>
+        </>
+      }
+    />
   );
 };
 

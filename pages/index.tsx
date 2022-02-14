@@ -5,7 +5,6 @@ import Button from "@components/elements/button";
 import TextField from "@components/elements/text-field";
 import { IconAdd } from "@components/icons";
 import useToast from "@core/hook/use-toast";
-import Callout from "@components/elements/callout";
 
 const Home: NextPage = () => {
   const toast = useToast();

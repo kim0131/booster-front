@@ -134,84 +134,80 @@ const ResetPassword: NextPage = () => {
     }
   };
   return (
-    <>
-      <Header />
-      <AccountsLayout
-        title={
-          <>
-            <Header4>{accountsDescription.resetPassword.title}</Header4>
-            <Body1>{accountsDescription.resetPassword.step1}</Body1>
-          </>
-        }
-        section1={
-          <>
-            <TextField
-              name="mb_id"
-              placeholder="아이디를 입력하세요"
+    <AccountsLayout
+      title={
+        <>
+          <Header4>{accountsDescription.resetPassword.title}</Header4>
+          <Body1>{accountsDescription.resetPassword.step1}</Body1>
+        </>
+      }
+      section1={
+        <>
+          <TextField
+            name="mb_id"
+            placeholder="아이디를 입력하세요"
+            size="large"
+            error={state.invalid.mb_id}
+            onChange={onChangeFindPw}
+            onFocus={onFocusFindPwd}
+          />
+          <TextField
+            name="mb_name"
+            placeholder="이름 입력하세요"
+            size="large"
+            error={state.invalid.mb_name}
+            onChange={onChangeFindPw}
+            onFocus={onFocusFindPwd}
+          />
+          <TextField
+            name="mb_ph"
+            placeholder="휴대폰 번호를 입력하세요"
+            size="large"
+            error={state.invalid.mb_ph}
+            onChange={onChangeFindPw}
+            onFocus={onFocusFindPwd}
+          />
+          {state.result.mb_pw || state.result.message ? (
+            <Callout
+              title={
+                state.result.mb_pw ? state.result.mb_pw : state.result.message
+              }
+            >
+              {state.result.date ? state.result.date : ""}
+            </Callout>
+          ) : (
+            ""
+          )}
+        </>
+      }
+      section2={
+        <>
+          {state.result.mb_pw ? (
+            <Button
+              variants="solid"
+              color="primary"
               size="large"
-              error={state.invalid.mb_id}
-              onChange={onChangeFindPw}
-              onFocus={onFocusFindPwd}
-            />
-            <TextField
-              name="mb_name"
-              placeholder="이름 입력하세요"
-              size="large"
-              error={state.invalid.mb_name}
-              onChange={onChangeFindPw}
-              onFocus={onFocusFindPwd}
-            />
-            <TextField
-              name="mb_ph"
-              placeholder="휴대폰 번호를 입력하세요"
-              size="large"
-              error={state.invalid.mb_ph}
-              onChange={onChangeFindPw}
-              onFocus={onFocusFindPwd}
-            />
-            {state.result.mb_pw || state.result.message ? (
-              <Callout
-                title={
-                  state.result.mb_pw ? state.result.mb_pw : state.result.message
-                }
-              >
-                {state.result.date ? state.result.date : ""}
-              </Callout>
-            ) : (
-              ""
-            )}
-          </>
-        }
-        section2={
-          <>
-            {state.result.mb_pw ? (
-              <Button
-                variants="solid"
-                color="primary"
-                size="large"
-                onClick={onClickCancel}
-              >
-                로그인하기
-              </Button>
-            ) : (
-              <Button
-                variants="solid"
-                color="primary"
-                size="large"
-                onClick={FindPw}
-              >
-                다음
-              </Button>
-            )}
-
-            <Button variants="light" size="large" onClick={onClickCancel}>
-              취소
+              onClick={onClickCancel}
+            >
+              로그인하기
             </Button>
-          </>
-        }
-      />
-      <Footer />
-    </>
+          ) : (
+            <Button
+              variants="solid"
+              color="primary"
+              size="large"
+              onClick={FindPw}
+            >
+              다음
+            </Button>
+          )}
+
+          <Button variants="light" size="large" onClick={onClickCancel}>
+            취소
+          </Button>
+        </>
+      }
+    />
   );
 };
 
