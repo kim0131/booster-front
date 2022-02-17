@@ -3,7 +3,7 @@ import Header from "@components/templates/header";
 import Footer from "@components/templates/footer";
 import { Body1, Header4 } from "@components/elements/types";
 import { accountsDescription } from "@core/config/description";
-import AccountsLayout from "@components/layouts/accounts/accounts-layout";
+import AccountsLayout from "@components/layouts/accounts-layout";
 import TextField from "@components/elements/text-field";
 import Button from "@components/elements/button";
 import Callout from "@components/elements/callout";
