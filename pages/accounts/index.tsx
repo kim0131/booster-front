@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import TextField from "@components/elements/text-field";
 import Button from "@components/elements/button";
-import AccountsLayout from "@components/layouts/accounts/accounts-layout";
+import AccountsLayout from "@components/layouts/accounts-layout";
 import { Body1, Body2, Header4 } from "@components/elements/types";
 import { accountsDescription } from "@core/config/description";
 import React, { useState } from "react";

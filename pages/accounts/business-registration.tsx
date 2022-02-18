@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import AccountsLayout from "@components/layouts/accounts/accounts-layout";
+import AccountsLayout from "@components/layouts/accounts-layout";
 import { Body1, Body2, Header4 } from "@components/elements/types";
 import { accountsDescription } from "@core/config/description";
 import Button from "@components/elements/button";

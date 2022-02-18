@@ -27,14 +27,18 @@ const Container = styled.div<IPropsContainer>`
   z-index: 10;
 `;
 
-const Item = styled.div<IPropsItem>`
+const Item = styled.button<IPropsItem>`
+  display: block;
+  width: 100%;
   padding: ${props => (props.size === "large" ? "0.75rem" : "0.5rem 0.75rem")};
   font-size: ${props => props.theme.fontSize.body2};
   line-height: ${props => props.theme.lineHeight.body2};
   text-align: left;
   cursor: pointer;
   font-weight: 500;
+  outline: 0;
   &:hover {
+    outline: 0;
     background-color: ${props => props.theme.color.gray[100]};
   }
 `;
@@ -50,7 +54,7 @@ interface IPropsDropdown {
   size?: string;
   isRight?: boolean;
   menu: IPropsMenu[];
-  onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const Dropdown = ({
