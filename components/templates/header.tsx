@@ -59,7 +59,7 @@ const Nav = styled.nav`
   align-items: center;
 `;
 
-const NavItem = styled.div<IPropsNavItem>`
+const NavItem = styled.button<IPropsNavItem>`
   height: 3rem;
   ${props => props.theme.screen.md} {
     height: 3.5rem;
@@ -71,7 +71,10 @@ const NavItem = styled.div<IPropsNavItem>`
   align-items: center;
   position: relative;
   cursor: pointer;
-  &:hover {
+  outline: 0;
+  &:hover,
+  &:focus {
+    outline: 0;
     box-shadow: ${props =>
       props.isRoute
         ? `inset 0px -4px 0px ${props.theme.color.blue[600]}`
@@ -83,7 +86,7 @@ const NavItem = styled.div<IPropsNavItem>`
       : "none"};
 `;
 
-const NavMore = styled.div`
+const NavMore = styled.button`
   height: 3.5rem;
   padding: 0 0.75rem;
   font-size: 0.875rem;
@@ -93,10 +96,14 @@ const NavMore = styled.div`
   position: relative;
   cursor: pointer;
   box-shadow: none;
+  outline: 0;
   & > div {
     display: none;
   }
-  &:hover {
+  &:hover,
+  &:focus,
+  &:active {
+    outline: 0;
     & > div {
       display: block;
     }
