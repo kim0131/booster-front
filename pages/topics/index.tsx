@@ -28,7 +28,7 @@ const lnbDatas = [
 const Topics: NextPage = () => {
   return (
     <LnbLayout>
-      <Lnb lnbDatas={lnbDatas} param="menu1" />
+      <Lnb lnbDatas={lnbDatas} param="menu4" />
     </LnbLayout>
   );
 };
