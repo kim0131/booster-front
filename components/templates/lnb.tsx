@@ -1,4 +1,5 @@
 import { Body2 } from "@components/elements/types";
+import { IconChevronDown } from "@components/icons";
 import useDesktop from "@core/hook/use-desktop";
 import styled from "@emotion/styled";
 
@@ -51,10 +52,18 @@ const LnbDesktop = {
 };
 
 const LnbMobile = {
+  Wrapper: styled.div`
+    position: relative;
+    width: 100%;
+    height: 3.5rem;
+    background-color: ${props => props.theme.color.white};
+  `,
   Selectbox: styled.select`
     appearance: none;
+    width: 100%;
     height: 3.5rem;
     padding: 0 1.25rem;
+    background-color: ${props => props.theme.color.white};
     box-shadow: ${props => props.theme.shadow.inset.bottom};
     font-size: ${props => props.theme.fontSize.body2};
     line-height: ${props => props.theme.lineHeight.body2};
@@ -64,6 +73,13 @@ const LnbMobile = {
     &:active {
       outline: 0;
     }
+  `,
+  Icon: styled.div`
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
   `,
 };
 
@@ -78,6 +94,7 @@ interface IPropsLnb {
 
 const Lnb = ({ lnbDatas, param }: IPropsLnb) => {
   const { isDesktop } = useDesktop();
+
   return isDesktop ? (
     <LnbDesktop.Container>
       {lnbDatas.map(lnbData => (
@@ -97,21 +114,22 @@ const Lnb = ({ lnbDatas, param }: IPropsLnb) => {
       ))}
     </LnbDesktop.Container>
   ) : (
-    <LnbMobile.Selectbox>
-      {lnbDatas.map(lnbData => (
-        <optgroup key={lnbData.id} label={lnbData.category}>
-          {lnbData.menus.map(menu => (
-            <option
-              key={menu.id}
-              value={menu.param}
-              selected={param === menu.param}
-            >
-              {menu.content}
-            </option>
-          ))}
-        </optgroup>
-      ))}
-    </LnbMobile.Selectbox>
+    <LnbMobile.Wrapper>
+      <LnbMobile.Selectbox defaultValue={param}>
+        {lnbDatas.map(lnbData => (
+          <optgroup key={lnbData.id} label={lnbData.category}>
+            {lnbData.menus.map(menu => (
+              <option key={menu.id} value={menu.param}>
+                {menu.content}
+              </option>
+            ))}
+          </optgroup>
+        ))}
+      </LnbMobile.Selectbox>
+      <LnbMobile.Icon>
+        <IconChevronDown />
+      </LnbMobile.Icon>
+    </LnbMobile.Wrapper>
   );
 };
 

@@ -27,7 +27,7 @@ const Home: NextPage = () => {
         onClick={() => console.log("ddd")}
       >
         <IconAdd />
-        ㅠㅠ
+        dpsjw
       </Button>
       <Button
         variants="solid"

@@ -1,4 +1,5 @@
 import LnbLayout from "@components/layouts/lnb-layout";
+import Board from "@components/templates/board";
 import Lnb from "@components/templates/lnb";
 import type { NextPage } from "next";
 
@@ -27,9 +28,12 @@ const lnbDatas = [
 
 const Topics: NextPage = () => {
   return (
-    <LnbLayout>
-      <Lnb lnbDatas={lnbDatas} param="menu4" />
-    </LnbLayout>
+    <>
+      <LnbLayout>
+        <Lnb lnbDatas={lnbDatas} param="menu4" />
+        <Board />
+      </LnbLayout>
+    </>
   );
 };
 
