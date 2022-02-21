@@ -98,27 +98,43 @@ const Page = styled.button<IPropsPage>`
 
 // Component
 
-interface IPropsPagination {}
+interface IPropsPagination {
+  totalContent: number;
+  line: number;
+  currentPage: number;
+}
 
-const sampleData = {
-  totalContent: 102581,
-  line: 20,
-  currentPage: 1,
-};
-
-const Pagination = ({}: IPropsPagination) => {
-  const pageNum = Math.ceil(sampleData.totalContent / sampleData.line);
+const Pagination = ({
+  totalContent = 102581,
+  line = 20,
+  currentPage = 12,
+}: IPropsPagination) => {
+  const totalPage = Math.ceil(totalContent / line);
+  const pageArr =
+    totalPage < 3
+      ? [...Array(totalPage)].map((v, i) => i)
+      : currentPage + 4 >= totalPage
+      ? [totalPage - 4, totalPage - 3, totalPage - 2, totalPage - 1, totalPage]
+      : currentPage < 3
+      ? [1, 2, 3, 4, 5]
+      : [
+          currentPage - 2,
+          currentPage - 1,
+          currentPage,
+          currentPage + 1,
+          currentPage + 2,
+        ];
 
   return (
     <Container>
       <Arrow>
         <IconChevronLeft size={16} />
       </Arrow>
-      <Page isCurrent>1</Page>
-      <Page isCurrent={false}>2</Page>
-      <Page isCurrent={false}>3</Page>
-      <Page isCurrent={false}>4</Page>
-      <Page isCurrent={false}>5</Page>
+      {pageArr.map(num => (
+        <Page key={num} isCurrent={num === currentPage}>
+          {num}
+        </Page>
+      ))}
       <Arrow disabled>
         <IconChevronRight size={16} />
       </Arrow>
