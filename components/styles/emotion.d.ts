@@ -95,6 +95,7 @@ declare module "@emotion/react" {
       inset: {
         top: string;
         bottom: string;
+        both: string;
       };
     };
     rounded: {

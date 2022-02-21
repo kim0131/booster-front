@@ -86,7 +86,7 @@ const NavItem = styled.button<IPropsNavItem>`
       : "none"};
 `;
 
-const NavMore = styled.button`
+const NavMore = styled.div`
   height: 3.5rem;
   padding: 0 0.75rem;
   font-size: 0.875rem;

@@ -92,6 +92,7 @@ const theme = {
     inset: {
       top: "inset 0px 1px 0px #d4d4d8",
       bottom: "inset 0px -1px 0px #d4d4d8",
+      both: "inset 0px 1px 0px #d4d4d8, inset 0px -1px 0px #d4d4d8",
     },
   },
   rounded: {

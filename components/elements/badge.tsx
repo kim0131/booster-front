@@ -14,6 +14,10 @@ const Container = styled.div<IPropsContainer>`
   position: relative;
   pointer-events: ${props => (props.onClick ? "auto" : "none")};
   height: ${props => (props.size === "large" ? "1.75rem" : "1.25rem")};
+  color: ${props =>
+    props.color === "primary"
+      ? props.theme.color.white
+      : props.theme.color.gray[500]};
   background-color: ${props =>
     props.color === "primary"
       ? props.theme.color.blue[600]
