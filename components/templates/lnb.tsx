@@ -99,8 +99,9 @@ interface IPropsLnb {
 const Lnb = ({ lnbDatas, param }: IPropsLnb) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
+  // console.log(param);
   const onClickRouter = (param: string) => {
-    router.push(`/topics/${param}`);
+    router.push(`/topics/?category=${param}`);
   };
   return isDesktop ? (
     <Style.Desktop.Container>

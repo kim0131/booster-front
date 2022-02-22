@@ -225,7 +225,7 @@ interface IPropsBoard {
 
 const Board = ({ category }: IPropsBoard) => {
   const { isDesktop } = useDesktop();
-  console.log(category);
+  // console.log(category);
   return (
     <Style.Container>
       {isDesktop && <Header4> {category}</Header4>}

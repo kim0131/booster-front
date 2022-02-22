@@ -5,9 +5,23 @@ import axios from "axios";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+interface IPropsLnb {
+  lnbDatas: {
+    id: number;
+    category: string;
+    menus: { id: number; content: string; param: string }[];
+  }[];
+  param: string | string[] | undefined;
+}
+
+interface Istate {
+  lnbDatas: IPropsLnb;
+  category: string | string[] | undefined;
+}
 
 const Topics: NextPage = () => {
   const router = useRouter();
+  let Category = router.query.category;
   const [state, setState] = useState({
     lnbDatas: [
       {
@@ -16,6 +30,7 @@ const Topics: NextPage = () => {
         menus: [{ id: 0, content: "메뉴1", param: "menu1" }],
       },
     ],
+    category: "",
   });
 
   useEffect(() => {
@@ -24,26 +39,32 @@ const Topics: NextPage = () => {
   }, [router]);
   const getCategory = async () => {
     let categoryList: any = [];
+    let categoryIdx: number = 0;
     await axios.get("/api2/category").then(res => {
-      const category = res.data.result;
-      category.map((item: object, idx: number) => {
+      const Getcategory = res.data.result;
+      Getcategory.map((item: object, idx: number) => {
         categoryList.push({
-          id: category[idx].idx,
-          content: category[idx].bo_subject,
-          param: category[idx].bo_table,
+          id: Getcategory[idx].idx,
+          content: Getcategory[idx].bo_subject,
+          param: Getcategory[idx].bo_table,
         });
+
+        if (Getcategory[idx].bo_table == Category) {
+          categoryIdx = idx;
+        }
       });
       setState({
         ...state,
         lnbDatas: [{ id: 1, category: "전체", menus: categoryList }],
+        category: Getcategory[categoryIdx].bo_subject,
       });
     });
   };
   return (
     <>
       <LnbLayout>
-        <Lnb lnbDatas={state.lnbDatas} param="menu4" />
-        <Board category="토픽 전체" />
+        <Lnb lnbDatas={state.lnbDatas} param={state.category} />
+        <Board category={state.category} />
       </LnbLayout>
     </>
   );

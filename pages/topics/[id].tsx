@@ -35,7 +35,7 @@ const TopicContent: NextPage = () => {
         <Lnb lnbDatas={lnbDatas} param="menu4" />
         <TopicContentLayout>
           <Comment />
-          <Board />
+          <Board category="전체" />
         </TopicContentLayout>
       </LnbLayout>
     </>
