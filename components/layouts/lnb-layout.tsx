@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-const Container = styled.div`
+const Style = styled.div`
   display: flex;
   flex-direction: column;
   ${props => props.theme.screen.md} {
@@ -17,7 +17,7 @@ interface IPropsLnbLayout {
 }
 
 const LnbLayout = ({ children }: IPropsLnbLayout) => {
-  return <Container>{children}</Container>;
+  return <Style>{children}</Style>;
 };
 
 export default LnbLayout;

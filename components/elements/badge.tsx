@@ -1,13 +1,13 @@
 import styled from "@emotion/styled";
 
 // Style
-interface IPropsContainer {
+interface IPropsStyle {
   size: string;
   color: string;
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-const Container = styled.div<IPropsContainer>`
+const Style = styled.div<IPropsStyle>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,9 +62,9 @@ const Badge = ({
   dataValue = undefined,
   onClick,
 }: IPropsBadge) => (
-  <Container size={size} color={color} data-value={dataValue} onClick={onClick}>
+  <Style size={size} color={color} data-value={dataValue} onClick={onClick}>
     {children}
-  </Container>
+  </Style>
 );
 
 export default Badge;
