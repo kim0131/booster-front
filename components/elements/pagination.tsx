@@ -15,9 +15,6 @@ const Style = {
     align-items: center;
     justify-content: center;
     gap: 0.25rem;
-    ${props => props.theme.screen.md} {
-      justify-content: flex-start;
-    }
   `,
   Arrow: styled.button`
     display: flex;
