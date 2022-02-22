@@ -15,123 +15,118 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Dropdown from "@components/elements/dropdown";
 import { accountsNavigation } from "@core/config/navigation";
 
-interface IPropsNavItem {
+interface IPropsStyle {
   isRoute?: boolean;
 }
 
-const Container = styled.header`
-  position: sticky;
-  width: 100%;
-  top: 0;
-  background-color: ${props => props.theme.color.white};
-  box-shadow: ${props => props.theme.shadow.inset.bottom};
-  display: flex;
-  flex-direction: column;
-  z-index: 10;
-`;
-
-const Wrapper = styled.div`
-  width: 100%;
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: 0.5rem 1.25rem;
-  ${props => props.theme.screen.md} {
-    padding: 0 3rem;
-  }
-  display: flex;
-  align-items: center;
-  gap: 3rem;
-`;
-
-const MobileWrapper = styled.div`
-  width: 100%;
-  max-width: 72rem;
-  margin: 0 auto;
-  padding-right: 1.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const Nav = styled.nav`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-`;
-
-const NavItem = styled.button<IPropsNavItem>`
-  height: 3rem;
-  ${props => props.theme.screen.md} {
-    height: 3.5rem;
-  }
-  padding: 0 0.75rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  position: relative;
-  cursor: pointer;
-  outline: 0;
-  &:hover,
-  &:focus {
+const Style = {
+  Container: styled.header`
+    position: sticky;
+    width: 100%;
+    top: 0;
+    background-color: ${props => props.theme.color.white};
+    box-shadow: ${props => props.theme.shadow.inset.bottom};
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+  `,
+  Wrapper: styled.div`
+    width: 100%;
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 0.5rem 1.25rem;
+    ${props => props.theme.screen.md} {
+      padding: 0 3rem;
+    }
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+  `,
+  MobileWrapper: styled.div`
+    width: 100%;
+    max-width: 72rem;
+    margin: 0 auto;
+    padding-right: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  `,
+  Nav: styled.nav`
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  `,
+  NavItem: styled.button<IPropsStyle>`
+    height: 3rem;
+    ${props => props.theme.screen.md} {
+      height: 3.5rem;
+    }
+    padding: 0 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
     outline: 0;
+    &:hover,
+    &:focus {
+      outline: 0;
+      box-shadow: ${props =>
+        props.isRoute
+          ? `inset 0px -4px 0px ${props.theme.color.blue[600]}`
+          : `inset 0px -4px 0px ${props.theme.color.gray[300]}`};
+    }
     box-shadow: ${props =>
       props.isRoute
         ? `inset 0px -4px 0px ${props.theme.color.blue[600]}`
-        : `inset 0px -4px 0px ${props.theme.color.gray[300]}`};
-  }
-  box-shadow: ${props =>
-    props.isRoute
-      ? `inset 0px -4px 0px ${props.theme.color.blue[600]}`
-      : "none"};
-`;
-
-const NavMore = styled.div`
-  height: 3.5rem;
-  padding: 0 0.75rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  position: relative;
-  cursor: pointer;
-  box-shadow: none;
-  outline: 0;
-  & > div {
-    display: none;
-  }
-  &:hover,
-  &:focus,
-  &:active {
+        : "none"};
+  `,
+  NavMore: styled.div`
+    height: 3.5rem;
+    padding: 0 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    box-shadow: none;
     outline: 0;
     & > div {
-      display: block;
+      display: none;
     }
-  }
-`;
-
-const ProfileWrapper = styled.div`
-  height: 3.5rem;
-  position: relative;
-  display: flex;
-  align-items: center;
-  & > div {
-    display: none;
-  }
-  &:hover {
+    &:hover,
+    &:focus,
+    &:active {
+      outline: 0;
+      & > div {
+        display: block;
+      }
+    }
+  `,
+  ProfileWrapper: styled.div`
+    height: 3.5rem;
+    position: relative;
+    display: flex;
+    align-items: center;
     & > div {
-      display: block;
+      display: none;
     }
-  }
-`;
-
-const Util = styled.div`
-  flex: 1 1 0%;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 0.5rem;
-`;
+    &:hover {
+      & > div {
+        display: block;
+      }
+    }
+  `,
+  Util: styled.div`
+    flex: 1 1 0%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+  `,
+};
 
 const Header = () => {
   const { data: session, status } = useSession();
@@ -158,28 +153,28 @@ const Header = () => {
     }
   };
   return (
-    <Container>
-      <Wrapper>
+    <Style.Container>
+      <Style.Wrapper>
         <Logo onClick={onClickLink} />
         {isDesktop && (
-          <Nav>
+          <Style.Nav>
             {globalNavigation.map(nav => (
-              <NavItem
+              <Style.NavItem
                 key={nav.id}
                 data-value={nav.url}
-                isRoute={router.pathname === nav.url}
+                isRoute={router.pathname.includes(nav.url)}
                 onClick={onClickLink}
               >
                 {nav.content}
-              </NavItem>
+              </Style.NavItem>
             ))}
-            <NavMore>
+            <Style.NavMore>
               더보기
               <Dropdown menu={globalNavigationMore} onClick={() => {}} />
-            </NavMore>
-          </Nav>
+            </Style.NavMore>
+          </Style.Nav>
         )}
-        <Util>
+        <Style.Util>
           {isDesktop && (
             <TextField
               isRounded
@@ -193,7 +188,7 @@ const Header = () => {
           </Button>
           {status == "authenticated" ? (
             // isDesktop && (
-            <ProfileWrapper>
+            <Style.ProfileWrapper>
               <Button variants="ghost" size="small">
                 <IconProfile />
               </Button>
@@ -202,7 +197,7 @@ const Header = () => {
                 isRight
                 onClick={onClickLink}
               />
-            </ProfileWrapper>
+            </Style.ProfileWrapper>
           ) : (
             // )
             <Button
@@ -219,26 +214,26 @@ const Header = () => {
               <IconSearch />
             </Button>
           )}
-        </Util>
-      </Wrapper>
+        </Style.Util>
+      </Style.Wrapper>
       {!isDesktop && (
-        <MobileWrapper>
-          <Nav>
+        <Style.MobileWrapper>
+          <Style.Nav>
             {globalNavigation.map(nav => (
-              <NavItem
+              <Style.NavItem
                 key={nav.id}
                 data-value={nav.url}
-                isRoute={router.pathname === nav.url}
+                isRoute={router.pathname.includes(nav.url)}
                 onClick={onClickLink}
               >
                 {nav.content}
-              </NavItem>
+              </Style.NavItem>
             ))}
-          </Nav>
+          </Style.Nav>
           <IconMenu />
-        </MobileWrapper>
+        </Style.MobileWrapper>
       )}
-    </Container>
+    </Style.Container>
   );
 };
 

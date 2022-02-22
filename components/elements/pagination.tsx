@@ -4,99 +4,101 @@ import styled from "@emotion/styled";
 import Loader from "./loader";
 
 // Style
-interface IPropsPage {
+interface IPropsStyle {
   isCurrent: boolean;
 }
 
-const Container = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25rem;
-  ${props => props.theme.screen.md} {
-    justify-content: flex-start;
-  }
-`;
-
-const Arrow = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  min-width: 2rem;
-  height: 2rem;
-  background-color: transparent;
-  color: ${props => props.theme.color.gray[500]};
-  font-size: ${props => props.theme.fontSize.body3};
-  line-height: ${props => props.theme.lineHeight.body3};
-  padding: 0 0.75rem;
-  border-radius: ${props => props.theme.rounded.xs};
-  font-weight: 500;
-  outline: 0;
-  & > svg {
-    width: 1rem;
-    height: 1rem;
-  }
-  & > svg > path {
-    fill: ${props => props.theme.color.gray[500]};
-  }
-  &:hover,
-  &:focus {
-    background-color: ${props => props.theme.color.gray[50]};
-    color: ${props => props.theme.color.gray[900]};
-    outline: 0;
-    & > svg > path {
-      fill: ${props => props.theme.color.gray[900]};
+const Style = {
+  Container: styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    ${props => props.theme.screen.md} {
+      justify-content: flex-start;
     }
-  }
-  &:active {
+  `,
+  Arrow: styled.button`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-width: 2rem;
+    height: 2rem;
+    background-color: transparent;
+    color: ${props => props.theme.color.gray[500]};
+    font-size: ${props => props.theme.fontSize.body3};
+    line-height: ${props => props.theme.lineHeight.body3};
+    padding: 0 0.75rem;
+    border-radius: ${props => props.theme.rounded.xs};
+    font-weight: 500;
     outline: 0;
-  }
-  &:disabled {
-    opacity: 0.25;
-    pointer-events: none;
-  }
-`;
-
-const Page = styled.button<IPropsPage>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  min-width: 2rem;
-  height: 2rem;
-  pointer-events: ${props => (props.isCurrent ? "none" : "auto")};
-  background-color: ${props =>
-    props.isCurrent ? props.theme.color.gray[100] : "transparent"};
-  color: ${props =>
-    props.isCurrent
-      ? props.theme.color.gray[900]
-      : props.theme.color.gray[500]};
-  font-size: ${props => props.theme.fontSize.body3};
-  line-height: ${props => props.theme.lineHeight.body3};
-  padding: 0 0.75rem;
-  border-radius: ${props => props.theme.rounded.xs};
-  font-weight: ${props => (props.isCurrent ? 700 : 500)};
-  outline: 0;
-  &:hover,
-  &:focus {
-    color: ${props => props.theme.color.gray[900]};
+    & > svg {
+      width: 1rem;
+      height: 1rem;
+    }
+    & > svg > path {
+      fill: ${props => props.theme.color.gray[500]};
+    }
+    &:hover,
+    &:focus {
+      background-color: ${props => props.theme.color.gray[50]};
+      color: ${props => props.theme.color.gray[900]};
+      outline: 0;
+      & > svg > path {
+        fill: ${props => props.theme.color.gray[900]};
+      }
+    }
+    &:active {
+      outline: 0;
+    }
+    &:disabled {
+      opacity: 0.25;
+      pointer-events: none;
+    }
+  `,
+  Page: styled.button<IPropsStyle>`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-width: 2rem;
+    height: 2rem;
+    pointer-events: ${props => (props.isCurrent ? "none" : "auto")};
     background-color: ${props =>
+      props.isCurrent ? props.theme.color.gray[100] : "transparent"};
+    color: ${props =>
       props.isCurrent
-        ? props.theme.color.gray[100]
-        : props.theme.color.gray[50]};
-  }
-  &:active {
+        ? props.theme.color.gray[900]
+        : props.theme.color.gray[500]};
+    font-size: ${props => props.theme.fontSize.body3};
+    line-height: ${props => props.theme.lineHeight.body3};
+    padding: 0 0.75rem;
+    border-radius: ${props => props.theme.rounded.xs};
+    font-weight: ${props => (props.isCurrent ? 700 : 500)};
     outline: 0;
-  }
-  &:disabled {
-    opacity: 0.25;
-    pointer-events: none;
-  }
-`;
+    &:hover,
+    &:focus {
+      color: ${props => props.theme.color.gray[900]};
+      background-color: ${props =>
+        props.isCurrent
+          ? props.theme.color.gray[100]
+          : props.theme.color.gray[50]};
+    }
+    &:active {
+      outline: 0;
+    }
+    &:disabled {
+      opacity: 0.25;
+      pointer-events: none;
+    }
+  `,
+};
 
 // Component
+
+// TODO : 전체 게시글, 한 페이지에 보여주는 게시글 수, 현재 페이지를 Props에 주입한다.
 
 interface IPropsPagination {
   totalContent: number;
@@ -107,7 +109,7 @@ interface IPropsPagination {
 const Pagination = ({
   totalContent = 102581,
   line = 20,
-  currentPage = 12,
+  currentPage = 1,
 }: IPropsPagination) => {
   const totalPage = Math.ceil(totalContent / line);
   const pageArr =
@@ -126,19 +128,19 @@ const Pagination = ({
         ];
 
   return (
-    <Container>
-      <Arrow>
+    <Style.Container>
+      <Style.Arrow disabled={currentPage === 1}>
         <IconChevronLeft size={16} />
-      </Arrow>
+      </Style.Arrow>
       {pageArr.map(num => (
-        <Page key={num} isCurrent={num === currentPage}>
+        <Style.Page key={num} isCurrent={num === currentPage}>
           {num}
-        </Page>
+        </Style.Page>
       ))}
-      <Arrow disabled>
+      <Style.Arrow disabled={currentPage === totalPage}>
         <IconChevronRight size={16} />
-      </Arrow>
-    </Container>
+      </Style.Arrow>
+    </Style.Container>
   );
 };
 

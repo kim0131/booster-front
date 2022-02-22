@@ -2,14 +2,14 @@ import styled from "@emotion/styled";
 import Loader from "./loader";
 
 // Style
-interface IPropsContainer {
+interface IPropsStyle {
   variants: string;
   size: string;
   color: string;
   isLoading: boolean;
 }
 
-const Container = styled.button<IPropsContainer>`
+const Style = styled.button<IPropsStyle>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -384,7 +384,7 @@ const Button = ({
   dataValue = undefined,
   onClick,
 }: IPropsButton) => (
-  <Container
+  <Style
     size={size}
     variants={variants}
     color={color}
@@ -398,7 +398,7 @@ const Button = ({
     ) : (
       <>{children}</>
     )}
-  </Container>
+  </Style>
 );
 
 export default Button;

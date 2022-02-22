@@ -1,11 +1,11 @@
 import theme from "@components/styles/theme";
 import styled from "@emotion/styled";
 
-interface IPropsWrapper {
+interface IPropsStyle {
   onClick?: (e: React.MouseEvent<SVGElement>) => void;
 }
 
-const Wrapper = styled.svg<IPropsWrapper>`
+const Style = styled.svg<IPropsStyle>`
   cursor: ${props => (props.onClick ? "pointer" : "default")};
 `;
 
@@ -17,7 +17,7 @@ interface IPropsLogo {
 
 const Logo = ({ width = "108px", height = "16px", onClick }: IPropsLogo) => {
   return (
-    <Wrapper
+    <Style
       width={width}
       height={height}
       viewBox="0 0 108 16"
@@ -55,7 +55,7 @@ const Logo = ({ width = "108px", height = "16px", onClick }: IPropsLogo) => {
       <rect width="2" height="16" fill={theme.color.blue[200]} />
       <rect x="4" width="4" height="16" fill={theme.color.blue[400]} />
       <rect x="10" width="6" height="16" fill={theme.color.blue[600]} />
-    </Wrapper>
+    </Style>
   );
 };
 
