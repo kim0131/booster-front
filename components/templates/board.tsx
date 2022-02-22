@@ -220,14 +220,16 @@ const sampleDatas = [
   },
 ];
 
-interface IPropsBoard {}
+interface IPropsBoard {
+  category: string | string[] | undefined;
+}
 
-const Board = ({}: IPropsBoard) => {
+const Board = ({ category }: IPropsBoard) => {
   const { isDesktop } = useDesktop();
-
+  console.log(category);
   return (
     <Style.Container>
-      {isDesktop && <Header4>토픽 전체</Header4>}
+      {isDesktop && <Header4> {category}</Header4>}
       <Style.BoardList.Container>
         {sampleDatas.map(data => (
           <Style.BoardList.Item.Container key={data.id}>

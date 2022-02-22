@@ -2,6 +2,7 @@ import { Body2 } from "@components/elements/types";
 import { IconChevronDown } from "@components/icons";
 import useDesktop from "@core/hook/use-desktop";
 import styled from "@emotion/styled";
+import { useRouter } from "next/router";
 
 interface IPropsStyle {
   isRoute?: boolean;
@@ -90,14 +91,17 @@ interface IPropsLnb {
     category: string;
     menus: { id: number; content: string; param: string }[];
   }[];
-  param: string;
+  param: string | string[] | undefined;
 }
 
 // TODO : LNB는 URL 쿼리스트링으로 카테고리를 받아온다.
 
 const Lnb = ({ lnbDatas, param }: IPropsLnb) => {
   const { isDesktop } = useDesktop();
-
+  const router = useRouter();
+  const onClickRouter = (param: string) => {
+    router.push(`/topics/${param}`);
+  };
   return isDesktop ? (
     <Style.Desktop.Container>
       {lnbDatas.map(lnbData => (
@@ -107,7 +111,8 @@ const Lnb = ({ lnbDatas, param }: IPropsLnb) => {
             {lnbData.menus.map(menu => (
               <Style.Desktop.Category.Button
                 key={menu.id}
-                isRoute={menu.param === param}
+                isRoute={menu.content === param}
+                onClick={() => onClickRouter(menu.param)}
               >
                 {menu.content}
               </Style.Desktop.Category.Button>
@@ -122,7 +127,11 @@ const Lnb = ({ lnbDatas, param }: IPropsLnb) => {
         {lnbDatas.map(lnbData => (
           <optgroup key={lnbData.id} label={lnbData.category}>
             {lnbData.menus.map(menu => (
-              <option key={menu.id} value={menu.param}>
+              <option
+                key={menu.id}
+                value={menu.param}
+                onClick={() => onClickRouter(menu.param)}
+              >
                 {menu.content}
               </option>
             ))}
