@@ -32,11 +32,11 @@ const TopicContent: NextPage = () => {
   return (
     <>
       <LnbLayout>
-        <Lnb lnbDatas={lnbDatas} param="menu4" />
+        {/* <Lnb lnbDatas={lnbDatas} param="menu4" />
         <TopicContentLayout>
           <Comment />
           <Board category="전체" />
-        </TopicContentLayout>
+        </TopicContentLayout> */}
       </LnbLayout>
     </>
   );

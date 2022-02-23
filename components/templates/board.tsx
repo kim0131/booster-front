@@ -12,6 +12,7 @@ import {
 import theme from "@components/styles/theme";
 import useDesktop from "@core/hook/use-desktop";
 import styled from "@emotion/styled";
+import { useEffect } from "react";
 
 const Style = {
   Container: styled.div`
@@ -221,16 +222,28 @@ const sampleDatas = [
 
 interface IPropsBoard {
   category: string | string[] | undefined;
+  Datas: {
+    id: number;
+    category: string;
+    title: string;
+    content: string;
+    writer: string;
+    like: number;
+    view: number;
+    comments: number;
+    bookmark: boolean;
+    create: Date;
+  }[];
 }
 
-const Board = ({ category }: IPropsBoard) => {
+const Board = ({ category, Datas }: IPropsBoard) => {
   const { isDesktop } = useDesktop();
-  // console.log(category);
+
   return (
     <Style.Container>
       {isDesktop && <Header4> {category}</Header4>}
       <Style.BoardList.Container>
-        {sampleDatas.map(data => (
+        {Datas.map(data => (
           <Style.BoardList.Item.Container key={data.id}>
             <Style.BoardList.Item.Top.Container>
               <Style.BoardList.Item.Top.Content.Container>
@@ -278,7 +291,7 @@ const Board = ({ category }: IPropsBoard) => {
           </Style.BoardList.Item.Container>
         ))}
       </Style.BoardList.Container>
-      <Pagination />
+      <Pagination totalContent={0} line={0} currentPage={0} />
     </Style.Container>
   );
 };
