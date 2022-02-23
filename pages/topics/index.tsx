@@ -35,7 +35,7 @@ const Topics: NextPage = () => {
       view: 0,
       comments: 0,
       bookmark: false,
-      create: new Date(),
+      create: 0,
     },
   ]);
   const [state, setState] = useState({
@@ -52,7 +52,6 @@ const Topics: NextPage = () => {
   useEffect(() => {
     getCategory();
     getTopiceContent();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router, state.category]);
 
@@ -101,8 +100,15 @@ const Topics: NextPage = () => {
     if (categoryContainer) {
       await axios("/api2/topic/list").then(res => {
         const TopicContent = res.data;
+        const CurrentTime = new Date();
 
         const result = TopicContent.filter((content: any) => {
+          const ContentTime = new Date(content.wr_datetime);
+
+          const elapsedTime = Math.ceil(
+            (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
+          );
+
           content.id = content.idx;
           content.category = getCategoryName(content.board);
           content.title = content.wr_subject;
@@ -112,7 +118,7 @@ const Topics: NextPage = () => {
           content.view = content.wr_view;
           content.comment = 50; // 추후 필요
           content.bookmark = false; //추후필요
-          content.create = content.wr_datetime;
+          content.create = elapsedTime;
           delete content.idx;
           delete content.board;
           delete content.mb_email;

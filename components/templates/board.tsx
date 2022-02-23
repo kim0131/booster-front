@@ -232,7 +232,7 @@ interface IPropsBoard {
     view: number;
     comments: number;
     bookmark: boolean;
-    create: Date;
+    create: number;
   }[];
 }
 
@@ -286,7 +286,11 @@ const Board = ({ category, Datas }: IPropsBoard) => {
                   <Body3 color={theme.color.gray[500]}>{data.comments}</Body3>
                 </Style.BoardList.Item.Bottom.Badge>
               </Style.BoardList.Item.Bottom.Info>
-              <Body3 color={theme.color.gray[500]}>3일 전</Body3>
+              <Body3 color={theme.color.gray[500]}>
+                {data.create > 24
+                  ? `${Math.ceil(data.create / 24)}일전`
+                  : `${data.create}시간전`}
+              </Body3>
             </Style.BoardList.Item.Bottom.Container>
           </Style.BoardList.Item.Container>
         ))}
