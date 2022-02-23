@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Badge from "@components/elements/badge";
 import Button from "@components/elements/button";
 import { Body3, Header5 } from "@components/elements/types";
@@ -11,6 +12,9 @@ import {
 } from "@components/icons";
 import theme from "@components/styles/theme";
 import styled from "@emotion/styled";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const Style = {
   Container: styled.div`
@@ -105,62 +109,93 @@ const Style = {
 
 interface IPropsTopicContentLayout {
   children?: React.ReactNode;
+  id: string | string[] | undefined;
 }
 
-const TopicContentLayout = ({ children }: IPropsTopicContentLayout) => {
+const TopicContentLayout = ({ children, id }: IPropsTopicContentLayout) => {
+  const router = useRouter();
+  const [topicContent, setTopicContent] = useState({
+    category: "",
+    wr_subject: "",
+    mb_name: "",
+    wr_good: "",
+    wr_view: 0,
+    create: 0,
+    wr_content: "",
+  });
+
+  useEffect(() => {
+    getTopiceContent();
+  }, [router]);
+
+  const getTopiceContent = async () => {
+    if (id) {
+      await axios(`/api2/topic/list/${id}`).then(res => {
+        const TopicContent = res.data;
+        const CurrentTime = new Date();
+        const ContentTime = new Date(TopicContent.wr_datetime);
+        const elapsedTime = Math.ceil(
+          (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
+        );
+        TopicContent.category = router.query.category;
+        TopicContent.bookmark = false; //추후필요
+        TopicContent.create = elapsedTime;
+        setTopicContent(TopicContent);
+      });
+    } else {
+      getTopiceContent();
+    }
+  };
   return (
     <Style.Container>
       <Style.Header.Container>
         <Style.Header.Badge>
-          <Badge size="large">게임</Badge>
+          <Badge size="large">{topicContent.category}</Badge>
         </Style.Header.Badge>
-        <Style.Header.Title>부산신항만 컨테이너 검수작업</Style.Header.Title>
+        <Style.Header.Title>{topicContent.wr_subject}</Style.Header.Title>
         <Style.Header.Bottom.Container>
           <Style.Header.Bottom.Info>
             <Style.Header.Bottom.Badge>
               <IconProfile size={16} color={theme.color.gray[500]} />
-              <Body3 color={theme.color.gray[500]}>물리돌이</Body3>
+              <Body3 color={theme.color.gray[500]}>
+                {topicContent.mb_name}
+              </Body3>
             </Style.Header.Bottom.Badge>
             <Style.Header.Bottom.Badge>
               <IconLike size={16} color={theme.color.gray[500]} />
-              <Body3 color={theme.color.gray[500]}>12</Body3>
+              <Body3 color={theme.color.gray[500]}>
+                {topicContent.wr_good}
+              </Body3>
             </Style.Header.Bottom.Badge>
             <Style.Header.Bottom.Badge>
               <IconView size={16} color={theme.color.gray[500]} />
-              <Body3 color={theme.color.gray[500]}>1,200</Body3>
+              <Body3 color={theme.color.gray[500]}>
+                {topicContent.wr_view}
+              </Body3>
             </Style.Header.Bottom.Badge>
             <Style.Header.Bottom.Badge>
               <IconComment size={16} color={theme.color.gray[500]} />
               <Body3 color={theme.color.gray[500]}>23</Body3>
             </Style.Header.Bottom.Badge>
           </Style.Header.Bottom.Info>
-          <Body3 color={theme.color.gray[500]}>3일 전</Body3>
+          <Body3 color={theme.color.gray[500]}>
+            {topicContent.create > 24
+              ? `${Math.ceil(topicContent.create / 24)}일전`
+              : `${topicContent.create}시간전`}
+          </Body3>
         </Style.Header.Bottom.Container>
       </Style.Header.Container>
       <Style.Body.Container>
-        <Style.Body.Content>
-          {`제목 그대로.
-
-난 전역한지 6년 되어가지만,
-대전에 있는 교관하고 연락해서 술한잔함.
-지금은 계룡대 어디에서 군무원 수행중.
-
-별 이해관계도 없는 사람에게 왜 가나 싶기도 한데,
-서툴렀던 육군 소위 당시에 참 많은 힘이 되어주었던 교관이기도 해서
-지금도 많이 생각남.
-
-서로 다 나이가 들어간다며 허허 웃었는데,
-참 시간 빠르다 싶었음.`}
-        </Style.Body.Content>
+        <Style.Body.Content>{topicContent.wr_content}</Style.Body.Content>
         <Style.Body.Button.Container>
           <Style.Body.Button.Wrapper>
             <Button color="transparent">
               <IconLike />
-              32
+              {topicContent.wr_good}
             </Button>
             <Button color="transparent">
               <IconComment />
-              32
+              23
             </Button>
           </Style.Body.Button.Wrapper>
           <Style.Body.Button.Wrapper>

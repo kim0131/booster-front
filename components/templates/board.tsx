@@ -12,6 +12,7 @@ import {
 import theme from "@components/styles/theme";
 import useDesktop from "@core/hook/use-desktop";
 import styled from "@emotion/styled";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 const Style = {
@@ -238,13 +239,20 @@ interface IPropsBoard {
 
 const Board = ({ category, Datas }: IPropsBoard) => {
   const { isDesktop } = useDesktop();
+  const router = useRouter();
 
+  const onClickRouter = (param: number) => {
+    router.push(`/topics/${param}?category=${category}`);
+  };
   return (
     <Style.Container>
       {isDesktop && <Header4> {category}</Header4>}
       <Style.BoardList.Container>
         {Datas.map(data => (
-          <Style.BoardList.Item.Container key={data.id}>
+          <Style.BoardList.Item.Container
+            key={data.id}
+            onClick={() => onClickRouter(data.id)}
+          >
             <Style.BoardList.Item.Top.Container>
               <Style.BoardList.Item.Top.Content.Container>
                 {data.category && (

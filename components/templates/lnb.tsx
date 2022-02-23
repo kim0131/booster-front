@@ -107,7 +107,14 @@ const Lnb = ({ lnbDatas, param }: IPropsLnb) => {
     <Style.Desktop.Container>
       {lnbDatas.map(lnbData => (
         <Style.Desktop.Category.Container key={lnbData.id}>
-          <Body2 isBold>{lnbData.category}</Body2>
+          <Body2
+            isBold
+            onClick={() => {
+              router.push("/topics");
+            }}
+          >
+            {lnbData.category}
+          </Body2>
           <Style.Desktop.Category.Block>
             {lnbData.menus.map(menu => (
               <Style.Desktop.Category.Button
