@@ -208,7 +208,7 @@ const Comment = ({}: IPropsComment) => {
           </Style.List.Bottom.Container>
         </Style.List.Container>
       </Style.Comment>
-      <Pagination />
+      {/* <Pagination /> */}
     </Style.Container>
   );
 };

@@ -13,7 +13,11 @@ import theme from "@components/styles/theme";
 import useDesktop from "@core/hook/use-desktop";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
+import { type } from "os";
 import { useEffect } from "react";
+import { Rings, TailSpin } from "react-loader-spinner";
+
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 const Style = {
   Container: styled.div`
@@ -114,7 +118,12 @@ const Style = {
     },
   },
 };
-
+const Flex = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
 const sampleDatas = [
   {
     id: 0,
@@ -235,9 +244,10 @@ interface IPropsBoard {
     bookmark: boolean;
     create: number;
   }[];
+  isLoading?: Boolean;
 }
 
-const Board = ({ category, Datas }: IPropsBoard) => {
+const Board = ({ category, Datas, isLoading }: IPropsBoard) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
 
@@ -245,66 +255,102 @@ const Board = ({ category, Datas }: IPropsBoard) => {
     router.push(`/topics/${param}?category=${category}`);
   };
   return (
-    <Style.Container>
-      {isDesktop && <Header4> {category}</Header4>}
-      <Style.BoardList.Container>
-        {Datas.map(data => (
-          <Style.BoardList.Item.Container
-            key={data.id}
-            onClick={() => onClickRouter(data.id)}
-          >
-            <Style.BoardList.Item.Top.Container>
-              <Style.BoardList.Item.Top.Content.Container>
-                {data.category && (
-                  <Style.BoardList.Item.Top.Content.Badge>
-                    <Badge>{data.category}</Badge>
-                  </Style.BoardList.Item.Top.Content.Badge>
-                )}
-                <Style.BoardList.Item.Top.Content.Title>
-                  {data.title}
-                </Style.BoardList.Item.Top.Content.Title>
-                <Style.BoardList.Item.Top.Content.Content>
-                  {data.content}
-                </Style.BoardList.Item.Top.Content.Content>
-              </Style.BoardList.Item.Top.Content.Container>
-              <Style.BoardList.Item.Top.Button>
-                {data.bookmark ? (
-                  <IconBookmarkFill size={20} color={theme.color.blue[600]} />
-                ) : (
-                  <IconBookmark size={20} color={theme.color.gray[500]} />
-                )}
-              </Style.BoardList.Item.Top.Button>
-            </Style.BoardList.Item.Top.Container>
-            <Style.BoardList.Item.Bottom.Container>
-              <Style.BoardList.Item.Bottom.Info>
-                <Style.BoardList.Item.Bottom.Badge>
-                  <IconProfile size={16} color={theme.color.gray[500]} />
-                  <Body3 color={theme.color.gray[500]}>{data.writer}</Body3>
-                </Style.BoardList.Item.Bottom.Badge>
-                <Style.BoardList.Item.Bottom.Badge>
-                  <IconLike size={16} color={theme.color.gray[500]} />
-                  <Body3 color={theme.color.gray[500]}>{data.like}</Body3>
-                </Style.BoardList.Item.Bottom.Badge>
-                <Style.BoardList.Item.Bottom.Badge>
-                  <IconView size={16} color={theme.color.gray[500]} />
-                  <Body3 color={theme.color.gray[500]}>{data.view}</Body3>
-                </Style.BoardList.Item.Bottom.Badge>
-                <Style.BoardList.Item.Bottom.Badge>
-                  <IconComment size={16} color={theme.color.gray[500]} />
-                  <Body3 color={theme.color.gray[500]}>{data.comments}</Body3>
-                </Style.BoardList.Item.Bottom.Badge>
-              </Style.BoardList.Item.Bottom.Info>
-              <Body3 color={theme.color.gray[500]}>
-                {data.create > 24
-                  ? `${Math.ceil(data.create / 24)}일전`
-                  : `${data.create}시간전`}
-              </Body3>
-            </Style.BoardList.Item.Bottom.Container>
-          </Style.BoardList.Item.Container>
-        ))}
-      </Style.BoardList.Container>
-      <Pagination totalContent={0} line={0} currentPage={0} />
-    </Style.Container>
+    <>
+      {isLoading ? (
+        <Flex>
+          <Rings height="100" width="100" color="black" ariaLabel="loading" />
+        </Flex>
+      ) : (
+        <Style.Container>
+          {isDesktop && <Header4> {category}</Header4>}
+
+          <Style.BoardList.Container>
+            {!Datas.length ? (
+              //카테고리 게시글이 없을 경우
+              <Style.BoardList.Item.Container>
+                <Style.BoardList.Item.Top.Container>
+                  <Style.BoardList.Item.Top.Content.Container>
+                    <Style.BoardList.Item.Top.Content.Title>
+                      작성된 게시글이 없습니다.
+                    </Style.BoardList.Item.Top.Content.Title>
+                    <Style.BoardList.Item.Top.Content.Content>
+                      작성된 게시글이 없습니다.
+                    </Style.BoardList.Item.Top.Content.Content>
+                  </Style.BoardList.Item.Top.Content.Container>
+                  <Style.BoardList.Item.Top.Button></Style.BoardList.Item.Top.Button>
+                </Style.BoardList.Item.Top.Container>
+                <Style.BoardList.Item.Bottom.Container>
+                  <Body3 color={theme.color.gray[500]}></Body3>
+                </Style.BoardList.Item.Bottom.Container>
+              </Style.BoardList.Item.Container>
+            ) : (
+              Datas.map(data => (
+                <Style.BoardList.Item.Container
+                  key={data.id}
+                  onClick={() => onClickRouter(data.id)}
+                >
+                  <Style.BoardList.Item.Top.Container>
+                    <Style.BoardList.Item.Top.Content.Container>
+                      {data.category && (
+                        <Style.BoardList.Item.Top.Content.Badge>
+                          <Badge>{data.category}</Badge>
+                        </Style.BoardList.Item.Top.Content.Badge>
+                      )}
+                      <Style.BoardList.Item.Top.Content.Title>
+                        {data.title}
+                      </Style.BoardList.Item.Top.Content.Title>
+                      <Style.BoardList.Item.Top.Content.Content>
+                        {data.content}
+                      </Style.BoardList.Item.Top.Content.Content>
+                    </Style.BoardList.Item.Top.Content.Container>
+                    <Style.BoardList.Item.Top.Button>
+                      {data.bookmark ? (
+                        <IconBookmarkFill
+                          size={20}
+                          color={theme.color.blue[600]}
+                        />
+                      ) : (
+                        <IconBookmark size={20} color={theme.color.gray[500]} />
+                      )}
+                    </Style.BoardList.Item.Top.Button>
+                  </Style.BoardList.Item.Top.Container>
+                  <Style.BoardList.Item.Bottom.Container>
+                    <Style.BoardList.Item.Bottom.Info>
+                      <Style.BoardList.Item.Bottom.Badge>
+                        <IconProfile size={16} color={theme.color.gray[500]} />
+                        <Body3 color={theme.color.gray[500]}>
+                          {data.writer}
+                        </Body3>
+                      </Style.BoardList.Item.Bottom.Badge>
+                      <Style.BoardList.Item.Bottom.Badge>
+                        <IconLike size={16} color={theme.color.gray[500]} />
+                        <Body3 color={theme.color.gray[500]}>{data.like}</Body3>
+                      </Style.BoardList.Item.Bottom.Badge>
+                      <Style.BoardList.Item.Bottom.Badge>
+                        <IconView size={16} color={theme.color.gray[500]} />
+                        <Body3 color={theme.color.gray[500]}>{data.view}</Body3>
+                      </Style.BoardList.Item.Bottom.Badge>
+                      <Style.BoardList.Item.Bottom.Badge>
+                        <IconComment size={16} color={theme.color.gray[500]} />
+                        <Body3 color={theme.color.gray[500]}>
+                          {data.comments}
+                        </Body3>
+                      </Style.BoardList.Item.Bottom.Badge>
+                    </Style.BoardList.Item.Bottom.Info>
+                    <Body3 color={theme.color.gray[500]}>
+                      {data.create > 24
+                        ? `${Math.ceil(data.create / 24)}일전`
+                        : `${data.create}시간전`}
+                    </Body3>
+                  </Style.BoardList.Item.Bottom.Container>
+                </Style.BoardList.Item.Container>
+              ))
+            )}
+          </Style.BoardList.Container>
+          <Pagination totalContent={0} line={0} currentPage={0} />
+        </Style.Container>
+      )}
+    </>
   );
 };
 

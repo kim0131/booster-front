@@ -5,6 +5,7 @@ import axios from "axios";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { TailSpin } from "react-loader-spinner";
 import TopicContent from "./[id]";
 interface IPropsLnb {
   lnbDatas: {
@@ -24,6 +25,7 @@ const Topics: NextPage = () => {
   const router = useRouter();
   let Category = router.query.category;
   const [categoryContainer, setCategoryContainer] = useState<any>([]);
+  const [isLoading, setLoading] = useState<any>();
   const [boardDatas, setBoardDatas] = useState([
     {
       id: 0,
@@ -48,14 +50,17 @@ const Topics: NextPage = () => {
     ],
     category: "",
   });
-
   useEffect(() => {
     getCategory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
+  useEffect(() => {
     getTopiceContent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router, state.category]);
+  }, [state.category]);
 
   const getCategory = async () => {
+    setLoading(true);
     let categoryList: any = [];
     let categoryIdx: number = 0;
     await axios.get("/api2/category").then(res => {
@@ -86,6 +91,7 @@ const Topics: NextPage = () => {
         });
       }
     });
+    setLoading(false);
   };
 
   const getCategoryName = (idx: any) => {
@@ -97,11 +103,13 @@ const Topics: NextPage = () => {
   };
 
   const getTopiceContent = async () => {
+    setLoading(true);
     if (categoryContainer) {
       await axios("/api2/topic/list").then(res => {
-        const TopicContent = res.data;
+        const TopicContent = res.data.result;
+
         const CurrentTime = new Date();
-        const result = TopicContent.filter((content: any) => {
+        let result = TopicContent.filter((content: any) => {
           const ContentTime = new Date(content.wr_datetime);
           const elapsedTime = Math.ceil(
             (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
@@ -139,18 +147,25 @@ const Topics: NextPage = () => {
           }
         });
 
-        setBoardDatas(result);
+        if (result) {
+          setBoardDatas(result);
+        }
       });
     } else {
       getTopiceContent();
     }
+    setLoading(false);
   };
 
   return (
     <>
       <LnbLayout>
         <Lnb lnbDatas={state.lnbDatas} param={state.category} />
-        <Board category={state.category} Datas={boardDatas} />
+        <Board
+          category={state.category}
+          Datas={boardDatas}
+          isLoading={isLoading}
+        />
       </LnbLayout>
     </>
   );

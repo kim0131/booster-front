@@ -102,7 +102,7 @@ const TopicContent: NextPage = () => {
   const getTopiceContent = async () => {
     if (categoryContainer) {
       await axios("/api2/topic/list").then(res => {
-        const TopicContent = res.data;
+        const TopicContent = res.data.result;
         const CurrentTime = new Date();
         const result = TopicContent.filter((content: any) => {
           const ContentTime = new Date(content.wr_datetime);

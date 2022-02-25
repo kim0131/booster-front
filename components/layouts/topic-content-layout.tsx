@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
 import Badge from "@components/elements/badge";
 import Button from "@components/elements/button";
@@ -104,6 +105,14 @@ const Style = {
         align-items: center;
       `,
     },
+    ImageContainer: styled.div`
+      background-image: ${(props: any) =>
+        props.background ? `url(${props.background})` : ""};
+      width: 100%;
+      height: auto;
+      border-radius: 1rem;
+      overflow: hidden;
+    `,
   },
 };
 
@@ -122,6 +131,7 @@ const TopicContentLayout = ({ children, id }: IPropsTopicContentLayout) => {
     wr_view: 0,
     create: 0,
     wr_content: "",
+    file_url: "",
   });
 
   useEffect(() => {
@@ -131,12 +141,16 @@ const TopicContentLayout = ({ children, id }: IPropsTopicContentLayout) => {
   const getTopiceContent = async () => {
     if (id) {
       await axios(`/api2/topic/list/${id}`).then(res => {
-        const TopicContent = res.data;
+        const TopicContent = res.data.result;
         const CurrentTime = new Date();
         const ContentTime = new Date(TopicContent.wr_datetime);
         const elapsedTime = Math.ceil(
           (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
         );
+        if (TopicContent.file_url) {
+          TopicContent.file_url =
+            "/uploads/" + TopicContent.file_url.slice(2, -2);
+        }
         TopicContent.category = router.query.category;
         TopicContent.bookmark = false; //추후필요
         TopicContent.create = elapsedTime;
@@ -187,6 +201,12 @@ const TopicContentLayout = ({ children, id }: IPropsTopicContentLayout) => {
       </Style.Header.Container>
       <Style.Body.Container>
         <Style.Body.Content>{topicContent.wr_content}</Style.Body.Content>
+        <Style.Body.ImageContainer>
+          <img
+            src={topicContent.file_url ? topicContent.file_url : ""}
+            alt=""
+          />
+        </Style.Body.ImageContainer>
         <Style.Body.Button.Container>
           <Style.Body.Button.Wrapper>
             <Button color="transparent">
