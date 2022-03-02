@@ -1,15 +1,15 @@
-import LnbLayout from "@components/layouts/lnb-layout";
+import SnbLayout from "@components/layouts/snb-layout";
 import TopicContentLayout from "@components/layouts/topic-content-layout";
 import Board from "@components/templates/board";
 import Comment from "@components/templates/comment";
-import Lnb from "@components/templates/lnb";
+import Snb from "@components/templates/snb";
 import axios from "axios";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-interface IPropsLnb {
-  lnbDatas: {
+interface IPropsSnb {
+  snbDatas: {
     id: number;
     category: string;
     menus: { id: number; content: string; param: string }[];
@@ -18,7 +18,7 @@ interface IPropsLnb {
 }
 
 interface Istate {
-  lnbDatas: any;
+  snbDatas: any;
   category: string | string[] | undefined;
 }
 const TopicContent: NextPage = () => {
@@ -42,7 +42,7 @@ const TopicContent: NextPage = () => {
     },
   ]);
   const [state, setState] = useState<Istate>({
-    lnbDatas: [
+    snbDatas: [
       {
         id: 0,
         category: "카테고리1",
@@ -78,13 +78,13 @@ const TopicContent: NextPage = () => {
       if (Category) {
         setState({
           ...state,
-          lnbDatas: [{ id: 1, category: "전체", menus: categoryList }],
+          snbDatas: [{ id: 1, category: "전체", menus: categoryList }],
           category: Category,
         });
       } else {
         setState({
           ...state,
-          lnbDatas: [{ id: 1, category: "전체", menus: categoryList }],
+          snbDatas: [{ id: 1, category: "전체", menus: categoryList }],
           category: Category,
         });
       }
@@ -151,13 +151,13 @@ const TopicContent: NextPage = () => {
 
   return (
     <>
-      <LnbLayout>
-        <Lnb lnbDatas={state.lnbDatas} param={state.category} />
+      <SnbLayout>
+        <Snb snbDatas={state.snbDatas} param={state.category} />
         <TopicContentLayout id={Id}>
           <Comment />
           <Board category={state.category} Datas={boardDatas} />
         </TopicContentLayout>
-      </LnbLayout>
+      </SnbLayout>
     </>
   );
 };

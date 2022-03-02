@@ -5,52 +5,57 @@ import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 
 interface IPropsStyle {
-  isRoute?: boolean;
+  isActive?: boolean;
 }
 
 const Style = {
   Desktop: {
     Container: styled.div`
-      flex: none;
-      width: 12rem;
       display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
     `,
-    Category: {
-      Container: styled.div`
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-      `,
-      Block: styled.div`
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-      `,
-      Button: styled.button<IPropsStyle>`
-        padding: 0.5rem;
-        border-radius: ${props => props.theme.rounded.md};
-        background-color: ${props =>
-          props.isRoute ? props.theme.color.blue[50] : "transparent"};
-        color: ${props =>
-          props.isRoute
-            ? props.theme.color.blue[600]
-            : props.theme.color.gray[900]};
-        font-size: ${props => props.theme.fontSize.body2};
-        font-weight: ${props => (props.isRoute ? 500 : 400)};
-        line-height: ${props => props.theme.lineHeight.body2};
-        text-align: left;
-        &:hover,
-        &:focus {
-          outline: 0;
-          background-color: ${props =>
-            props.isRoute
-              ? props.theme.color.blue[50]
-              : props.theme.color.gray[100]};
-        }
-      `,
-    },
+    Button: styled.button<IPropsStyle>`
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      height: 3rem;
+      color: ${props =>
+        props.isActive
+          ? props.theme.color.gray[900]
+          : props.theme.color.gray[500]};
+      background-color: ${props =>
+        props.isActive ? props.theme.color.gray[100] : "transparent"};
+      border-color: ${props =>
+        props.isActive ? props.theme.color.gray[100] : "transparent"};
+      font-size: ${props => props.theme.fontSize.body1};
+      line-height: ${props => props.theme.lineHeight.body1};
+      font-weight: 500;
+      padding-left: 13px;
+      padding-right: 13px;
+      border-radius: ${props => props.theme.rounded.md};
+      gap: 8px;
+      &:hover,
+      &:focus {
+        color: ${props => props.theme.color.gray[600]};
+        background-color: ${props => props.theme.color.gray[50]};
+        border-color: ${props => props.theme.color.gray[50]};
+        outline: 0;
+      }
+      &:disabled {
+        opacity: 0.25;
+        pointer-events: none;
+      }
+      & > svg {
+        width: 20px;
+        height: 20px;
+      }
+      & > svg > path {
+        fill: ${props => props.theme.color.gray[500]};
+      }
+    `,
   },
   Mobile: {
     Wrapper: styled.div`
@@ -88,8 +93,8 @@ const Style = {
 interface IPropsLnb {
   lnbDatas: {
     id: number;
-    category: string;
-    menus: { id: number; content: string; param: string }[];
+    content: string;
+    param: string;
   }[];
   param: string | string[] | undefined;
 }
@@ -106,44 +111,22 @@ const Lnb = ({ lnbDatas, param }: IPropsLnb) => {
   return isDesktop ? (
     <Style.Desktop.Container>
       {lnbDatas.map(lnbData => (
-        <Style.Desktop.Category.Container key={lnbData.id}>
-          <Body2
-            isBold
-            onClick={() => {
-              router.push("/topics");
-            }}
-          >
-            {lnbData.category}
-          </Body2>
-          <Style.Desktop.Category.Block>
-            {lnbData.menus.map(menu => (
-              <Style.Desktop.Category.Button
-                key={menu.id}
-                isRoute={menu.content === param}
-                onClick={() => onClickRouter(menu.param)}
-              >
-                {menu.content}
-              </Style.Desktop.Category.Button>
-            ))}
-          </Style.Desktop.Category.Block>
-        </Style.Desktop.Category.Container>
+        <Style.Desktop.Button
+          key={lnbData.id}
+          onClick={() => {}}
+          isActive={lnbData.content === param}
+        >
+          {lnbData.content}
+        </Style.Desktop.Button>
       ))}
     </Style.Desktop.Container>
   ) : (
     <Style.Mobile.Wrapper>
       <Style.Mobile.Selectbox defaultValue={param}>
         {lnbDatas.map(lnbData => (
-          <optgroup key={lnbData.id} label={lnbData.category}>
-            {lnbData.menus.map(menu => (
-              <option
-                key={menu.id}
-                value={menu.param}
-                onClick={() => onClickRouter(menu.param)}
-              >
-                {menu.content}
-              </option>
-            ))}
-          </optgroup>
+          <option key={lnbData.id} value={lnbData.param} onClick={() => {}}>
+            {lnbData.content}
+          </option>
         ))}
       </Style.Mobile.Selectbox>
       <Style.Mobile.Icon>

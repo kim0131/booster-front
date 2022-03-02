@@ -106,7 +106,7 @@ interface IPropsPagination {
 const Pagination = ({
   totalContent = 102581,
   line = 20,
-  currentPage = 1,
+  currentPage = 5130,
 }: IPropsPagination) => {
   const totalPage = Math.ceil(totalContent / line);
   const pageArr =

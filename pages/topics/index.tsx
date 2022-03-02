@@ -1,14 +1,14 @@
-import LnbLayout from "@components/layouts/lnb-layout";
+import SnbLayout from "@components/layouts/snb-layout";
 import Board from "@components/templates/board";
-import Lnb from "@components/templates/lnb";
+import Snb from "@components/templates/snb";
 import axios from "axios";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { TailSpin } from "react-loader-spinner";
 import TopicContent from "./[id]";
-interface IPropsLnb {
-  lnbDatas: {
+interface IPropsSnb {
+  snbDatas: {
     id: number;
     category: string;
     menus: { id: number; content: string; param: string }[];
@@ -17,7 +17,7 @@ interface IPropsLnb {
 }
 
 interface Istate {
-  lnbDatas: IPropsLnb;
+  snbDatas: IPropsSnb;
   category: string | string[] | undefined;
 }
 
@@ -41,7 +41,7 @@ const Topics: NextPage = () => {
     },
   ]);
   const [state, setState] = useState({
-    lnbDatas: [
+    snbDatas: [
       {
         id: 0,
         category: "카테고리1",
@@ -80,13 +80,13 @@ const Topics: NextPage = () => {
       if (Category) {
         setState({
           ...state,
-          lnbDatas: [{ id: 1, category: "전체", menus: categoryList }],
+          snbDatas: [{ id: 1, category: "전체", menus: categoryList }],
           category: Getcategory[categoryIdx].bo_subject,
         });
       } else {
         setState({
           ...state,
-          lnbDatas: [{ id: 1, category: "전체", menus: categoryList }],
+          snbDatas: [{ id: 1, category: "전체", menus: categoryList }],
           category: "토픽 전체",
         });
       }
@@ -159,14 +159,14 @@ const Topics: NextPage = () => {
 
   return (
     <>
-      <LnbLayout>
-        <Lnb lnbDatas={state.lnbDatas} param={state.category} />
+      <SnbLayout>
+        <Snb snbDatas={state.snbDatas} param={state.category} />
         <Board
           category={state.category}
           Datas={boardDatas}
           isLoading={isLoading}
         />
-      </LnbLayout>
+      </SnbLayout>
     </>
   );
 };

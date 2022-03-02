@@ -4,6 +4,7 @@ const Style = styled.div`
   display: flex;
   flex-direction: column;
   ${props => props.theme.screen.md} {
+    flex-direction: row;
     max-width: 72rem;
     margin: auto;
     gap: 3rem;
@@ -11,12 +12,12 @@ const Style = styled.div`
   }
 `;
 
-interface IPropsLnbLayout {
+interface IPropsSnbLayout {
   children?: React.ReactNode;
 }
 
-const LnbLayout = ({ children }: IPropsLnbLayout) => {
+const SnbLayout = ({ children }: IPropsSnbLayout) => {
   return <Style>{children}</Style>;
 };
 
-export default LnbLayout;
+export default SnbLayout;

@@ -1,4 +1,5 @@
 import Badge from "@components/elements/badge";
+import Loader from "@components/elements/loader";
 import Pagination from "@components/elements/pagination";
 import { Body3, Header4 } from "@components/elements/types";
 import {
@@ -13,11 +14,6 @@ import theme from "@components/styles/theme";
 import useDesktop from "@core/hook/use-desktop";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
-import { type } from "os";
-import { useEffect } from "react";
-import { Rings, TailSpin } from "react-loader-spinner";
-
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 const Style = {
   Container: styled.div`
@@ -118,117 +114,6 @@ const Style = {
     },
   },
 };
-const Flex = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-`;
-const sampleDatas = [
-  {
-    id: 0,
-    category: "TV·연예",
-    title: "이지현 금쪽이 보는 데",
-    content:
-      "ㅋㅋㅋㅋㅋㅋ진짜 웃기네 이지현 엄마로서 카리스마 0 사자후도 아니고 약간 20대 초반이 연애할 때 남자한테 찡찡거리는 말투네 자기도 자기가 통제가 안되는듯 이지현이 adhd끼가 있어보이는데? 애들은 이쁜데 안타깝다",
-    writer: "한국철도공사",
-    like: 12,
-    view: 365,
-    comments: 64,
-    bookmark: false,
-    create: new Date(),
-  },
-  {
-    id: 1,
-    category: "암호화폐",
-    title: "코인 수익률 -50%면 하위 몇%이야...?",
-    content: "ㅜㅜㅠ 1200에서 600댔어..",
-    writer: "LG유플러스",
-    like: 2,
-    view: 638,
-    comments: 16,
-    bookmark: false,
-    create: new Date(),
-  },
-  {
-    id: 2,
-    category: "TV·연예",
-    title: "이지현 금쪽이 보는 데",
-    content:
-      "ㅋㅋㅋㅋㅋㅋ진짜 웃기네 이지현 엄마로서 카리스마 0 사자후도 아니고 약간 20대 초반이 연애할 때 남자한테 찡찡거리는 말투네 자기도 자기가 통제가 안되는듯 이지현이 adhd끼가 있어보이는데? 애들은 이쁜데 안타깝다",
-    writer: "한국철도공사",
-    like: 12,
-    view: 365,
-    comments: 64,
-    bookmark: false,
-    create: new Date(),
-  },
-  {
-    id: 3,
-    category: "TV·연예",
-    title: "이지현 금쪽이 보는 데",
-    content:
-      "ㅋㅋㅋㅋㅋㅋ진짜 웃기네 이지현 엄마로서 카리스마 0 사자후도 아니고 약간 20대 초반이 연애할 때 남자한테 찡찡거리는 말투네 자기도 자기가 통제가 안되는듯 이지현이 adhd끼가 있어보이는데? 애들은 이쁜데 안타깝다",
-    writer: "한국철도공사",
-    like: 12,
-    view: 365,
-    comments: 64,
-    bookmark: false,
-    create: new Date(),
-  },
-  {
-    id: 4,
-    category: "TV·연예",
-    title: "이지현 금쪽이 보는 데",
-    content:
-      "ㅋㅋㅋㅋㅋㅋ진짜 웃기네 이지현 엄마로서 카리스마 0 사자후도 아니고 약간 20대 초반이 연애할 때 남자한테 찡찡거리는 말투네 자기도 자기가 통제가 안되는듯 이지현이 adhd끼가 있어보이는데? 애들은 이쁜데 안타깝다",
-    writer: "한국철도공사",
-    like: 12,
-    view: 365,
-    comments: 64,
-    bookmark: false,
-    create: new Date(),
-  },
-  {
-    id: 5,
-    category: "우리회사 채용해요",
-    title: "민자고속도로(서울고속도로) 산업안전 채용",
-    content:
-      "https://www.seoulbeltway.co.kr/boardCnts/view.do?m=0106&boardID=1000196&boardSeq=1102137&lev=0",
-    writer: "새회사",
-    like: 4,
-    view: 53,
-    comments: 5,
-    bookmark: true,
-    create: new Date(),
-  },
-  {
-    id: 6,
-    category: "TV·연예",
-    title: "이지현 금쪽이 보는 데",
-    content:
-      "ㅋㅋㅋㅋㅋㅋ진짜 웃기네 이지현 엄마로서 카리스마 0 사자후도 아니고 약간 20대 초반이 연애할 때 남자한테 찡찡거리는 말투네 자기도 자기가 통제가 안되는듯 이지현이 adhd끼가 있어보이는데? 애들은 이쁜데 안타깝다",
-    writer: "한국철도공사",
-    like: 12,
-    view: 365,
-    comments: 64,
-    bookmark: false,
-    create: new Date(),
-  },
-  {
-    id: 7,
-    category: "TV·연예",
-    title: "이지현 금쪽이 보는 데",
-    content:
-      "ㅋㅋㅋㅋㅋㅋ진짜 웃기네 이지현 엄마로서 카리스마 0 사자후도 아니고 약간 20대 초반이 연애할 때 남자한테 찡찡거리는 말투네 자기도 자기가 통제가 안되는듯 이지현이 adhd끼가 있어보이는데? 애들은 이쁜데 안타깝다",
-    writer: "한국철도공사",
-    like: 12,
-    view: 365,
-    comments: 64,
-    bookmark: false,
-    create: new Date(),
-  },
-];
 
 interface IPropsBoard {
   category: string | string[] | undefined;
@@ -257,9 +142,7 @@ const Board = ({ category, Datas, isLoading }: IPropsBoard) => {
   return (
     <>
       {isLoading ? (
-        <Flex>
-          <Rings height="100" width="100" color="black" ariaLabel="loading" />
-        </Flex>
+        <Loader color="gray" />
       ) : (
         <Style.Container>
           {isDesktop && <Header4> {category}</Header4>}
