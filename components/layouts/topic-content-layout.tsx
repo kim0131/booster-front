@@ -12,6 +12,7 @@ import {
   IconView,
 } from "@components/icons";
 import theme from "@components/styles/theme";
+import { topicImageUrl } from "@core/config/imgurl";
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -149,7 +150,7 @@ const TopicContentLayout = ({ children, id }: IPropsTopicContentLayout) => {
         );
         if (TopicContent.file_url) {
           TopicContent.file_url =
-            "/uploads/" + TopicContent.file_url.slice(2, -2);
+            topicImageUrl + TopicContent.file_url.slice(2, -2);
         }
         TopicContent.category = router.query.category;
         TopicContent.bookmark = false; //추후필요
