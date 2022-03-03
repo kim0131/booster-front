@@ -124,21 +124,18 @@ const Signup: NextPage = () => {
     let pass_fail = true;
     await mb_nick_vaildate(state.data.mb_nick).then(res => {
       if (res.error) {
-        console.log(res.error);
         setState({ ...state, invalid: { mb_nick: res.error } });
         pass_fail = false;
       }
     });
     await mb_email_vaildate(state.data.mb_email).then(res => {
       if (res.error) {
-        console.log(res.error);
         setState({ ...state, invalid: { mb_email: res.error } });
         pass_fail = false;
       }
     });
     await mb_ph_vaildate(state.data.mb_ph).then(res => {
       if (res.error) {
-        console.log(res.error);
         setState({ ...state, invalid: { mb_ph: res.error } });
         pass_fail = false;
       }
@@ -156,7 +153,19 @@ const Signup: NextPage = () => {
           mb_business_num: state.data.mb_business_num,
           mb_nick: state.data.mb_nick,
         })
-        .then((res: any) => {
+        .then(async (res: any) => {
+          const mb_idx = res.data.result.idx;
+          await axios
+            .post(`/api2/business/write`, {
+              mb_idx: mb_idx,
+            })
+            .then(async res => {
+              const business_idx = res.data.result.idx;
+              await axios.post(`/api2/user/update/${mb_idx}`, {
+                mb_business_num: business_idx,
+                mb_business_certify: 0,
+              });
+            });
           signIn("username-password", {
             mb_id: state.data.mb_id,
             mb_pw: state.data.mb_pw,
