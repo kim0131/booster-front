@@ -3,6 +3,7 @@ import Button from "@components/elements/button";
 import TextField from "@components/elements/text-field";
 import { IconAdd } from "@components/icons";
 import useToast from "@core/hook/use-toast";
+import TextAreaTopicContent from "@components/elements/text-area-topic-content";
 
 const Home: NextPage = () => {
   const toast = useToast();
@@ -47,6 +48,7 @@ const Home: NextPage = () => {
         placeholder="test"
         error="아아하하"
       />
+      <TextAreaTopicContent />
     </div>
   );
 };
