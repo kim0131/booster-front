@@ -15,7 +15,7 @@ const Insights: NextPage = () => {
   return (
     <LnbLayout>
       <Lnb lnbDatas={state.lnbDatas} param="전체" />
-      <Post></Post>
+      <Post />
     </LnbLayout>
   );
 };

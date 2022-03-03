@@ -5,7 +5,7 @@ const Style = styled.div`
   flex-direction: column;
   ${props => props.theme.screen.md} {
     max-width: 72rem;
-    margin: auto;
+    margin: 0 auto;
     gap: 3rem;
     padding: 3rem;
   }

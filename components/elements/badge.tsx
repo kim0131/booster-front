@@ -38,7 +38,7 @@ const Style = styled.div<IPropsStyle>`
   padding-left: ${props => (props.size === "large" ? "0.5rem" : "0.25rem")};
   padding-right: ${props => (props.size === "large" ? "0.5rem" : "0.25rem")};
   border-radius: ${props =>
-    props.size === "large" ? "2px" : props.theme.rounded.xs};
+    props.size === "large" ? props.theme.rounded.xs : "2px"};
   gap: ${props => (props.size === "large" ? "4px" : "2px")};
 `;
 
