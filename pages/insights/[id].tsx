@@ -1,20 +1,30 @@
+import InsightsContentLayout from "@components/layouts/insights-content-layout";
+import LnbLayout from "@components/layouts/lnb-layout";
+import Comment from "@components/templates/comment";
+import Lnb from "@components/templates/lnb";
+import Post from "@components/templates/post";
 import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import { jsx, css, Global, ClassNames } from "@emotion/react";
 import { useRouter } from "next/router";
-import Header from "../../components/templates/header";
-import Footer from "../../components/templates/footer";
+import { useState } from "react";
 
 const InsightId: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
+  const [state, setState] = useState({
+    lnbDatas: [
+      { id: 0, content: "전체", param: "all" },
+      { id: 1, content: "메뉴1", param: "menu1" },
+      { id: 2, content: "메뉴2", param: "menu2" },
+    ],
+  });
   console.log(id);
   return (
-    <>
-      <Header />
-      <Footer />
-    </>
+    <InsightsContentLayout comments={<Comment />}>
+      <LnbLayout>
+        <Lnb lnbDatas={state.lnbDatas} param="전체" />
+        <Post />
+      </LnbLayout>
+    </InsightsContentLayout>
   );
 };
 

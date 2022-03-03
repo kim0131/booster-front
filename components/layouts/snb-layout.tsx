@@ -6,7 +6,7 @@ const Style = styled.div`
   ${props => props.theme.screen.md} {
     flex-direction: row;
     max-width: 72rem;
-    margin: auto;
+    margin: 0 auto;
     gap: 3rem;
     padding: 3rem;
   }
