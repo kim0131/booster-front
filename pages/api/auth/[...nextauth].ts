@@ -22,10 +22,10 @@ export default NextAuth({
         const mb_id = credentials?.mb_id;
         const mb_nick = credentials?.mb_nick;
         //이유를 모르겠으나... 아이디는 email, 닉네임은 name에 할당
-        const user = { mb_id: mb_id, name: mb_nick };
+        const user = { email: mb_id, name: mb_nick };
         if (user) {
           // Any object returned will be saved in `user` property of the JWT
-          console.log(user);
+
           return user;
         } else {
           // If you return null or false then the credentials will be rejected
