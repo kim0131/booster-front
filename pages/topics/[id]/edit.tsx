@@ -6,7 +6,7 @@ import TopicCreateLayout from "@components/layouts/topic-create-layout";
 import type { NextPage } from "next";
 import { useRef, useState } from "react";
 
-const CreateTopic: NextPage = () => {
+const EditTopic: NextPage = () => {
   const [state, setState] = useState("");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -18,7 +18,7 @@ const CreateTopic: NextPage = () => {
   };
   return (
     <TopicCreateLayout
-      header="글쓰기"
+      header="수정하기"
       category={<Selectbox />}
       title={<TextField />}
       content={
@@ -34,7 +34,7 @@ const CreateTopic: NextPage = () => {
       buttons={
         <>
           <Button variants="solid" size="large">
-            등록하기
+            수정하기
           </Button>
           <Button size="large">취소</Button>
         </>
@@ -43,4 +43,4 @@ const CreateTopic: NextPage = () => {
   );
 };
 
-export default CreateTopic;
+export default EditTopic;

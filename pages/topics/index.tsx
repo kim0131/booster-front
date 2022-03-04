@@ -5,8 +5,7 @@ import axios from "axios";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { TailSpin } from "react-loader-spinner";
-import TopicContent from "./[id]";
+
 interface IPropsSnb {
   snbDatas: {
     id: number;

@@ -53,6 +53,7 @@ const Style = {
 };
 
 interface IPropsTopicCreateLayout {
+  header: string;
   category: React.ReactNode;
   title: React.ReactNode;
   content: React.ReactNode;
@@ -60,6 +61,7 @@ interface IPropsTopicCreateLayout {
 }
 
 const TopicCreateLayout = ({
+  header,
   category,
   title,
   content,
@@ -67,7 +69,7 @@ const TopicCreateLayout = ({
 }: IPropsTopicCreateLayout) => {
   return (
     <Style.Container>
-      <Header4>글쓰기</Header4>
+      <Header4>{header}</Header4>
       <Style.Wrapper>
         <Style.Header.Container>
           <Style.Header.Category>{category}</Style.Header.Category>

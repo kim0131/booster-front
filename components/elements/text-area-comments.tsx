@@ -1,14 +1,9 @@
-import { IconClose, IconPhoto } from "@components/icons";
 import styled from "@emotion/styled";
 import Badge from "./badge";
-import Button from "./button";
 
 interface IPropsStyle {
   container: {
     isDisabled?: boolean;
-  };
-  thumbnail: {
-    photo?: string;
   };
 }
 
@@ -35,30 +30,8 @@ const Style = {
   `,
   Tool: styled.div`
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    z-index: 2;
-  `,
-  Thumbnail: styled.div<IPropsStyle["thumbnail"]>`
-    width: 6rem;
-    height: 6rem;
-    display: flex;
-    align-items: flex-start;
     justify-content: flex-end;
-    border: ${props => `1px solid ${props.theme.color.gray[300]};`};
-    background-color: ${props => props.theme.color.white};
-    background-image: ${props =>
-      props.photo ? `url(${props.photo})` : "none"};
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    padding: 0.25rem;
-    border-radius: ${props => props.theme.rounded.sm};
-    ${props => props.theme.screen.md} {
-      width: 8rem;
-      height: 8rem;
-      padding: 0.5rem;
-    }
+    z-index: 2;
   `,
 };
 
@@ -96,7 +69,7 @@ const Input = styled.textarea`
   }
 `;
 
-interface IPropsTextAreaTopicContent {
+interface IPropsTextAreaComments {
   name: string;
   value: string;
   thumbnail: string;
@@ -109,10 +82,9 @@ interface IPropsTextAreaTopicContent {
   maxLength?: number;
 }
 
-const TextAreaTopicContent = ({
+const TextAreaComments = ({
   name,
   value,
-  thumbnail,
   onChange,
   onFocus,
   textAreaRef,
@@ -120,7 +92,7 @@ const TextAreaTopicContent = ({
   rows,
   placeholder,
   maxLength,
-}: IPropsTextAreaTopicContent) => {
+}: IPropsTextAreaComments) => {
   return (
     <Style.Container isDisabled={isDisabled}>
       <Input
@@ -135,18 +107,6 @@ const TextAreaTopicContent = ({
         maxLength={maxLength}
       />
       <Style.Tool>
-        {/* TODO : 썸네일  */}
-        {thumbnail ? (
-          <Style.Thumbnail>
-            <Button size="small">
-              <IconClose />
-            </Button>
-          </Style.Thumbnail>
-        ) : (
-          <Button color="transparent">
-            <IconPhoto />
-          </Button>
-        )}
         <Badge>
           {value.length.toLocaleString()} / {maxLength?.toLocaleString()}
         </Badge>
@@ -156,4 +116,4 @@ const TextAreaTopicContent = ({
   );
 };
 
-export default TextAreaTopicContent;
+export default TextAreaComments;
