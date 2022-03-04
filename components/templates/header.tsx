@@ -10,7 +10,7 @@ import {
 import useDesktop from "@core/hook/use-desktop";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Dropdown from "@components/elements/dropdown";
 import { accountsNavigation } from "@core/config/navigation";
@@ -152,6 +152,7 @@ const Header = () => {
         : "";
     }
   };
+
   return (
     <Style.Container>
       <Style.Wrapper>
