@@ -1,5 +1,6 @@
 import Button from "@components/elements/button";
 import Pagination from "@components/elements/pagination";
+import TextAreaComments from "@components/elements/text-area-comments";
 import { Body3, Header5 } from "@components/elements/types";
 import {
   IconComment,
@@ -10,6 +11,7 @@ import {
 } from "@components/icons";
 import theme from "@components/styles/theme";
 import styled from "@emotion/styled";
+import { useRef, useState } from "react";
 
 interface IPropsStyle {
   isReply: boolean;
@@ -111,12 +113,27 @@ interface IPropsComment {
 }
 
 const Comment = ({}: IPropsComment) => {
+  const [state, setState] = useState("");
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const onChangeheight = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    textAreaRef.current!.style.height = "auto";
+    textAreaRef.current!.style.height = `${e.target.scrollHeight}px`;
+    console.log(e.currentTarget.scrollHeight);
+    setState(e.currentTarget.value);
+  };
   return (
     <Style.Container>
       <Style.Comment>
         <Style.AddComment.Container>
           <Header5>40개의 댓글</Header5>
-          <Style.AddComment.TextArea rows={3} />
+          <TextAreaComments
+            name="comments"
+            textAreaRef={textAreaRef}
+            value={state}
+            onChange={onChangeheight}
+            maxLength={200}
+            rows={3}
+          />
           <Style.AddComment.Button>
             <Button variants="solid" color="primary">
               작성하기

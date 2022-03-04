@@ -7,6 +7,7 @@ interface IPropsStyle {
   size: string;
   color: string;
   isLoading: boolean;
+  isRounded: boolean;
 }
 
 const Style = styled.button<IPropsStyle>`
@@ -155,14 +156,17 @@ const Style = styled.button<IPropsStyle>`
     }
   }};
   border-radius: ${props => {
-    switch (props.size) {
-      case "large":
-        return props.theme.rounded.md;
-      case "small":
-        return props.theme.rounded.xs;
-      default:
-        return props.theme.rounded.sm;
-    }
+    if (props.isRounded) {
+      return props.theme.rounded.full;
+    } else
+      switch (props.size) {
+        case "large":
+          return props.theme.rounded.md;
+        case "small":
+          return props.theme.rounded.xs;
+        default:
+          return props.theme.rounded.sm;
+      }
   }};
   font-weight: 500;
   gap: ${props => {
@@ -370,6 +374,7 @@ interface IPropsButton {
   color?: string;
   isDisabled?: boolean;
   isLoading?: boolean;
+  isRounded?: boolean;
   dataValue?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
@@ -381,6 +386,7 @@ const Button = ({
   color = "gray",
   isDisabled = false,
   isLoading = false,
+  isRounded = false,
   dataValue = undefined,
   onClick,
 }: IPropsButton) => (
@@ -390,6 +396,7 @@ const Button = ({
     color={color}
     disabled={isDisabled}
     isLoading={isLoading}
+    isRounded={isRounded}
     data-value={dataValue}
     onClick={isLoading ? undefined : onClick}
   >

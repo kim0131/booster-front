@@ -86,6 +86,7 @@ const Style = {
       right: 1.25rem;
       width: 1.5rem;
       height: 1.5rem;
+      pointer-events: none;
     `,
   },
 };

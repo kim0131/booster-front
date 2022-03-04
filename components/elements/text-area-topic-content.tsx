@@ -1,12 +1,19 @@
+import { IconClose, IconPhoto } from "@components/icons";
 import styled from "@emotion/styled";
 import Badge from "./badge";
+import Button from "./button";
 
 interface IPropsStyle {
-  isDisabled?: boolean;
+  container: {
+    isDisabled?: boolean;
+  };
+  thumbnail: {
+    photo?: string;
+  };
 }
 
 const Style = {
-  Container: styled.label<IPropsStyle>`
+  Container: styled.label<IPropsStyle["container"]>`
     display: flex;
     flex-direction: column;
     padding: 14px;
@@ -26,11 +33,32 @@ const Style = {
     border-color: ${props => props.theme.color.gray[300]};
     z-index: 1;
   `,
-  Badge: styled.div`
+  Tool: styled.div`
     display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: flex-end;
     z-index: 2;
+  `,
+  Thumbnail: styled.div<IPropsStyle["thumbnail"]>`
+    width: 6rem;
+    height: 6rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    border: ${props => `1px solid ${props.theme.color.gray[300]};`};
+    background-color: ${props => props.theme.color.white};
+    background-image: ${props =>
+      props.photo ? `url(${props.photo})` : "none"};
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 0.25rem;
+    border-radius: ${props => props.theme.rounded.sm};
+    ${props => props.theme.screen.md} {
+      width: 8rem;
+      height: 8rem;
+      padding: 0.5rem;
+    }
   `,
 };
 
@@ -68,9 +96,10 @@ const Input = styled.textarea`
   }
 `;
 
-interface IPropsTextAreaCreate {
+interface IPropsTextAreaTopicContent {
   name: string;
   value: string;
+  thumbnail: string;
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
   textAreaRef?: React.RefObject<HTMLTextAreaElement>;
@@ -80,9 +109,10 @@ interface IPropsTextAreaCreate {
   maxLength?: number;
 }
 
-const TextAreaCreate = ({
+const TextAreaTopicContent = ({
   name,
   value,
+  thumbnail,
   onChange,
   onFocus,
   textAreaRef,
@@ -90,7 +120,7 @@ const TextAreaCreate = ({
   rows,
   placeholder,
   maxLength,
-}: IPropsTextAreaCreate) => {
+}: IPropsTextAreaTopicContent) => {
   return (
     <Style.Container isDisabled={isDisabled}>
       <Input
@@ -104,12 +134,26 @@ const TextAreaCreate = ({
         placeholder={placeholder}
         maxLength={maxLength}
       />
-      <Style.Badge>
-        <Badge>123</Badge>
-      </Style.Badge>
+      <Style.Tool>
+        {/* TODO : 썸네일  */}
+        {thumbnail ? (
+          <Style.Thumbnail>
+            <Button size="small">
+              <IconClose />
+            </Button>
+          </Style.Thumbnail>
+        ) : (
+          <Button color="transparent">
+            <IconPhoto />
+          </Button>
+        )}
+        <Badge>
+          {value.length.toLocaleString()} / {maxLength?.toLocaleString()}
+        </Badge>
+      </Style.Tool>
       <Style.Background />
     </Style.Container>
   );
 };
 
-export default TextAreaCreate;
+export default TextAreaTopicContent;
