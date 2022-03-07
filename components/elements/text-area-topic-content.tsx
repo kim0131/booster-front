@@ -99,7 +99,7 @@ const Input = styled.textarea`
 interface IPropsTextAreaTopicContent {
   name: string;
   value: string;
-  thumbnail: string;
+  thumbnail?: string;
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
   textAreaRef?: React.RefObject<HTMLTextAreaElement>;

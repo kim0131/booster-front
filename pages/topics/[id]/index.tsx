@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import SnbLayout from "@components/layouts/snb-layout";
 import TopicContentLayout from "@components/layouts/topic-content-layout";
 import Board from "@components/templates/board";
@@ -24,7 +25,8 @@ interface Istate {
 const TopicContent: NextPage = () => {
   const router = useRouter();
   let Category = router.query.category;
-  let Id = router.query.id;
+  let id = router.query.id;
+  const [commentCount, setCount] = useState();
   const [categoryContainer, setCategoryContainer] = useState<any>([]);
   const [topicContent, setTopicContent] = useState();
   const [boardDatas, setBoardDatas] = useState([
@@ -53,10 +55,12 @@ const TopicContent: NextPage = () => {
   });
 
   useEffect(() => {
-    getCategory();
-    getTopiceContent();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router, state.category]);
+    if (id) {
+      getCategory();
+      getTopiceContent();
+      getCount(id);
+    }
+  }, [router, id, state.category]);
 
   const getCategory = async () => {
     let categoryList: any = [];
@@ -91,6 +95,11 @@ const TopicContent: NextPage = () => {
     });
   };
 
+  const getCount = async (id: any) => {
+    const res = await axios.get(`/api2/topic/commentcount/${id}`);
+    setCount(res.data.result.length);
+  };
+
   const getCategoryName = (idx: any) => {
     for (let i = 0; i < categoryContainer.length; i++) {
       if (categoryContainer[i].idx == idx) {
@@ -109,6 +118,7 @@ const TopicContent: NextPage = () => {
           const elapsedTime = Math.ceil(
             (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
           );
+
           content.id = content.idx;
           content.category = getCategoryName(content.board);
           content.title = content.wr_subject;
@@ -116,9 +126,10 @@ const TopicContent: NextPage = () => {
           content.writer = content.mb_name;
           content.like = content.wr_good;
           content.view = content.wr_view;
-          content.comments = 50; // 추후 필요
+          content.comments = 0;
           content.bookmark = false; //추후필요
           content.create = elapsedTime;
+          content.replycount = res.data.result.length;
           delete content.idx;
           delete content.board;
           delete content.mb_email;
@@ -153,8 +164,8 @@ const TopicContent: NextPage = () => {
     <>
       <SnbLayout>
         <Snb snbDatas={state.snbDatas} param={state.category} />
-        <TopicContentLayout id={Id}>
-          <Comment />
+        <TopicContentLayout id={id} count={commentCount}>
+          <Comment id={id} count={commentCount} />
           <Board category={state.category} Datas={boardDatas} />
         </TopicContentLayout>
       </SnbLayout>

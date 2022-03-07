@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Badge from "@components/elements/badge";
 import Loader from "@components/elements/loader";
 import Pagination from "@components/elements/pagination";
@@ -13,7 +14,9 @@ import {
 import theme from "@components/styles/theme";
 import useDesktop from "@core/hook/use-desktop";
 import styled from "@emotion/styled";
+import axios from "axios";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const Style = {
   Container: styled.div`
@@ -134,21 +137,37 @@ interface IPropsBoard {
 
 const Board = ({ category, Datas, isLoading }: IPropsBoard) => {
   const { isDesktop } = useDesktop();
+  const [datas, setData] = useState(Datas);
+  const [isLoading2, setLoading] = useState<any>(isLoading);
   const router = useRouter();
+  useEffect(() => {
+    getReplyDatas();
+  }, [Datas]);
 
   const onClickRouter = (param: number) => {
     router.push(`/topics/${param}?category=${category}`);
   };
+
+  const getReplyDatas = async () => {
+    setLoading(true);
+    const Datas1 = Datas;
+    for (const item of Datas1) {
+      const count = await axios.get(`/api2/topic/commentcount/${item.id}`);
+      item.comments = count.data.result.length;
+    }
+    setData(Datas1);
+    setLoading(false);
+  };
   return (
     <>
-      {isLoading ? (
+      {isLoading2 ? (
         <Loader color="gray" />
       ) : (
         <Style.Container>
           {isDesktop && <Header4> {category}</Header4>}
 
           <Style.BoardList.Container>
-            {!Datas.length ? (
+            {!datas.length ? (
               //카테고리 게시글이 없을 경우
               <Style.BoardList.Item.Container>
                 <Style.BoardList.Item.Top.Container>
@@ -167,7 +186,7 @@ const Board = ({ category, Datas, isLoading }: IPropsBoard) => {
                 </Style.BoardList.Item.Bottom.Container>
               </Style.BoardList.Item.Container>
             ) : (
-              Datas.map(data => (
+              datas.map(data => (
                 <Style.BoardList.Item.Container
                   key={data.id}
                   onClick={() => onClickRouter(data.id)}

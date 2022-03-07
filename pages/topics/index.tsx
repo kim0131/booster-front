@@ -120,7 +120,7 @@ const Topics: NextPage = () => {
           content.writer = content.mb_name;
           content.like = content.wr_good;
           content.view = content.wr_view;
-          content.comments = 50; // 추후 필요
+          content.comments = 0; // 추후 필요
           content.bookmark = false; //추후필요
           content.create = elapsedTime;
           delete content.idx;
