@@ -148,7 +148,7 @@ const TextAreaTopicContent = ({
           </Button>
         )}
         <Badge>
-          {value.length.toLocaleString()} / {maxLength?.toLocaleString()}
+          {value?.length?.toLocaleString()} / {maxLength?.toLocaleString()}
         </Badge>
       </Style.Tool>
       <Style.Background />
