@@ -13,10 +13,12 @@ import {
 } from "@components/icons";
 import theme from "@components/styles/theme";
 import { topicImageUrl } from "@core/config/imgurl";
+import { TopicDetail } from "@core/swr/topicfetch";
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 const Style = {
   Container: styled.div`
@@ -129,6 +131,11 @@ const TopicContentLayout = ({
   count,
 }: IPropsTopicContentLayout) => {
   const router = useRouter();
+  const { data: topicdetail } = useSWR(
+    () => `/api2/topic/list/${id}`,
+    TopicDetail,
+  );
+  console.log(topicdetail);
   const [topicContent, setTopicContent] = useState({
     category: "",
     wr_subject: "",
@@ -145,25 +152,8 @@ const TopicContentLayout = ({
   }, [router]);
 
   const getTopiceContent = async () => {
-    if (id) {
-      await axios(`/api2/topic/list/${id}`).then(res => {
-        const TopicContent = res.data.result;
-        const CurrentTime = new Date();
-        const ContentTime = new Date(TopicContent.wr_datetime);
-        const elapsedTime = Math.ceil(
-          (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
-        );
-        if (TopicContent.file_url) {
-          TopicContent.file_url =
-            topicImageUrl + TopicContent.file_url.slice(2, -2);
-        }
-        TopicContent.category = router.query.category;
-        TopicContent.bookmark = false; //추후필요
-        TopicContent.create = elapsedTime;
-        setTopicContent(TopicContent);
-      });
-    } else {
-      getTopiceContent();
+    if (topicdetail) {
+      setTopicContent(topicdetail);
     }
   };
   return (

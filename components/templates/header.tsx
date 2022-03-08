@@ -153,6 +153,10 @@ const Header = () => {
     }
   };
 
+  const oncClickPUshWrite = () => {
+    router.push("/create");
+  };
+
   return (
     <Style.Container>
       <Style.Wrapper>
@@ -184,7 +188,7 @@ const Header = () => {
               prefix={<IconSearch />}
             />
           )}
-          <Button variants="solid" size="small">
+          <Button variants="solid" size="small" onClick={oncClickPUshWrite}>
             글쓰기
           </Button>
           {status == "authenticated" ? (

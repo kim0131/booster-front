@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { IconClose, IconPhoto } from "@components/icons";
 import styled from "@emotion/styled";
 import Badge from "./badge";
@@ -107,6 +108,8 @@ interface IPropsTextAreaTopicContent {
   rows?: number;
   placeholder?: string;
   maxLength?: number;
+  insertImage?: any;
+  delImage?: any;
 }
 
 const TextAreaTopicContent = ({
@@ -120,6 +123,8 @@ const TextAreaTopicContent = ({
   rows,
   placeholder,
   maxLength,
+  insertImage,
+  delImage,
 }: IPropsTextAreaTopicContent) => {
   return (
     <Style.Container isDisabled={isDisabled}>
@@ -135,15 +140,14 @@ const TextAreaTopicContent = ({
         maxLength={maxLength}
       />
       <Style.Tool>
-        {/* TODO : 썸네일  */}
         {thumbnail ? (
-          <Style.Thumbnail>
-            <Button size="small">
+          <Style.Thumbnail photo={thumbnail}>
+            <Button size="small" onClick={delImage}>
               <IconClose />
             </Button>
           </Style.Thumbnail>
         ) : (
-          <Button color="transparent">
+          <Button color="transparent" onClick={insertImage}>
             <IconPhoto />
           </Button>
         )}

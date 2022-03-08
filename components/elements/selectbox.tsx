@@ -1,12 +1,6 @@
 import { IconChevronDown } from "@components/icons";
 import styled from "@emotion/styled";
-import React from "react";
-
-const options = [
-  { id: 0, value: "chocolate", content: "Chocolate" },
-  { id: 1, value: "strawberry", content: "Strawberry" },
-  { id: 2, value: "vanilla", content: "Vanilla" },
-];
+import React, { MutableRefObject } from "react";
 
 // Style
 interface IPropsStyle {
@@ -164,6 +158,8 @@ const Style = {
     }
   `,
   Suffix: styled.div<IPropsStyle["icon"]>`
+    position: absolute;
+    right: 1rem;
     flex: none;
     order: 1;
     z-index: 2;
@@ -205,6 +201,8 @@ const Style = {
 };
 
 const Select = styled.select<IPropsStyle["input"]>`
+  height: 100%;
+  width: 100%;
   flex: 1 1 0%;
   order: 0;
   appearance: none;
@@ -283,6 +281,7 @@ interface IPropsSelectbox {
   error?: React.ReactNode;
   prefix?: React.ReactNode;
   type?: string;
+  options?: any;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLSelectElement>) => void;
 }
@@ -299,6 +298,7 @@ const Selectbox = ({
   isRounded = false,
   prefix,
   placeholder,
+  options = [{ id: "", value: "", content: "" }],
   onChange,
   onFocus,
 }: IPropsSelectbox) => (
@@ -314,7 +314,7 @@ const Selectbox = ({
         onChange={onChange}
         onFocus={onFocus}
       >
-        {options.map(option => (
+        {options.map((option: any) => (
           <option key={option.id} value={option.value}>
             {option.content}
           </option>

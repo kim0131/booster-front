@@ -1,10 +1,12 @@
 import SnbLayout from "@components/layouts/snb-layout";
 import Board from "@components/templates/board";
 import Snb from "@components/templates/snb";
+import { Topicfetcher } from "@core/swr/topicfetch";
 import axios from "axios";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 interface IPropsSnb {
   snbDatas: {
@@ -22,6 +24,7 @@ interface Istate {
 
 const Topics: NextPage = () => {
   const router = useRouter();
+  const { data: topic } = useSWR(`/api2/topic/list`, Topicfetcher);
   let Category = router.query.category;
   const [categoryContainer, setCategoryContainer] = useState<any>([]);
   const [isLoading, setLoading] = useState<any>();
@@ -54,9 +57,11 @@ const Topics: NextPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
   useEffect(() => {
-    getTopiceContent();
+    if (topic) {
+      getTopiceContent();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.category]);
+  }, [state.category, topic]);
 
   const getCategory = async () => {
     setLoading(true);
@@ -103,55 +108,20 @@ const Topics: NextPage = () => {
 
   const getTopiceContent = async () => {
     setLoading(true);
-    if (categoryContainer) {
-      await axios("/api2/topic/list").then(res => {
-        const TopicContent = res.data.result;
 
-        const CurrentTime = new Date();
-        let result = TopicContent.filter((content: any) => {
-          const ContentTime = new Date(content.wr_datetime);
-          const elapsedTime = Math.ceil(
-            (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
-          );
-          content.id = content.idx;
-          content.category = getCategoryName(content.board);
-          content.title = content.wr_subject;
-          content.content = content.wr_content;
-          content.writer = content.mb_name;
-          content.like = content.wr_good;
-          content.view = content.wr_view;
-          content.comments = 0; // 추후 필요
-          content.bookmark = false; //추후필요
-          content.create = elapsedTime;
-          delete content.idx;
-          delete content.board;
-          delete content.mb_email;
-          delete content.mb_id;
-          delete content.mb_name;
-          delete content.wr_content;
-          delete content.wr_datetime;
-          delete content.wr_good;
-          delete content.wr_ip;
-          delete content.wr_is_comment;
-          delete content.wr_is_comment2;
-          delete content.wr_parent;
-          delete content.wr_subject;
-          delete content.wr_update;
-          delete content.wr_view;
-          delete content.file_url;
-          if (Category) {
-            return content.category == state.category;
-          } else {
-            return true;
-          }
-        });
-
-        if (result) {
-          setBoardDatas(result);
+    if (categoryContainer.length) {
+      let result = topic.filter((content: any) => {
+        if (Category) {
+          return content.category == state.category;
+        } else {
+          return true;
         }
       });
+      if (result) {
+        setBoardDatas(result);
+      }
     } else {
-      getTopiceContent();
+      setBoardDatas(topic);
     }
     setLoading(false);
   };
@@ -160,11 +130,13 @@ const Topics: NextPage = () => {
     <>
       <SnbLayout>
         <Snb snbDatas={state.snbDatas} param={state.category} />
-        <Board
-          category={state.category}
-          Datas={boardDatas}
-          isLoading={isLoading}
-        />
+        {boardDatas && (
+          <Board
+            category={state.category}
+            Datas={boardDatas}
+            isLoading={isLoading}
+          />
+        )}
       </SnbLayout>
     </>
   );

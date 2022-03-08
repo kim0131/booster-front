@@ -142,7 +142,7 @@ const Board = ({ category, Datas, isLoading }: IPropsBoard) => {
   const router = useRouter();
   useEffect(() => {
     getReplyDatas();
-  }, [Datas]);
+  }, [Datas, category]);
 
   const onClickRouter = (param: number) => {
     router.push(`/topics/${param}?category=${category}`);
@@ -150,12 +150,7 @@ const Board = ({ category, Datas, isLoading }: IPropsBoard) => {
 
   const getReplyDatas = async () => {
     setLoading(true);
-    const Datas1 = Datas;
-    for (const item of Datas1) {
-      const count = await axios.get(`/api2/topic/commentcount/${item.id}`);
-      item.comments = count.data.result.length;
-    }
-    setData(Datas1);
+    setData(Datas);
     setLoading(false);
   };
   return (

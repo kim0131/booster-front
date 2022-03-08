@@ -4,10 +4,13 @@ import TopicContentLayout from "@components/layouts/topic-content-layout";
 import Board from "@components/templates/board";
 import Comment from "@components/templates/comment";
 import Snb from "@components/templates/snb";
+import { CategorySelectfetcher } from "@core/swr/categoryfetcher";
+import { Topicfetcher } from "@core/swr/topicfetch";
 import axios from "axios";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 interface IPropsSnb {
   snbDatas: {
@@ -26,9 +29,15 @@ const TopicContent: NextPage = () => {
   const router = useRouter();
   let Category = router.query.category;
   let id = router.query.id;
+  const { data: topic } = useSWR(`/api2/topic/list`, Topicfetcher);
+  const { data: categoryList } = useSWR(
+    `/api2/category`,
+    CategorySelectfetcher,
+  );
+  const [isLoading, setLoading] = useState<any>();
   const [commentCount, setCount] = useState();
   const [categoryContainer, setCategoryContainer] = useState<any>([]);
-  const [topicContent, setTopicContent] = useState();
+
   const [boardDatas, setBoardDatas] = useState([
     {
       id: 0,
@@ -60,7 +69,7 @@ const TopicContent: NextPage = () => {
       getTopiceContent();
       getCount(id);
     }
-  }, [router, id, state.category]);
+  }, [id, state.category]);
 
   const getCategory = async () => {
     let categoryList: any = [];
@@ -100,64 +109,23 @@ const TopicContent: NextPage = () => {
     setCount(res.data.result.length);
   };
 
-  const getCategoryName = (idx: any) => {
-    for (let i = 0; i < categoryContainer.length; i++) {
-      if (categoryContainer[i].idx == idx) {
-        return categoryContainer[i].bo_subject;
-      }
-    }
-  };
-
   const getTopiceContent = async () => {
+    setLoading(true);
     if (categoryContainer) {
-      await axios("/api2/topic/list").then(res => {
-        const TopicContent = res.data.result;
-        const CurrentTime = new Date();
-        const result = TopicContent.filter((content: any) => {
-          const ContentTime = new Date(content.wr_datetime);
-          const elapsedTime = Math.ceil(
-            (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
-          );
-
-          content.id = content.idx;
-          content.category = getCategoryName(content.board);
-          content.title = content.wr_subject;
-          content.content = content.wr_content;
-          content.writer = content.mb_name;
-          content.like = content.wr_good;
-          content.view = content.wr_view;
-          content.comments = 0;
-          content.bookmark = false; //추후필요
-          content.create = elapsedTime;
-          content.replycount = res.data.result.length;
-          delete content.idx;
-          delete content.board;
-          delete content.mb_email;
-          delete content.mb_id;
-          delete content.mb_name;
-          delete content.wr_content;
-          delete content.wr_datetime;
-          delete content.wr_good;
-          delete content.wr_ip;
-          delete content.wr_is_comment;
-          delete content.wr_is_comment2;
-          delete content.wr_parent;
-          delete content.wr_subject;
-          delete content.wr_update;
-          delete content.wr_view;
-          delete content.file_url;
-          if (Category) {
-            return content.category == state.category;
-          } else {
-            return true;
-          }
-        });
-
-        setBoardDatas(result);
+      let result = topic.filter((content: any) => {
+        if (Category) {
+          return content.category == state.category;
+        } else {
+          return true;
+        }
       });
+      if (result) {
+        setBoardDatas(result);
+      }
     } else {
-      getTopiceContent();
+      setBoardDatas(topic);
     }
+    setLoading(false);
   };
 
   return (
@@ -166,7 +134,13 @@ const TopicContent: NextPage = () => {
         <Snb snbDatas={state.snbDatas} param={state.category} />
         <TopicContentLayout id={id} count={commentCount}>
           <Comment id={id} count={commentCount} />
-          <Board category={state.category} Datas={boardDatas} />
+          {boardDatas && (
+            <Board
+              category={state.category}
+              Datas={boardDatas}
+              isLoading={isLoading}
+            />
+          )}
         </TopicContentLayout>
       </SnbLayout>
     </>
