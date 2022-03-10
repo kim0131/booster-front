@@ -13,10 +13,7 @@ const Topics: NextPage = () => {
   const router = useRouter();
   let Category = router.query.category;
   const { data: topic } = useSWR(`/api2/topic/list`, topicfetcher);
-  const { data: categoryContainer } = useSWR(
-    "/api2/category",
-    CategorySelectfetcher,
-  );
+
   const [isLoading, setLoading] = useState<any>();
   const [boardDatas, setBoardDatas] = useState([
     {

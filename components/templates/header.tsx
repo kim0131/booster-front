@@ -134,6 +134,12 @@ const Header = () => {
   const router = useRouter();
   const { isDesktop } = useDesktop();
 
+  useEffect(() => {
+    if (status == "unauthenticated" && router.route != "/accounts") {
+      router.push("/accounts");
+    }
+  }, [router, status]);
+
   const onClickLink = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,
   ) => {

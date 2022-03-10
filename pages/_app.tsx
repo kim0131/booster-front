@@ -1,6 +1,6 @@
 import "@public/fonts/spoqahansansneo.css";
 import type { AppProps } from "next/app";
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider, useSession } from "next-auth/react";
 import { Global, ThemeProvider } from "@emotion/react";
 import theme from "@components/styles/theme";
 import global from "@components/styles/global";
@@ -12,11 +12,14 @@ import { SWRConfig } from "swr";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { message } = useToast();
+
   return (
     <SWRConfig
-      value={{
-        refreshInterval: 1000,
-      }}
+      value={
+        {
+          // refreshInterval: 1000,
+        }
+      }
     >
       <ThemeProvider theme={theme}>
         <SessionProvider>

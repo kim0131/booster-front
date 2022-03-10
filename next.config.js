@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+  webpack5: false,
   reactStrictMode: true,
   // env 내용 추가
   env: {

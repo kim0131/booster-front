@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Badge from "@components/elements/badge";
 import Button from "@components/elements/button";
+import Dropdown from "@components/elements/dropdown";
 import { Body3, Header5 } from "@components/elements/types";
 import {
   IconBookmark,
@@ -117,6 +118,29 @@ const Style = {
       overflow: hidden;
     `,
   },
+  SubMore: styled.div`
+    height: 3.5rem;
+    padding: 0 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    box-shadow: none;
+    outline: 0;
+    & > div {
+      display: none;
+    }
+    &:hover,
+    &:focus,
+    &:active {
+      outline: 0;
+      & > div {
+        display: block;
+      }
+    }
+  `,
 };
 
 interface IPropsTopicContentLayout {
@@ -133,6 +157,25 @@ const TopicContentLayout = ({
   const router = useRouter();
   const topicContent = data;
 
+  const onClickLink = async (
+    e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,
+  ) => {
+    e.preventDefault();
+    const idx: any = e.currentTarget.dataset.value;
+    const content: string | null = e.currentTarget.textContent;
+
+    if (idx) {
+      router.push(`/topics/edit?id=${idx}`);
+    }
+    if (content == "삭제하기") {
+      let result = confirm("정말 삭제하시겠습니까?");
+      if (result) {
+        await axios
+          .post(`/api2.topic/delete/${idx}`)
+          .then(res => alert("삭제되었습니다"));
+      }
+    }
+  };
   return (
     <>
       {topicContent && (
@@ -180,7 +223,11 @@ const TopicContentLayout = ({
             <Style.Body.Content>{topicContent.wr_content}</Style.Body.Content>
             <Style.Body.ImageContainer>
               <img
-                src={topicContent.file_url ? topicContent.file_full_url : ""}
+                src={
+                  topicContent.file_full_url != topicImageUrl
+                    ? topicContent.file_full_url
+                    : ""
+                }
                 alt=""
               />
             </Style.Body.ImageContainer>
@@ -200,9 +247,22 @@ const TopicContentLayout = ({
                   <IconBookmark />
                   스크랩
                 </Button>
-                <Button color="transparent">
+
+                <Style.SubMore>
                   <IconMoreVertical />
-                </Button>
+
+                  <Dropdown
+                    menu={[
+                      {
+                        id: 0,
+                        content: "수정하기",
+                        url: topicContent.idx,
+                      },
+                      { id: 1, content: "삭제하기", url: topicContent.idx },
+                    ]}
+                    onClick={onClickLink}
+                  />
+                </Style.SubMore>
               </Style.Body.Button.Wrapper>
             </Style.Body.Button.Container>
           </Style.Body.Container>

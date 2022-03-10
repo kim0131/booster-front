@@ -100,7 +100,7 @@ interface IPropsSnb {
 const Snb = ({ param }: IPropsSnb) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
-  let Category = router.query.category;
+
   const { data: snbDatas, error: dataError } = useSWR(
     "/api2/category",
     CategorySnbMenufetcher,
@@ -113,7 +113,7 @@ const Snb = ({ param }: IPropsSnb) => {
     <>
       {snbDatas && (
         <Style.Desktop.Container>
-          {snbDatas?.map(snbData => (
+          {snbDatas.map((snbData: any) => (
             <Style.Desktop.Category.Container key={snbData.id}>
               <Body2
                 isBold
@@ -124,15 +124,16 @@ const Snb = ({ param }: IPropsSnb) => {
                 {snbData.category}
               </Body2>
               <Style.Desktop.Category.Block>
-                {snbData.menus.map((menu: any) => (
-                  <Style.Desktop.Category.Button
-                    key={menu.id}
-                    isRoute={menu.content === param}
-                    onClick={() => onClickRouter(menu.content)}
-                  >
-                    {menu.content}
-                  </Style.Desktop.Category.Button>
-                ))}
+                {snbData.menus &&
+                  snbData.menus.map((menu: any) => (
+                    <Style.Desktop.Category.Button
+                      key={menu.id}
+                      isRoute={menu.content === param}
+                      onClick={() => onClickRouter(menu.content)}
+                    >
+                      {menu.content}
+                    </Style.Desktop.Category.Button>
+                  ))}
               </Style.Desktop.Category.Block>
             </Style.Desktop.Category.Container>
           ))}
@@ -144,17 +145,18 @@ const Snb = ({ param }: IPropsSnb) => {
       {snbDatas && (
         <Style.Mobile.Wrapper>
           <Style.Mobile.Selectbox defaultValue={param}>
-            {snbDatas?.map(snbData => (
+            {snbDatas.map((snbData: any) => (
               <optgroup key={snbData.id} label={snbData.category}>
-                {snbData.menus.map((menu: any) => (
-                  <option
-                    key={menu.id}
-                    value={menu.param}
-                    onClick={() => onClickRouter(menu.content)}
-                  >
-                    {menu.content}
-                  </option>
-                ))}
+                {snbData.menus &&
+                  snbData.menus.map((menu: any) => (
+                    <option
+                      key={menu.id}
+                      value={menu.param}
+                      onClick={() => onClickRouter(menu.content)}
+                    >
+                      {menu.content}
+                    </option>
+                  ))}
               </optgroup>
             ))}
           </Style.Mobile.Selectbox>

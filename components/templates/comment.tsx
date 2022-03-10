@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Button from "@components/elements/button";
+import Dropdown from "@components/elements/dropdown";
 // import Pagination from "@components/elements/pagination";
 import { Body3, Header5 } from "@components/elements/types";
 import {
@@ -112,6 +113,29 @@ const Style = {
       `,
     },
   },
+  SubMore: styled.div`
+    height: 3.5rem;
+    padding: 0 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    box-shadow: none;
+    outline: 0;
+    & > div {
+      display: none;
+    }
+    &:hover,
+    &:focus,
+    &:active {
+      outline: 0;
+      & > div {
+        display: block;
+      }
+    }
+  `,
 };
 // Style
 
@@ -208,6 +232,30 @@ const Comment = ({ id, children, count }: IPropsComment) => {
     board: null,
   });
 
+  const onClickLink = async (
+    e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,
+  ) => {
+    e.preventDefault();
+    const idx: any = e.currentTarget.dataset.value;
+    const content: string | null = e.currentTarget.textContent;
+
+    if (content == "수정하기") {
+      if (idx == replydata.wr_parent2) {
+        setReply({ ...replydata, wr_parent2: 0, wr_content: "" });
+      } else {
+        setReply({ ...replydata, wr_parent2: idx, wr_content: "" });
+      }
+    }
+    if (content == "삭제하기") {
+      let result = confirm("정말 삭제하시겠습니까?");
+      if (result) {
+        await axios
+          .post(`/api2.topic/delete/${idx}`)
+          .then(res => alert("삭제되었습니다"));
+      }
+    }
+  };
+
   useEffect(() => {
     getUserSet();
   }, [router]);
@@ -296,16 +344,24 @@ const Comment = ({ id, children, count }: IPropsComment) => {
                     <Style.List.Content>
                       {comment.wr_content}
                     </Style.List.Content>
-                    <Style.List.Button
-                      onClick={e => {
-                        onClickReply(e, comment.idx);
-                      }}
-                    >
-                      <IconMoreVertical
-                        size={20}
-                        color={theme.color.gray[500]}
+                    <Style.SubMore>
+                      <IconMoreVertical />
+                      <Dropdown
+                        menu={[
+                          {
+                            id: 0,
+                            content: "수정하기",
+                            url: comment.idx,
+                          },
+                          {
+                            id: 1,
+                            content: "삭제하기",
+                            url: comment.idx,
+                          },
+                        ]}
+                        onClick={onClickLink}
                       />
-                    </Style.List.Button>
+                    </Style.SubMore>
                   </Style.List.Header>
                   <Style.List.Bottom.Container>
                     <Style.List.Bottom.Info>

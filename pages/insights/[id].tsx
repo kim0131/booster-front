@@ -19,7 +19,9 @@ const InsightId: NextPage = () => {
   });
   console.log(id);
   return (
-    <InsightsContentLayout comments={<Comment />}>
+    <InsightsContentLayout
+    // comments={<Comment />}
+    >
       <LnbLayout>
         <Lnb lnbDatas={state.lnbDatas} param="전체" />
         <Post />

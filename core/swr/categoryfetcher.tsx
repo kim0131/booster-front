@@ -17,17 +17,17 @@ export const CategorySelectfetcher = async (url: string) => {
 };
 
 export const CategorySnbMenufetcher = async (url: string) => {
-  let categoryList: any = [];
+  let result: any = [{ id: 1, category: "전체", menus: [] }];
 
   await axios.get(url).then(res => {
     const Getcategory = res.data.result;
     Getcategory.map((item: object, idx: number) => {
-      categoryList.push({
+      result[0].menus.push({
         id: Getcategory[idx].idx,
         content: Getcategory[idx].bo_subject,
         param: Getcategory[idx].bo_table,
       });
     });
   });
-  return [{ id: 1, category: "전체", menus: categoryList }];
+  return result;
 };

@@ -61,7 +61,6 @@ const BusinessRegistration: NextPage = () => {
       });
       setLoaded(true);
     };
-    console.log(image);
   };
 
   const deleteImage = () => {

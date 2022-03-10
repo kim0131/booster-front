@@ -84,8 +84,7 @@ const Signup: NextPage = () => {
 
   const onClickNext = async (e: React.MouseEvent<HTMLButtonElement>) => {
     setState({ ...state, isLoading: true });
-    console.log(1);
-    console.log(state.isLoading);
+
     e.preventDefault();
     let pass_fail = true;
     await mb_id_vaildate(state.data.mb_id).then(res => {

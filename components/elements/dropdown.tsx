@@ -67,7 +67,7 @@ const Dropdown = ({
         <Style.Item
           size={size}
           key={item.id}
-          date-value={item.url}
+          data-value={item.url}
           onClick={onClick}
         >
           {item.content}

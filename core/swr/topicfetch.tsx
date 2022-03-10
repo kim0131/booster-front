@@ -41,7 +41,7 @@ export const topicfetcher = async (url: string) => {
         like: content.wr_good,
         view: content.wr_view,
         comments: content.commentCnt,
-
+        board: content.board,
         bookmark: false, //추후필요
         create: elapsedTime,
       });
@@ -52,7 +52,7 @@ export const topicfetcher = async (url: string) => {
 
 export const topicDetail = async (url: any) => {
   let topicList: any = {};
-  await axios.get(url).then(res => {
+  await axios.get(url).then(async res => {
     const TopicContent = res.data.result[0];
     const CurrentTime = new Date();
     const ContentTime = new Date(TopicContent.wr_datetime);
@@ -60,12 +60,12 @@ export const topicDetail = async (url: any) => {
       (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
     );
     if (TopicContent.file_url) {
-      TopicContent.file_url =
-        topicImageUrl + TopicContent.file_url.slice(2, -2);
+      TopicContent.file_full_url =
+        (await topicImageUrl) + TopicContent.file_url.slice(2, -2);
     }
-    TopicContent.category = getCategoryName(TopicContent.board);
-    TopicContent.bookmark = false; //추후필요
-    TopicContent.create = elapsedTime;
+    TopicContent.category = await getCategoryName(TopicContent.board);
+    TopicContent.bookmark = await false; //추후필요
+    TopicContent.create = await elapsedTime;
     topicList = TopicContent;
   });
   return topicList;

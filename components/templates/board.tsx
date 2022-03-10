@@ -145,14 +145,12 @@ const Board = ({ category, Datas, isLoading }: IPropsBoard) => {
     getReplyDatas();
   }, [Datas]);
 
-  const onClickRouter = async (param: number) => {
-    router.push(`/topics/detail?id=${param}&category=${category}`);
+  const onClickRouter = (param: number) => {
+    router.push(`/topics/detail?id=${param}`);
   };
 
-  const getReplyDatas = async () => {
-    setLoading(true);
-    await setData(Datas);
-    setLoading(false);
+  const getReplyDatas = () => {
+    setData(Datas);
   };
   return (
     <>

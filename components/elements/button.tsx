@@ -376,6 +376,7 @@ interface IPropsButton {
   isLoading?: boolean;
   isRounded?: boolean;
   dataValue?: string;
+  subMenus?: any;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -388,6 +389,7 @@ const Button = ({
   isLoading = false,
   isRounded = false,
   dataValue = undefined,
+  subMenus,
   onClick,
 }: IPropsButton) => (
   <Style
@@ -403,7 +405,10 @@ const Button = ({
     {isLoading ? (
       <Loader size={size} color={variants === "solid" ? "white" : color} />
     ) : (
-      <>{children}</>
+      <>
+        {children}
+        {subMenus ? subMenus : ""}
+      </>
     )}
   </Style>
 );
