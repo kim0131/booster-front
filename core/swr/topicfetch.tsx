@@ -1,6 +1,7 @@
 import { topicImageUrl } from "@core/config/imgurl";
 import axios from "axios";
 let category: any = [];
+
 const onClickCategoryList = async () => {
   await axios.get("/api2/category").then((res: any) => {
     let list = res.data.result;
@@ -62,7 +63,6 @@ export const TopicDetail = async (url: any) => {
       TopicContent.file_url =
         topicImageUrl + TopicContent.file_url.slice(2, -2);
     }
-    console.log(TopicContent);
     TopicContent.category = getCategoryName(TopicContent.board);
     TopicContent.bookmark = false; //추후필요
     TopicContent.create = elapsedTime;

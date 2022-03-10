@@ -1,8 +1,10 @@
 import { Body2 } from "@components/elements/types";
 import { IconChevronDown } from "@components/icons";
 import useDesktop from "@core/hook/use-desktop";
+import { CategorySnbMenufetcher } from "@core/swr/categoryfetcher";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
+import useSWR from "swr";
 
 interface IPropsStyle {
   isRoute?: boolean;
@@ -87,70 +89,81 @@ const Style = {
 };
 
 interface IPropsSnb {
-  snbDatas: {
+  snbDatas?: {
     id: number;
     category: string;
     menus: { id: number; content: string; param: string }[];
   }[];
-  param: string | string[] | undefined;
+  param?: string | string[] | undefined;
 }
 
-// TODO : LNB는 URL 쿼리스트링으로 카테고리를 받아온다.
-
-const Snb = ({ snbDatas, param }: IPropsSnb) => {
+const Snb = ({ param }: IPropsSnb) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
-  // console.log(param);
+  let Category = router.query.category;
+  const { data: snbDatas, error: dataError } = useSWR(
+    "/api2/category",
+    CategorySnbMenufetcher,
+  );
+
   const onClickRouter = (param: string) => {
     router.push(`/topics/?category=${param}`);
   };
   return isDesktop ? (
-    <Style.Desktop.Container>
-      {snbDatas.map(snbData => (
-        <Style.Desktop.Category.Container key={snbData.id}>
-          <Body2
-            isBold
-            onClick={() => {
-              router.push("/topics");
-            }}
-          >
-            {snbData.category}
-          </Body2>
-          <Style.Desktop.Category.Block>
-            {snbData.menus.map(menu => (
-              <Style.Desktop.Category.Button
-                key={menu.id}
-                isRoute={menu.content === param}
-                onClick={() => onClickRouter(menu.param)}
+    <>
+      {snbDatas && (
+        <Style.Desktop.Container>
+          {snbDatas?.map(snbData => (
+            <Style.Desktop.Category.Container key={snbData.id}>
+              <Body2
+                isBold
+                onClick={() => {
+                  router.push("/topics");
+                }}
               >
-                {menu.content}
-              </Style.Desktop.Category.Button>
-            ))}
-          </Style.Desktop.Category.Block>
-        </Style.Desktop.Category.Container>
-      ))}
-    </Style.Desktop.Container>
+                {snbData.category}
+              </Body2>
+              <Style.Desktop.Category.Block>
+                {snbData.menus.map((menu: any) => (
+                  <Style.Desktop.Category.Button
+                    key={menu.id}
+                    isRoute={menu.content === param}
+                    onClick={() => onClickRouter(menu.content)}
+                  >
+                    {menu.content}
+                  </Style.Desktop.Category.Button>
+                ))}
+              </Style.Desktop.Category.Block>
+            </Style.Desktop.Category.Container>
+          ))}
+        </Style.Desktop.Container>
+      )}
+    </>
   ) : (
-    <Style.Mobile.Wrapper>
-      <Style.Mobile.Selectbox defaultValue={param}>
-        {snbDatas.map(snbData => (
-          <optgroup key={snbData.id} label={snbData.category}>
-            {snbData.menus.map(menu => (
-              <option
-                key={menu.id}
-                value={menu.param}
-                onClick={() => onClickRouter(menu.param)}
-              >
-                {menu.content}
-              </option>
+    <>
+      {snbDatas && (
+        <Style.Mobile.Wrapper>
+          <Style.Mobile.Selectbox defaultValue={param}>
+            {snbDatas?.map(snbData => (
+              <optgroup key={snbData.id} label={snbData.category}>
+                {snbData.menus.map((menu: any) => (
+                  <option
+                    key={menu.id}
+                    value={menu.param}
+                    onClick={() => onClickRouter(menu.content)}
+                  >
+                    {menu.content}
+                  </option>
+                ))}
+              </optgroup>
             ))}
-          </optgroup>
-        ))}
-      </Style.Mobile.Selectbox>
-      <Style.Mobile.Icon>
-        <IconChevronDown />
-      </Style.Mobile.Icon>
-    </Style.Mobile.Wrapper>
+          </Style.Mobile.Selectbox>
+          <Style.Mobile.Icon>
+            <IconChevronDown />
+          </Style.Mobile.Icon>
+        </Style.Mobile.Wrapper>
+      )}
+    </>
   );
 };
 

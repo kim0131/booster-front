@@ -121,7 +121,7 @@ const Style = {
 
 interface IPropsTopicContentLayout {
   children?: React.ReactNode;
-  id: string | string[] | undefined;
+  id?: string | string[] | undefined;
   count?: number;
 }
 
@@ -131,11 +131,6 @@ const TopicContentLayout = ({
   count,
 }: IPropsTopicContentLayout) => {
   const router = useRouter();
-  const { data: topicdetail } = useSWR(
-    () => `/api2/topic/list/${id}`,
-    TopicDetail,
-  );
-  console.log(topicdetail);
   const [topicContent, setTopicContent] = useState({
     category: "",
     wr_subject: "",
@@ -145,6 +140,7 @@ const TopicContentLayout = ({
     create: 0,
     wr_content: "",
     file_url: "",
+    file_full_url: "",
   });
 
   useEffect(() => {
@@ -152,8 +148,25 @@ const TopicContentLayout = ({
   }, [router]);
 
   const getTopiceContent = async () => {
-    if (topicdetail) {
-      setTopicContent(topicdetail);
+    if (id) {
+      await axios(`/api2/topic/list/${id}`).then(res => {
+        console.log(res.data.result);
+        const TopicContent = res.data.result[0];
+        const CurrentTime = new Date();
+        const ContentTime = new Date(TopicContent.wr_datetime);
+        const elapsedTime = Math.ceil(
+          (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
+        );
+        TopicContent.category = router.query.category;
+        TopicContent.bookmark = false; //추후필요
+        TopicContent.create = elapsedTime;
+        if (TopicContent.file_url) {
+          TopicContent.file_full_url =
+            topicImageUrl + TopicContent.file_url.slice(2, -2);
+          TopicContent.file_url = TopicContent.file_url.slice(2, -2);
+        }
+        setTopicContent(TopicContent);
+      });
     }
   };
   return (
@@ -199,7 +212,7 @@ const TopicContentLayout = ({
         <Style.Body.Content>{topicContent.wr_content}</Style.Body.Content>
         <Style.Body.ImageContainer>
           <img
-            src={topicContent.file_url ? topicContent.file_url : ""}
+            src={topicContent.file_url ? topicContent.file_full_url : ""}
             alt=""
           />
         </Style.Body.ImageContainer>

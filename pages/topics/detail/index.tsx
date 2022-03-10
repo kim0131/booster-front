@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import Loader from "@components/elements/loader";
 import SnbLayout from "@components/layouts/snb-layout";
 import TopicContentLayout from "@components/layouts/topic-content-layout";
 import Board from "@components/templates/board";
@@ -25,7 +26,7 @@ interface Istate {
   snbDatas: any;
   category: string | string[] | undefined;
 }
-const TopicContent: NextPage = () => {
+const TopicDetail: NextPage = () => {
   const router = useRouter();
   let Category = router.query.category;
   let { id } = router.query;
@@ -132,19 +133,23 @@ const TopicContent: NextPage = () => {
     <>
       <SnbLayout>
         <Snb snbDatas={state.snbDatas} param={state.category} />
-        <TopicContentLayout id={id} count={commentCount}>
-          <Comment id={id} count={commentCount} />
-          {boardDatas && (
-            <Board
-              category={state.category}
-              Datas={boardDatas}
-              isLoading={isLoading}
-            />
-          )}
-        </TopicContentLayout>
+        {isLoading ? (
+          <Loader color="gray" />
+        ) : (
+          <TopicContentLayout id={id} count={commentCount}>
+            <Comment id={id} count={commentCount} />
+            {boardDatas && (
+              <Board
+                category={state.category}
+                Datas={boardDatas}
+                isLoading={isLoading}
+              />
+            )}
+          </TopicContentLayout>
+        )}
       </SnbLayout>
     </>
   );
 };
 
-export default TopicContent;
+export default TopicDetail;

@@ -8,19 +8,26 @@ import { MordalPortal, ToastPortal } from "@components/templates/portal";
 import useToast from "@core/hook/use-toast";
 import Header from "@components/templates/header";
 import Footer from "@components/templates/footer";
+import { SWRConfig } from "swr";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { message } = useToast();
   return (
-    <ThemeProvider theme={theme}>
-      <SessionProvider>
-        <Global styles={global} />
-        <Header />
-        <Component {...pageProps} />
-        <Footer />
-        <div>{message}</div>
-      </SessionProvider>
-    </ThemeProvider>
+    <SWRConfig
+      value={{
+        refreshInterval: 60000,
+      }}
+    >
+      <ThemeProvider theme={theme}>
+        <SessionProvider>
+          <Global styles={global} />
+          <Header />
+          <Component {...pageProps} />
+          <Footer />
+          <div>{message}</div>
+        </SessionProvider>
+      </ThemeProvider>
+    </SWRConfig>
   );
 }
 

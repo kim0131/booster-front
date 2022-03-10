@@ -140,17 +140,18 @@ const Board = ({ category, Datas, isLoading }: IPropsBoard) => {
   const [datas, setData] = useState(Datas);
   const [isLoading2, setLoading] = useState<any>(isLoading);
   const router = useRouter();
+
   useEffect(() => {
     getReplyDatas();
-  }, [Datas, category]);
+  }, [Datas]);
 
-  const onClickRouter = (param: number) => {
-    router.push(`/topics/${param}?category=${category}`);
+  const onClickRouter = async (param: number) => {
+    router.push(`/topics/detail?id=${param}&category=${category}`);
   };
 
   const getReplyDatas = async () => {
     setLoading(true);
-    setData(Datas);
+    await setData(Datas);
     setLoading(false);
   };
   return (
@@ -159,7 +160,7 @@ const Board = ({ category, Datas, isLoading }: IPropsBoard) => {
         <Loader color="gray" />
       ) : (
         <Style.Container>
-          {isDesktop && <Header4> {category}</Header4>}
+          {isDesktop && <Header4> {category ? category : "전체"}</Header4>}
 
           <Style.BoardList.Container>
             {!datas.length ? (

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Button from "@components/elements/button";
 import Selectbox from "@components/elements/selectbox";
 import TextAreaTopicContent from "@components/elements/text-area-topic-content";
@@ -6,13 +7,15 @@ import TopicCreateLayout from "@components/layouts/topic-create-layout";
 import { CategorySelectfetcher } from "@core/swr/categoryfetcher";
 import axios from "axios";
 import type { NextPage } from "next";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 
 const CreateTopic: NextPage = () => {
   const router = useRouter();
   const [state, setState] = useState("");
+  const { data: session, status } = useSession();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const { data: categoryList } = useSWR(
     `/api2/category`,
@@ -23,7 +26,7 @@ const CreateTopic: NextPage = () => {
     preview_URL: "",
   });
   const hiddenFileInput = React.useRef<any>(null);
-  const [data, setData] = useState({
+  const [data, setData] = useState<any>({
     wr_subject: "",
     wr_content: "",
     wr_ip: "",
@@ -33,6 +36,16 @@ const CreateTopic: NextPage = () => {
     wr_datetime: new Date(),
     wr_update: new Date(),
   });
+
+  useEffect(() => {
+    getUserIp();
+  }, [session]);
+
+  const getUserIp = async () => {
+    const res = await axios.get("https://geolocation-db.com/json/");
+    setData({ ...data, wr_ip: res.data.IPv4 });
+  };
+
   const onChangeheight = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     textAreaRef.current!.style.height = "auto";
     textAreaRef.current!.style.height = `${e.target.scrollHeight}px`;
@@ -50,7 +63,12 @@ const CreateTopic: NextPage = () => {
 
   const onChangeTopic = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.currentTarget;
-    setData({ ...data, [name]: value });
+    setData({
+      ...data,
+      [name]: value,
+      mb_id: session?.user?.email,
+      mb_name: session?.user?.name,
+    });
   };
   const onLoadFile = (e: any) => {
     e.preventDefault();
