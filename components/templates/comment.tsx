@@ -10,12 +10,14 @@ import {
   IconView,
 } from "@components/icons";
 import theme from "@components/styles/theme";
+import { topicComment, topicDetail } from "@core/swr/topicfetch";
 
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 interface IPropsStyle {
   isReply: boolean;
@@ -181,10 +183,9 @@ interface IPropsComment {
 
 const Comment = ({ id, children, count }: IPropsComment) => {
   const router = useRouter();
-
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: comments } = useSWR(`/api2/topic/comment/${id}`, topicComment);
   const { data: session, status } = useSession();
-
+  const { data: topicContent } = useSWR(`/api2/topic/list/${id}`, topicDetail);
   const [commentdata, setCommentData] = useState({
     wr_content: "",
     mb_id: session?.user?.email,
@@ -205,26 +206,14 @@ const Comment = ({ id, children, count }: IPropsComment) => {
     wr_is_comment2: 1,
     board: null,
   });
-  const [commentList, setComentList] = useState([
-    {
-      idx: "",
-      wr_is_comment: "",
-      wr_is_comment2: "",
-      wr_content: "",
-      mb_name: "",
-      wr_view: "",
-      wr_good: "",
-      wr_create: "",
-    },
-  ]);
+
   useEffect(() => {
     if (id) {
       getUserSet();
-      getComment();
     } else {
       router.push(router.asPath);
     }
-  }, [router, id, session]);
+  }, [router, id]);
 
   const getUserSet = async () => {
     const res = await axios.get("https://geolocation-db.com/json/");
@@ -244,83 +233,6 @@ const Comment = ({ id, children, count }: IPropsComment) => {
     });
   };
 
-  const getComment = async () => {
-    setIsLoading(true);
-    await axios.get(`/api2/topic/comment/${id}`).then(async res => {
-      const comment = res.data.result;
-      const result: any = [];
-      for (const item of comment) {
-        const CurrentTime = new Date();
-        const ContentTime = new Date(item.wr_datetime);
-        const elapsedTime = Math.ceil(
-          (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
-        );
-        const replyCount = await axios.get(
-          `/api2/topic/replycount/${item.idx}`,
-        );
-
-        result.push(
-          await {
-            idx: item.idx,
-            wr_is_comment: item.wr_is_comment,
-            wr_is_comment2: item.wr_is_comment2,
-            wr_content: item.wr_content,
-            mb_name: item.mb_name,
-            wr_view: item.wr_view,
-            wr_good: item.wr_good,
-            wr_create: elapsedTime,
-            replycount: replyCount.data.result.length,
-            wr_reply: await getCommentIsReply(item.idx),
-          },
-        );
-      }
-      setComentList(result);
-    });
-
-    setIsLoading(false);
-  };
-
-  const getCommentIsReply = async (idx: string | number) => {
-    const reply = await axios.get(`/api2/topic/reply/${idx}`);
-    if (reply.data.result.length) {
-      const result = reply.data.result.map((item: any, idx: any) => {
-        return (
-          <>
-            <Style.List.Container isReply={true}>
-              <Style.List.Header>
-                <Style.List.Content>{item.wr_content}</Style.List.Content>
-                <Style.List.Button>
-                  <IconMoreVertical size={20} color={theme.color.gray[500]} />
-                </Style.List.Button>
-              </Style.List.Header>
-              <Style.List.Bottom.Container>
-                <Style.List.Bottom.Info>
-                  <Style.List.Bottom.Badge>
-                    <IconProfile size={16} color={theme.color.gray[500]} />
-                    <Body3 color={theme.color.gray[500]}>{item.mb_name}</Body3>
-                  </Style.List.Bottom.Badge>
-                  <Style.List.Bottom.Badge>
-                    <IconLike size={16} color={theme.color.gray[500]} />
-                    <Body3 color={theme.color.gray[500]}>{item.wr_good}</Body3>
-                  </Style.List.Bottom.Badge>
-                </Style.List.Bottom.Info>
-                <Body3 color={theme.color.gray[500]}>
-                  {item.create > 24
-                    ? `${Math.ceil(item.create / 24)}일전`
-                    : item.create > 0
-                    ? `${item.create}시간전`
-                    : `방금전`}
-                </Body3>
-              </Style.List.Bottom.Container>
-            </Style.List.Container>
-          </>
-        );
-      });
-      return result;
-    } else {
-      return [];
-    }
-  };
   const onClickWriteComment = async () => {
     await axios.post(`/api2/topic/write`, commentdata).then(res => {
       alert("댓글이 등록되었습니다");
@@ -357,7 +269,9 @@ const Comment = ({ id, children, count }: IPropsComment) => {
     <Style.Container>
       <Style.Comment>
         <Style.AddComment.Container>
-          <Header5>{count}개의 댓글</Header5>
+          <Header5>
+            {topicContent.commentCnt ? topicContent.commentCnt : "0"}개의 댓글
+          </Header5>
           <Style.AddComment.TextArea
             rows={3}
             name={"wr_content"}
@@ -376,17 +290,11 @@ const Comment = ({ id, children, count }: IPropsComment) => {
           </Style.AddComment.Button>
         </Style.AddComment.Container>
 
-        {commentList.length > 0 && isLoading == false ? (
-          commentList.map((comment: any) => {
+        {comments &&
+          comments.map((comment: any) => {
             return (
               <>
-                <Style.List.Container
-                  isReply={false}
-                  onClick={() => {
-                    getCommentIsReply(comment.idx);
-                  }}
-                  id={comment.idx}
-                >
+                <Style.List.Container isReply={false} id={comment.idx}>
                   <Style.List.Header>
                     <Style.List.Content>
                       {comment.wr_content}
@@ -468,14 +376,56 @@ const Comment = ({ id, children, count }: IPropsComment) => {
                 )}
 
                 {comment.wr_reply.map((item: any) => {
-                  return item;
+                  return (
+                    <>
+                      <Style.List.Container isReply={true} id={item.idx}>
+                        <Style.List.Header>
+                          <Style.List.Content>
+                            {item.wr_content}
+                          </Style.List.Content>
+                          <Style.List.Button>
+                            <IconMoreVertical
+                              size={20}
+                              color={theme.color.gray[500]}
+                            />
+                          </Style.List.Button>
+                        </Style.List.Header>
+                        <Style.List.Bottom.Container>
+                          <Style.List.Bottom.Info>
+                            <Style.List.Bottom.Badge>
+                              <IconProfile
+                                size={16}
+                                color={theme.color.gray[500]}
+                              />
+                              <Body3 color={theme.color.gray[500]}>
+                                {item.mb_name}
+                              </Body3>
+                            </Style.List.Bottom.Badge>
+                            <Style.List.Bottom.Badge>
+                              <IconLike
+                                size={16}
+                                color={theme.color.gray[500]}
+                              />
+                              <Body3 color={theme.color.gray[500]}>
+                                {item.wr_good}
+                              </Body3>
+                            </Style.List.Bottom.Badge>
+                          </Style.List.Bottom.Info>
+                          <Body3 color={theme.color.gray[500]}>
+                            {item.create > 24
+                              ? `${Math.ceil(item.create / 24)}일전`
+                              : item.create > 0
+                              ? `${item.create}시간전`
+                              : `방금전`}
+                          </Body3>
+                        </Style.List.Bottom.Container>
+                      </Style.List.Container>
+                    </>
+                  );
                 })}
               </>
             );
-          })
-        ) : (
-          <Loader color={"black"} />
-        )}
+          })}
       </Style.Comment>
       {/* <Pagination /> */}
     </Style.Container>

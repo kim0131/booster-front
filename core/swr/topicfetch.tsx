@@ -21,7 +21,7 @@ const getCategoryName = (idx: any) => {
   }
 };
 
-export const Topicfetcher = async (url: string) => {
+export const topicfetcher = async (url: string) => {
   onClickCategoryList();
   let topicList: any = [];
   const CurrentTime = new Date();
@@ -50,10 +50,10 @@ export const Topicfetcher = async (url: string) => {
   return topicList;
 };
 
-export const TopicDetail = async (url: any) => {
+export const topicDetail = async (url: any) => {
   let topicList: any = {};
   await axios.get(url).then(res => {
-    const TopicContent = res.data.result;
+    const TopicContent = res.data.result[0];
     const CurrentTime = new Date();
     const ContentTime = new Date(TopicContent.wr_datetime);
     const elapsedTime = Math.ceil(
@@ -69,4 +69,55 @@ export const TopicDetail = async (url: any) => {
     topicList = TopicContent;
   });
   return topicList;
+};
+
+const getCommentIsReply = async (idx: string | number) => {
+  const reply = await axios.get(`/api2/topic/reply/${idx}`);
+  if (reply.data.result.length) {
+    const result: any = [];
+    reply.data.result.map((item: any, idx: any) => {
+      result.push({
+        idx: item.idx,
+        wr_is_comment: item.wr_is_comment,
+        wr_is_comment2: item.wr_is_comment2,
+        wr_content: item.wr_content,
+        mb_name: item.mb_name,
+        wr_view: item.wr_view,
+        wr_good: item.wr_good,
+      });
+    });
+    return result;
+  } else {
+    return [];
+  }
+};
+export const topicComment = async (url: string) => {
+  let result: any = [];
+  await axios.get(url).then(async res => {
+    const comment = res.data.result;
+    for (const item of comment) {
+      const CurrentTime = new Date();
+      const ContentTime = new Date(item.wr_datetime);
+      const elapsedTime = Math.ceil(
+        (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
+      );
+      const replyCount = await axios.get(`/api2/topic/replycount/${item.idx}`);
+
+      result.push(
+        await {
+          idx: item.idx,
+          wr_is_comment: item.wr_is_comment,
+          wr_is_comment2: item.wr_is_comment2,
+          wr_content: item.wr_content,
+          mb_name: item.mb_name,
+          wr_view: item.wr_view,
+          wr_good: item.wr_good,
+          wr_create: elapsedTime,
+          replycount: replyCount.data.result.length,
+          wr_reply: await getCommentIsReply(item.idx),
+        },
+      );
+    }
+  });
+  return result;
 };

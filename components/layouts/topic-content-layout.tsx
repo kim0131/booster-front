@@ -13,7 +13,7 @@ import {
 } from "@components/icons";
 import theme from "@components/styles/theme";
 import { topicImageUrl } from "@core/config/imgurl";
-import { TopicDetail } from "@core/swr/topicfetch";
+import { topicDetail } from "@core/swr/topicfetch";
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -122,124 +122,89 @@ const Style = {
 interface IPropsTopicContentLayout {
   children?: React.ReactNode;
   id?: string | string[] | undefined;
-  count?: number;
 }
 
-const TopicContentLayout = ({
-  children,
-  id,
-  count,
-}: IPropsTopicContentLayout) => {
+const TopicContentLayout = ({ children, id }: IPropsTopicContentLayout) => {
   const router = useRouter();
-  const [topicContent, setTopicContent] = useState({
-    category: "",
-    wr_subject: "",
-    mb_name: "",
-    wr_good: "",
-    wr_view: 0,
-    create: 0,
-    wr_content: "",
-    file_url: "",
-    file_full_url: "",
-  });
+  const { data: topicContent } = useSWR(`/api2/topic/list/${id}`, topicDetail);
 
-  useEffect(() => {
-    getTopiceContent();
-  }, [router]);
-
-  const getTopiceContent = async () => {
-    if (id) {
-      await axios(`/api2/topic/list/${id}`).then(res => {
-        console.log(res.data.result);
-        const TopicContent = res.data.result[0];
-        const CurrentTime = new Date();
-        const ContentTime = new Date(TopicContent.wr_datetime);
-        const elapsedTime = Math.ceil(
-          (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
-        );
-        TopicContent.category = router.query.category;
-        TopicContent.bookmark = false; //추후필요
-        TopicContent.create = elapsedTime;
-        if (TopicContent.file_url) {
-          TopicContent.file_full_url =
-            topicImageUrl + TopicContent.file_url.slice(2, -2);
-          TopicContent.file_url = TopicContent.file_url.slice(2, -2);
-        }
-        setTopicContent(TopicContent);
-      });
-    }
-  };
   return (
-    <Style.Container>
-      <Style.Header.Container>
-        <Style.Header.Badge>
-          <Badge size="large">{topicContent.category}</Badge>
-        </Style.Header.Badge>
-        <Style.Header.Title>{topicContent.wr_subject}</Style.Header.Title>
-        <Style.Header.Bottom.Container>
-          <Style.Header.Bottom.Info>
-            <Style.Header.Bottom.Badge>
-              <IconProfile size={16} color={theme.color.gray[500]} />
+    <>
+      {topicContent && (
+        <Style.Container>
+          <Style.Header.Container>
+            <Style.Header.Badge>
+              <Badge size="large">{topicContent.category}</Badge>
+            </Style.Header.Badge>
+            <Style.Header.Title>{topicContent.wr_subject}</Style.Header.Title>
+            <Style.Header.Bottom.Container>
+              <Style.Header.Bottom.Info>
+                <Style.Header.Bottom.Badge>
+                  <IconProfile size={16} color={theme.color.gray[500]} />
+                  <Body3 color={theme.color.gray[500]}>
+                    {topicContent.mb_name}
+                  </Body3>
+                </Style.Header.Bottom.Badge>
+                <Style.Header.Bottom.Badge>
+                  <IconLike size={16} color={theme.color.gray[500]} />
+                  <Body3 color={theme.color.gray[500]}>
+                    {topicContent.wr_good}
+                  </Body3>
+                </Style.Header.Bottom.Badge>
+                <Style.Header.Bottom.Badge>
+                  <IconView size={16} color={theme.color.gray[500]} />
+                  <Body3 color={theme.color.gray[500]}>
+                    {topicContent.wr_view}
+                  </Body3>
+                </Style.Header.Bottom.Badge>
+                <Style.Header.Bottom.Badge>
+                  <IconComment size={16} color={theme.color.gray[500]} />
+                  <Body3 color={theme.color.gray[500]}>
+                    {topicContent.commentCnt}
+                  </Body3>
+                </Style.Header.Bottom.Badge>
+              </Style.Header.Bottom.Info>
               <Body3 color={theme.color.gray[500]}>
-                {topicContent.mb_name}
+                {topicContent.create > 24
+                  ? `${Math.ceil(topicContent.create / 24)}일전`
+                  : `${topicContent.create}시간전`}
               </Body3>
-            </Style.Header.Bottom.Badge>
-            <Style.Header.Bottom.Badge>
-              <IconLike size={16} color={theme.color.gray[500]} />
-              <Body3 color={theme.color.gray[500]}>
-                {topicContent.wr_good}
-              </Body3>
-            </Style.Header.Bottom.Badge>
-            <Style.Header.Bottom.Badge>
-              <IconView size={16} color={theme.color.gray[500]} />
-              <Body3 color={theme.color.gray[500]}>
-                {topicContent.wr_view}
-              </Body3>
-            </Style.Header.Bottom.Badge>
-            <Style.Header.Bottom.Badge>
-              <IconComment size={16} color={theme.color.gray[500]} />
-              <Body3 color={theme.color.gray[500]}>{count}</Body3>
-            </Style.Header.Bottom.Badge>
-          </Style.Header.Bottom.Info>
-          <Body3 color={theme.color.gray[500]}>
-            {topicContent.create > 24
-              ? `${Math.ceil(topicContent.create / 24)}일전`
-              : `${topicContent.create}시간전`}
-          </Body3>
-        </Style.Header.Bottom.Container>
-      </Style.Header.Container>
-      <Style.Body.Container>
-        <Style.Body.Content>{topicContent.wr_content}</Style.Body.Content>
-        <Style.Body.ImageContainer>
-          <img
-            src={topicContent.file_url ? topicContent.file_full_url : ""}
-            alt=""
-          />
-        </Style.Body.ImageContainer>
-        <Style.Body.Button.Container>
-          <Style.Body.Button.Wrapper>
-            <Button color="transparent">
-              <IconLike />
-              {topicContent.wr_good}
-            </Button>
-            <Button color="transparent">
-              <IconComment />
-              {count}
-            </Button>
-          </Style.Body.Button.Wrapper>
-          <Style.Body.Button.Wrapper>
-            <Button color="transparent">
-              <IconBookmark />
-              스크랩
-            </Button>
-            <Button color="transparent">
-              <IconMoreVertical />
-            </Button>
-          </Style.Body.Button.Wrapper>
-        </Style.Body.Button.Container>
-      </Style.Body.Container>
-      {children}
-    </Style.Container>
+            </Style.Header.Bottom.Container>
+          </Style.Header.Container>
+          <Style.Body.Container>
+            <Style.Body.Content>{topicContent.wr_content}</Style.Body.Content>
+            <Style.Body.ImageContainer>
+              <img
+                src={topicContent.file_url ? topicContent.file_full_url : ""}
+                alt=""
+              />
+            </Style.Body.ImageContainer>
+            <Style.Body.Button.Container>
+              <Style.Body.Button.Wrapper>
+                <Button color="transparent">
+                  <IconLike />
+                  {topicContent.wr_good}
+                </Button>
+                <Button color="transparent">
+                  <IconComment />
+                  {topicContent.commentCnt}
+                </Button>
+              </Style.Body.Button.Wrapper>
+              <Style.Body.Button.Wrapper>
+                <Button color="transparent">
+                  <IconBookmark />
+                  스크랩
+                </Button>
+                <Button color="transparent">
+                  <IconMoreVertical />
+                </Button>
+              </Style.Body.Button.Wrapper>
+            </Style.Body.Button.Container>
+          </Style.Body.Container>
+          {children}
+        </Style.Container>
+      )}
+    </>
   );
 };
 

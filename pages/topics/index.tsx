@@ -2,7 +2,7 @@ import SnbLayout from "@components/layouts/snb-layout";
 import Board from "@components/templates/board";
 import Snb from "@components/templates/snb";
 import { CategorySelectfetcher } from "@core/swr/categoryfetcher";
-import { Topicfetcher } from "@core/swr/topicfetch";
+import { topicfetcher } from "@core/swr/topicfetch";
 import axios from "axios";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -20,7 +20,7 @@ interface IPropsSnb {
 
 const Topics: NextPage = () => {
   const router = useRouter();
-  const { data: topic } = useSWR(`/api2/topic/list`, Topicfetcher);
+  const { data: topic } = useSWR(`/api2/topic/list`, topicfetcher);
   let Category = router.query.category;
   const { data: categoryContainer } = useSWR(
     "/api2/category",
