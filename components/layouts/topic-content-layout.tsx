@@ -120,13 +120,18 @@ const Style = {
 };
 
 interface IPropsTopicContentLayout {
+  data?: any;
   children?: React.ReactNode;
   id?: string | string[] | undefined;
 }
 
-const TopicContentLayout = ({ children, id }: IPropsTopicContentLayout) => {
+const TopicContentLayout = ({
+  data,
+  children,
+  id,
+}: IPropsTopicContentLayout) => {
   const router = useRouter();
-  const { data: topicContent } = useSWR(`/api2/topic/list/${id}`, topicDetail);
+  const topicContent = data;
 
   return (
     <>

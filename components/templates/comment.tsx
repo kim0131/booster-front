@@ -16,7 +16,7 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 
 interface IPropsStyle {
@@ -183,6 +183,7 @@ interface IPropsComment {
 
 const Comment = ({ id, children, count }: IPropsComment) => {
   const router = useRouter();
+  const [isLoading, setLoading] = useState<Boolean>(true);
   const { data: comments } = useSWR(`/api2/topic/comment/${id}`, topicComment);
   const { data: session, status } = useSession();
   const { data: topicContent } = useSWR(`/api2/topic/list/${id}`, topicDetail);
@@ -208,12 +209,8 @@ const Comment = ({ id, children, count }: IPropsComment) => {
   });
 
   useEffect(() => {
-    if (id) {
-      getUserSet();
-    } else {
-      router.push(router.asPath);
-    }
-  }, [router, id]);
+    getUserSet();
+  }, [router]);
 
   const getUserSet = async () => {
     const res = await axios.get("https://geolocation-db.com/json/");
@@ -293,8 +290,8 @@ const Comment = ({ id, children, count }: IPropsComment) => {
         {comments &&
           comments.map((comment: any) => {
             return (
-              <>
-                <Style.List.Container isReply={false} id={comment.idx}>
+              <React.Fragment key={comment.idx}>
+                <Style.List.Container isReply={false}>
                   <Style.List.Header>
                     <Style.List.Content>
                       {comment.wr_content}
@@ -377,8 +374,8 @@ const Comment = ({ id, children, count }: IPropsComment) => {
 
                 {comment.wr_reply.map((item: any) => {
                   return (
-                    <>
-                      <Style.List.Container isReply={true} id={item.idx}>
+                    <React.Fragment key={comment.idx}>
+                      <Style.List.Container isReply={true} key={item.idx}>
                         <Style.List.Header>
                           <Style.List.Content>
                             {item.wr_content}
@@ -420,12 +417,13 @@ const Comment = ({ id, children, count }: IPropsComment) => {
                           </Body3>
                         </Style.List.Bottom.Container>
                       </Style.List.Container>
-                    </>
+                    </React.Fragment>
                   );
                 })}
-              </>
+              </React.Fragment>
             );
           })}
+        {!comments && <Loader color={"gray"} size={"large"} />}
       </Style.Comment>
       {/* <Pagination /> */}
     </Style.Container>

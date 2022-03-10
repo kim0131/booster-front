@@ -27,6 +27,7 @@ const TopicDetail: NextPage = () => {
   let Category = router.query.category;
   let { id } = router.query;
   const { data: topic } = useSWR(`/api2/topic/list`, topicfetcher);
+  const { data: topicContent } = useSWR(`/api2/topic/list/${id}`, topicDetail);
   const [isLoading, setLoading] = useState<any>();
   const [boardDatas, setBoardDatas] = useState([
     {
@@ -44,16 +45,16 @@ const TopicDetail: NextPage = () => {
   ]);
 
   useEffect(() => {
-    if (topic) {
+    if (topic && topicContent) {
       getTopiceContent();
     }
-  }, [id, Category]);
+  }, [Category, topic, topicContent]);
 
   const getTopiceContent = async () => {
     if (topic) {
       let result = topic.filter((content: any) => {
         if (Category) {
-          return content.category == Category;
+          return content.category == topicContent.category;
         } else {
           return true;
         }
@@ -73,11 +74,11 @@ const TopicDetail: NextPage = () => {
         {isLoading ? (
           <Loader color="gray" />
         ) : (
-          <TopicContentLayout id={id}>
+          <TopicContentLayout id={id} data={topicContent}>
             <Comment id={id} />
-            {boardDatas && (
+            {topicContent && (
               <Board
-                category={Category}
+                category={topicContent.category}
                 Datas={boardDatas}
                 isLoading={isLoading}
               />

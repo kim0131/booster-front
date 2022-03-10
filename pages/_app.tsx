@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <SWRConfig
       value={{
-        refreshInterval: 60000,
+        refreshInterval: 1000,
       }}
     >
       <ThemeProvider theme={theme}>
