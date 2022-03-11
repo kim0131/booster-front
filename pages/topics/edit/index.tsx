@@ -34,7 +34,7 @@ const EditTopic: NextPage = () => {
   });
 
   const { data: categoryList } = useSWR(
-    `/api2/category`,
+    `/api2/category/select`,
     CategorySelectfetcher,
     {
       refreshInterval: 1000,

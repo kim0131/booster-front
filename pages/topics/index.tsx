@@ -11,10 +11,7 @@ import useSWR from "swr";
 
 const Topics: NextPage = () => {
   const router = useRouter();
-  let Category = router.query.category;
-  const { data: topic } = useSWR(`/api2/topic/list`, topicfetcher);
-
-  const [isLoading, setLoading] = useState<any>();
+  const { category } = router.query;
   const [boardDatas, setBoardDatas] = useState([
     {
       id: 0,
@@ -27,37 +24,59 @@ const Topics: NextPage = () => {
       comments: 0,
       bookmark: false,
       create: 0,
+      likeCnt: 0,
     },
   ]);
-
+  const { data: topic, isValidating } = useSWR(
+    `/api2/topic/list`,
+    topicfetcher,
+    {
+      refreshInterval: 1000,
+      onSuccess: (data, key, config) => {
+        if (data) {
+          let result = data.filter((content: any) => {
+            if (category) {
+              return content.category == category;
+            } else {
+              return true;
+            }
+          });
+          if (result) {
+            setBoardDatas(result);
+          }
+        } else {
+          setBoardDatas(data);
+        }
+      },
+    },
+  );
   useEffect(() => {
+    getTopicList();
+  }, [category]);
+
+  const getTopicList = () => {
     if (topic) {
-      getTopiceContent();
-    }
-  }, [Category, topic]);
-
-  const getTopiceContent = async () => {
-    setLoading(true);
-    let result = topic.filter((content: any) => {
-      if (Category) {
-        return content.category == Category;
-      } else {
-        return true;
+      let result = topic.filter((content: any) => {
+        if (category) {
+          return content.category == category;
+        } else {
+          return true;
+        }
+      });
+      if (result) {
+        setBoardDatas(result);
       }
-    });
-    if (result) {
-      setBoardDatas(result);
+    } else {
+      setBoardDatas(topic);
     }
-
-    setLoading(false);
   };
 
   return (
     <>
       <SnbLayout>
-        <Snb param={Category} />
+        <Snb param={category} />
         {boardDatas && (
-          <Board category={Category} Datas={boardDatas} isLoading={isLoading} />
+          <Board category={category} Datas={boardDatas} isLoading={false} />
         )}
       </SnbLayout>
     </>

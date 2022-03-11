@@ -98,9 +98,9 @@ const Style = {
 // TODO : 전체 게시글, 한 페이지에 보여주는 게시글 수, 현재 페이지를 Props에 주입한다.
 
 interface IPropsPagination {
-  totalContent: number;
-  line: number;
-  currentPage: number;
+  totalContent?: number;
+  line?: number;
+  currentPage?: number;
 }
 
 const Pagination = ({

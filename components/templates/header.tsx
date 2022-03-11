@@ -14,6 +14,13 @@ import React, { useEffect } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Dropdown from "@components/elements/dropdown";
 import { accountsNavigation } from "@core/config/navigation";
+import axios from "axios";
+import useSWR from "swr";
+import {
+  CategorySelectfetcher,
+  CategorySnbMenufetcher,
+} from "@core/swr/categoryfetcher";
+import { topicfetcher } from "@core/swr/topicfetch";
 
 interface IPropsStyle {
   isRoute?: boolean;
@@ -129,8 +136,16 @@ const Style = {
 };
 
 const Header = () => {
+  const { data: categoryList } = useSWR(
+    `/api2/category/select`,
+    CategorySelectfetcher,
+  );
+  const { data: topic } = useSWR(`/api2/topic/list`, topicfetcher);
+  const { data: snbDatas, error: dataError } = useSWR(
+    "/api2/category/snbdata",
+    CategorySnbMenufetcher,
+  );
   const { data: session, status } = useSession();
-
   const router = useRouter();
   const { isDesktop } = useDesktop();
 

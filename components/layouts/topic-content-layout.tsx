@@ -17,6 +17,7 @@ import { topicImageUrl } from "@core/config/imgurl";
 import { topicDetail } from "@core/swr/topicfetch";
 import styled from "@emotion/styled";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
@@ -156,6 +157,7 @@ const TopicContentLayout = ({
 }: IPropsTopicContentLayout) => {
   const router = useRouter();
   const topicContent = data;
+  const { data: session, status }: any = useSession();
 
   const onClickLink = async (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,
@@ -164,17 +166,41 @@ const TopicContentLayout = ({
     const idx: any = e.currentTarget.dataset.value;
     const content: string | null = e.currentTarget.textContent;
 
-    if (idx) {
+    if (content == "수정하기") {
       router.push(`/topics/edit?id=${idx}`);
     }
     if (content == "삭제하기") {
       let result = confirm("정말 삭제하시겠습니까?");
       if (result) {
-        await axios
-          .post(`/api2.topic/delete/${idx}`)
-          .then(res => alert("삭제되었습니다"));
+        await axios.post(`/api2/topic/delete/${idx}`).then(res => {
+          alert("삭제되었습니다");
+          router.push("topics");
+        });
       }
     }
+  };
+
+  const onClickLikeButton = async () => {
+    await axios
+      .post(`/api2/topic/like/${id}`, {
+        member_idx: parseInt(session?.user?.idx),
+      })
+      .then(async res => {
+        const result = res.data.result.length;
+        if (result) {
+          await axios
+            .post(`/api2/topic/like/cancel/${id}`, {
+              member_idx: parseInt(session?.user?.idx),
+            })
+            .then(() => console.log("삭제"));
+        } else {
+          await axios
+            .post(`/api2/topic/like/insert/${id}`, {
+              member_idx: parseInt(session?.user?.idx),
+            })
+            .then(() => console.log("추가"));
+        }
+      });
   };
   return (
     <>
@@ -196,7 +222,7 @@ const TopicContentLayout = ({
                 <Style.Header.Bottom.Badge>
                   <IconLike size={16} color={theme.color.gray[500]} />
                   <Body3 color={theme.color.gray[500]}>
-                    {topicContent.wr_good}
+                    {topicContent.likeCnt}
                   </Body3>
                 </Style.Header.Bottom.Badge>
                 <Style.Header.Bottom.Badge>
@@ -233,9 +259,9 @@ const TopicContentLayout = ({
             </Style.Body.ImageContainer>
             <Style.Body.Button.Container>
               <Style.Body.Button.Wrapper>
-                <Button color="transparent">
+                <Button color="transparent" onClick={onClickLikeButton}>
                   <IconLike />
-                  {topicContent.wr_good}
+                  {topicContent.likeCnt}
                 </Button>
                 <Button color="transparent">
                   <IconComment />

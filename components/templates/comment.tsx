@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Button from "@components/elements/button";
 import Dropdown from "@components/elements/dropdown";
+import Pagination from "@components/elements/pagination";
 // import Pagination from "@components/elements/pagination";
 import { Body3, Header5 } from "@components/elements/types";
 import {
@@ -243,7 +244,7 @@ const Comment = ({ id, children, count }: IPropsComment) => {
       if (idx == replydata.wr_parent2) {
         setReply({ ...replydata, wr_parent2: 0, wr_content: "" });
       } else {
-        setReply({ ...replydata, wr_parent2: idx, wr_content: "" });
+        setReply({ ...replydata, wr_parent2: parseInt(idx), wr_content: "" });
       }
     }
     if (content == "삭제하기") {
@@ -306,7 +307,11 @@ const Comment = ({ id, children, count }: IPropsComment) => {
     if (wr_parent == replydata.wr_parent2) {
       setReply({ ...replydata, wr_parent2: 0, wr_content: "" });
     } else {
-      setReply({ ...replydata, wr_parent2: wr_parent, wr_content: "" });
+      setReply({
+        ...replydata,
+        wr_parent2: parseInt(wr_parent),
+        wr_content: "",
+      });
     }
   };
 
@@ -481,7 +486,7 @@ const Comment = ({ id, children, count }: IPropsComment) => {
           })}
         {!comments && <Loader color={"gray"} size={"large"} />}
       </Style.Comment>
-      {/* <Pagination /> */}
+      <Pagination />
     </Style.Container>
   );
 };

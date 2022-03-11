@@ -18,7 +18,7 @@ const CreateTopic: NextPage = () => {
   const { data: session, status } = useSession();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const { data: categoryList } = useSWR(
-    `/api2/category`,
+    `/api2/category/select`,
     CategorySelectfetcher,
   );
   const [image, setImage] = useState<any>({

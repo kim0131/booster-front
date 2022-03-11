@@ -131,6 +131,7 @@ interface IPropsBoard {
     comments: number;
     bookmark: boolean;
     create: number;
+    likeCnt: number;
   }[];
   isLoading?: Boolean;
 }
@@ -144,14 +145,15 @@ const Board = ({ category, Datas, isLoading }: IPropsBoard) => {
   useEffect(() => {
     getReplyDatas();
   }, [Datas]);
-
   const onClickRouter = (param: number) => {
     router.push(`/topics/detail?id=${param}`);
   };
 
   const getReplyDatas = () => {
     setData(Datas);
+    setLoading(false);
   };
+
   return (
     <>
       {isLoading2 ? (
@@ -220,7 +222,9 @@ const Board = ({ category, Datas, isLoading }: IPropsBoard) => {
                       </Style.BoardList.Item.Bottom.Badge>
                       <Style.BoardList.Item.Bottom.Badge>
                         <IconLike size={16} color={theme.color.gray[500]} />
-                        <Body3 color={theme.color.gray[500]}>{data.like}</Body3>
+                        <Body3 color={theme.color.gray[500]}>
+                          {data.likeCnt}
+                        </Body3>
                       </Style.BoardList.Item.Bottom.Badge>
                       <Style.BoardList.Item.Bottom.Badge>
                         <IconView size={16} color={theme.color.gray[500]} />

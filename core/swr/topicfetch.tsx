@@ -44,6 +44,7 @@ export const topicfetcher = async (url: string) => {
         board: content.board,
         bookmark: false, //추후필요
         create: elapsedTime,
+        likeCnt: content.likeCnt,
       });
     }
   });

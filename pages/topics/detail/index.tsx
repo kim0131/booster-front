@@ -28,9 +28,24 @@ const TopicDetail: NextPage = () => {
   let { id } = router.query;
   const [category, setCategory] = useState();
   const [topicContent, setTopicContent] = useState();
+  const [isLoading, setLoading] = useState<any>();
+  const [boardDatas, setBoardDatas] = useState([
+    {
+      id: 0,
+      category: "0",
+      title: "0",
+      content: "0",
+      writer: "0",
+      like: 0,
+      view: 0,
+      comments: 0,
+      bookmark: false,
+      create: 0,
+      likeCnt: 0,
+    },
+  ]);
   const { data: topic } = useSWR(`/api2/topic/list`, topicfetcher);
   const { data, isValidating } = useSWR(`/api2/topic/list/${id}`, topicDetail, {
-    refreshInterval: 100,
     onSuccess: (data, key, config) => {
       if (topic) {
         let result = topic.filter((content: any) => {
@@ -50,21 +65,27 @@ const TopicDetail: NextPage = () => {
       setCategory(data.category);
     },
   });
-  const [isLoading, setLoading] = useState<any>();
-  const [boardDatas, setBoardDatas] = useState([
-    {
-      id: 0,
-      category: "0",
-      title: "0",
-      content: "0",
-      writer: "0",
-      like: 0,
-      view: 0,
-      comments: 0,
-      bookmark: false,
-      create: 0,
-    },
-  ]);
+
+  useEffect(() => {
+    getTopicList();
+  }, [category]);
+
+  const getTopicList = () => {
+    if (topic) {
+      let result = topic.filter((content: any) => {
+        if (category) {
+          return content.category == category;
+        } else {
+          return true;
+        }
+      });
+      if (result) {
+        setBoardDatas(result);
+      }
+    } else {
+      setBoardDatas(topic);
+    }
+  };
 
   return (
     <>
