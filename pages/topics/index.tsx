@@ -71,12 +71,21 @@ const Topics: NextPage = () => {
     }
   };
 
+  const onClickRouter = (param: any) => {
+    router.push(`/topics/detail?id=${param}`);
+  };
+
   return (
     <>
       <SnbLayout>
         <Snb param={category} />
         {boardDatas && (
-          <Board category={category} Datas={boardDatas} isLoading={false} />
+          <Board
+            category={category}
+            Datas={boardDatas}
+            isLoading={false}
+            onClick={onClickRouter}
+          />
         )}
       </SnbLayout>
     </>

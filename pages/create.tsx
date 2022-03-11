@@ -42,7 +42,7 @@ const CreateTopic: NextPage = () => {
   }, [session]);
 
   const getUserIp = async () => {
-    const res = await axios.get("https://geolocation-db.com/json/");
+    const res = await axios.get("/json/");
     setData({ ...data, wr_ip: res.data.IPv4 });
   };
 

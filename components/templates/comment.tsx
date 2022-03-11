@@ -304,7 +304,7 @@ const Comment = ({ id, children, count }: IPropsComment) => {
   };
 
   const getUserSet = async () => {
-    const res = await axios.get("https://geolocation-db.com/json/");
+    const res = await axios.get("/json/");
     setCommentData({
       ...commentdata,
       wr_ip: res.data.IPv4,
@@ -361,9 +361,7 @@ const Comment = ({ id, children, count }: IPropsComment) => {
     <Style.Container>
       <Style.Comment>
         <Style.AddComment.Container>
-          <Header5>
-            {topicContent.commentCnt ? topicContent.commentCnt : "0"}개의 댓글
-          </Header5>
+          <Header5>{totalCount && totalCount}개의 댓글</Header5>
           <Style.AddComment.TextArea
             rows={3}
             name={"wr_content"}

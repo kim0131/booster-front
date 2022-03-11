@@ -134,9 +134,10 @@ interface IPropsBoard {
     likeCnt: number;
   }[];
   isLoading?: Boolean;
+  onClick?: any;
 }
 
-const Board = ({ category, Datas, isLoading }: IPropsBoard) => {
+const Board = ({ category, Datas, isLoading, onClick }: IPropsBoard) => {
   const { isDesktop } = useDesktop();
   const [datas, setData] = useState(Datas);
   const [isLoading2, setLoading] = useState<any>(isLoading);
@@ -146,21 +147,17 @@ const Board = ({ category, Datas, isLoading }: IPropsBoard) => {
   const [currentPage, setcurrentPage] = useState(1);
 
   useEffect(() => {
-    getReplyDatas();
+    sliceTopicList();
   }, [currentPage, Datas]);
 
   useEffect(() => {
+    setTotalCount(Datas.length);
     setcurrentPage(1);
   }, [Datas]);
-  const onClickRouter = (param: number) => {
-    router.push(`/topics/detail?id=${param}`);
-  };
 
-  const getReplyDatas = () => {
-    setTotalCount(Datas.length);
+  const sliceTopicList = () => {
     const result = Datas.slice((currentPage - 1) * line, currentPage * line);
     setData(result);
-    setLoading(false);
   };
 
   const onClickPagenation = (e: any) => {
@@ -206,7 +203,7 @@ const Board = ({ category, Datas, isLoading }: IPropsBoard) => {
               datas.map(data => (
                 <Style.BoardList.Item.Container
                   key={data.id}
-                  onClick={() => onClickRouter(data.id)}
+                  onClick={() => onClick(data.id)}
                 >
                   <Style.BoardList.Item.Top.Container>
                     <Style.BoardList.Item.Top.Content.Container>

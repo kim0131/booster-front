@@ -12,7 +12,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { config } from "process";
 import { useEffect, useState } from "react";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 
 interface IPropsSnb {
   snbDatas: {
@@ -26,6 +26,7 @@ interface IPropsSnb {
 const TopicDetail: NextPage = () => {
   const router = useRouter();
   let { id } = router.query;
+  const [topicId, setTopicId] = useState(id);
   const [category, setCategory] = useState();
   const [topicContent, setTopicContent] = useState();
   const [isLoading, setLoading] = useState<any>();
@@ -44,33 +45,42 @@ const TopicDetail: NextPage = () => {
       likeCnt: 0,
     },
   ]);
+  useEffect(() => {
+    setTopicId(id);
+    getTopicList();
+  }, [category, id, router.query]);
+
   const { data: topic } = useSWR(`/api2/topic/list`, topicfetcher, {
     refreshInterval: 1000,
   });
-  const { data, isValidating } = useSWR(`/api2/topic/list/${id}`, topicDetail, {
-    onSuccess: (data, key, config) => {
-      if (topic) {
-        let result = topic.filter((content: any) => {
-          if (data.category) {
-            return content.category == category;
-          } else {
-            return true;
-          }
-        });
-        if (result) {
-          setBoardDatas(result);
-        }
-      } else {
-        setBoardDatas(topic);
-      }
-      setTopicContent(data);
-      setCategory(data.category);
-    },
-  });
 
-  useEffect(() => {
-    getTopicList();
-  }, [category]);
+  const { data, isValidating } = useSWR(
+    `/api2/topic/list/${topicId}`,
+    topicDetail,
+    {
+      onSuccess: (data, key, config) => {
+        console.log(data);
+        console.log(topicId);
+        setTopicContent(undefined);
+        if (topic) {
+          let result = topic.filter((content: any) => {
+            if (data.category) {
+              return content.category == category;
+            } else {
+              return true;
+            }
+          });
+          if (result) {
+            setBoardDatas(result);
+          }
+        } else {
+          setBoardDatas(topic);
+        }
+        setTopicContent(data);
+        setCategory(data.category);
+      },
+    },
+  );
 
   const getTopicList = () => {
     if (topic) {
@@ -89,25 +99,30 @@ const TopicDetail: NextPage = () => {
     }
   };
 
+  const onClickRouter = (param: any) => {
+    setTopicId(param);
+    router.push(`/topics/detail?id=${param}`);
+  };
+
   return (
     <>
       <SnbLayout>
-        {topicContent && (
+        {!isValidating && (
           <>
             <Snb param={category} />
-            <TopicContentLayout id={id} data={topicContent}>
+            <TopicContentLayout id={topicId} data={topicContent}>
               <Comment id={id} />
               {topicContent && (
                 <Board
                   category={category}
                   Datas={boardDatas}
                   isLoading={isLoading}
+                  onClick={onClickRouter}
                 />
               )}
             </TopicContentLayout>
           </>
         )}
-        {!topicContent && <Loader color={"black"} />}
       </SnbLayout>
     </>
   );
