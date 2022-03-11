@@ -400,7 +400,7 @@ const Comment = ({ id, children, count }: IPropsComment) => {
                           menu={[
                             {
                               id: 0,
-                              content: "수정하기",
+                              content: "댓글달기",
                               url: comment.idx,
                             },
                             {

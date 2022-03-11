@@ -186,15 +186,14 @@ const TopicContentLayout = ({
         member_idx: parseInt(session?.user?.idx),
       })
       .then(async res => {
-        const result = res.data.result.length;
+        const result = await res.data.result.length;
         if (result) {
           await axios
             .post(`/api2/topic/like/cancel/${id}`, {
               member_idx: parseInt(session?.user?.idx),
             })
             .then(() => {
-              console.log("삭제");
-              router.push(router.asPath);
+              topicContent.likeCnt = topicContent.likeCnt - 1;
             });
         } else {
           await axios
@@ -202,8 +201,7 @@ const TopicContentLayout = ({
               member_idx: parseInt(session?.user?.idx),
             })
             .then(() => {
-              console.log("추가");
-              router.push(router.asPath);
+              topicContent.likeCnt = topicContent.likeCnt + 1;
             });
         }
       });
