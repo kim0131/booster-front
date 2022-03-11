@@ -120,8 +120,21 @@ const Style = {
     font-weight: 700;
   `,
   Content: styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: flex-start;
     font-size: ${props => props.theme.fontSize.body2};
     line-height: ${props => props.theme.lineHeight.body2};
+  `,
+  Button: styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.75rem;
+    ${props => props.theme.screen.md} {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
   `,
 };
 
@@ -133,12 +146,14 @@ interface IPropsCallout {
   title?: React.ReactNode;
   size?: string;
   color?: string;
+  button?: React.ReactNode;
 }
 
 const Callout = ({
   children,
   icon,
   title,
+  button,
   size = "medium",
   color = "gray",
 }: IPropsCallout) => (
@@ -147,6 +162,7 @@ const Callout = ({
     <Style.Wrapper>
       {title && <Style.Title>{title}</Style.Title>}
       <Style.Content>{children}</Style.Content>
+      {button && <Style.Button>{button}</Style.Button>}
     </Style.Wrapper>
   </Style.Container>
 );
