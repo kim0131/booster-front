@@ -94,6 +94,7 @@ const getCommentIsReply = async (idx: string | number) => {
 };
 export const topicComment = async (url: string) => {
   let result: any = [];
+  let result2: any = [];
   await axios.get(url).then(async res => {
     const comment = res.data.result;
     for (const item of comment) {
@@ -120,5 +121,13 @@ export const topicComment = async (url: string) => {
       );
     }
   });
-  return result;
+  for (const item of result) {
+    result2.push(item);
+    if (item.wr_reply.length > 0) {
+      for (const v of item.wr_reply) {
+        result2.push(v);
+      }
+    }
+  }
+  return result2;
 };

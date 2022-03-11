@@ -209,9 +209,25 @@ interface IPropsComment {
 const Comment = ({ id, children, count }: IPropsComment) => {
   const router = useRouter();
   const [isLoading, setLoading] = useState<Boolean>(true);
-  const { data: comments } = useSWR(`/api2/topic/comment/${id}`, topicComment);
+  const [comments, setComments] = useState([]);
+  const { data: commentsList, isValidating } = useSWR(
+    `/api2/topic/comment/${id}`,
+    topicComment,
+    {
+      onSuccess: (data, key, error) => {
+        setTotalCount(data.length);
+      },
+    },
+  );
   const { data: session, status } = useSession();
-  const { data: topicContent } = useSWR(`/api2/topic/list/${id}`, topicDetail);
+  const { data: topicContent } = useSWR(`/api2/topic/list/${id}`, topicDetail, {
+    onSuccess: (data, key, error) => {
+      setTotalCount(data.commentCnt);
+    },
+  });
+  const [totalCount, setTotalCount] = useState(0);
+  const [line, setLine] = useState(5);
+  const [currentPage, setcurrentPage] = useState(1);
   const [commentdata, setCommentData] = useState({
     wr_content: "",
     mb_id: session?.user?.email,
@@ -233,6 +249,24 @@ const Comment = ({ id, children, count }: IPropsComment) => {
     board: null,
   });
 
+  useEffect(() => {
+    getUserSet();
+  }, [router]);
+
+  useEffect(() => {
+    sliccComment();
+  }, [currentPage, commentsList]);
+
+  const sliccComment = () => {
+    if (commentsList) {
+      const result = commentsList.slice(
+        (currentPage - 1) * line,
+        currentPage * line,
+      );
+      setComments(result);
+    }
+  };
+
   const onClickLink = async (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,
   ) => {
@@ -251,15 +285,25 @@ const Comment = ({ id, children, count }: IPropsComment) => {
       let result = confirm("정말 삭제하시겠습니까?");
       if (result) {
         await axios
-          .post(`/api2.topic/delete/${idx}`)
-          .then(res => alert("삭제되었습니다"));
+          .post(`/api2/topic/delete/${idx}`)
+          .then(res => {
+            alert("삭제되었습니다")
+            router.push(router.asPath)
+          });
       }
     }
   };
+  const onClickPagenation = (e: any) => {
+    const value = parseInt(e.currentTarget.textContent);
+    setcurrentPage(value);
+  };
 
-  useEffect(() => {
-    getUserSet();
-  }, [router]);
+  const onClickMoveFront = () => {
+    setcurrentPage(1);
+  };
+  const onClickMoveEnd = () => {
+    setcurrentPage(Math.ceil(totalCount / line));
+  };
 
   const getUserSet = async () => {
     const res = await axios.get("https://geolocation-db.com/json/");
@@ -344,28 +388,43 @@ const Comment = ({ id, children, count }: IPropsComment) => {
           comments.map((comment: any) => {
             return (
               <React.Fragment key={comment.idx}>
-                <Style.List.Container isReply={false}>
+                <Style.List.Container
+                  isReply={comment.wr_is_comment2 ? true : false}
+                >
                   <Style.List.Header>
                     <Style.List.Content>
                       {comment.wr_content}
                     </Style.List.Content>
                     <Style.SubMore>
                       <IconMoreVertical />
-                      <Dropdown
-                        menu={[
-                          {
-                            id: 0,
-                            content: "수정하기",
-                            url: comment.idx,
-                          },
-                          {
-                            id: 1,
-                            content: "삭제하기",
-                            url: comment.idx,
-                          },
-                        ]}
-                        onClick={onClickLink}
-                      />
+                      {!comment.wr_is_comment2 ? (
+                        <Dropdown
+                          menu={[
+                            {
+                              id: 0,
+                              content: "수정하기",
+                              url: comment.idx,
+                            },
+                            {
+                              id: 1,
+                              content: "삭제하기",
+                              url: comment.idx,
+                            },
+                          ]}
+                          onClick={onClickLink}
+                        />
+                      ) : (
+                        <Dropdown
+                          menu={[
+                            {
+                              id: 1,
+                              content: "삭제하기",
+                              url: comment.idx,
+                            },
+                          ]}
+                          onClick={onClickLink}
+                        />
+                      )}
                     </Style.SubMore>
                   </Style.List.Header>
                   <Style.List.Bottom.Container>
@@ -404,7 +463,8 @@ const Comment = ({ id, children, count }: IPropsComment) => {
                     </Body3>
                   </Style.List.Bottom.Container>
                 </Style.List.Container>
-                {replydata.wr_parent2 == comment.idx ? (
+                {replydata.wr_parent2 == comment.idx &&
+                !comment.wr_is_comment2 ? (
                   <Style.AddComment.Container>
                     <Style.AddComment.TextArea
                       rows={3}
@@ -433,7 +493,7 @@ const Comment = ({ id, children, count }: IPropsComment) => {
                   ""
                 )}
 
-                {comment.wr_reply.map((item: any) => {
+                {/* {comment.wr_reply.map((item: any) => {
                   return (
                     <React.Fragment key={comment.idx}>
                       <Style.List.Container isReply={true} key={item.idx}>
@@ -480,13 +540,20 @@ const Comment = ({ id, children, count }: IPropsComment) => {
                       </Style.List.Container>
                     </React.Fragment>
                   );
-                })}
+                })} */}
               </React.Fragment>
             );
           })}
-        {!comments && <Loader color={"gray"} size={"large"} />}
+        {isValidating && <Loader color={"gray"} size={"large"} />}
       </Style.Comment>
-      <Pagination />
+      <Pagination
+        totalContent={totalCount}
+        line={line}
+        currentPage={currentPage}
+        onClick={onClickPagenation}
+        MoveFront={onClickMoveFront}
+        MoveEnd={onClickMoveEnd}
+      />
     </Style.Container>
   );
 };
