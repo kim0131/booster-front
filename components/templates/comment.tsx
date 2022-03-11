@@ -453,10 +453,10 @@ const Comment = ({ id, children, count }: IPropsComment) => {
                       </Style.List.Bottom.Badge>
                     </Style.List.Bottom.Info>
                     <Body3 color={theme.color.gray[500]}>
-                      {comment.create > 24
-                        ? `${Math.ceil(comment.create / 24)}일전`
-                        : comment.create > 0
-                        ? `${comment.create}시간전`
+                      {comment.wr_create > 24
+                        ? `${Math.ceil(comment.wr_create / 24)}일전`
+                        : comment.wr_create > 0
+                        ? `${comment.wr_create}시간전`
                         : `방금전`}
                     </Body3>
                   </Style.List.Bottom.Container>

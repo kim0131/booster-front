@@ -131,10 +131,17 @@ const CreateTopic: NextPage = () => {
           />
         )
       }
-      title={<TextField name={"wr_subject"} onChange={onChangeTopic} />}
+      title={
+        <TextField
+          name={"wr_subject"}
+          onChange={onChangeTopic}
+          placeholder="제목"
+        />
+      }
       content={
         <TextAreaTopicContent
           name="wr_content"
+          placeholder="내용을 입력하세요."
           value={state}
           textAreaRef={textAreaRef}
           rows={20}

@@ -52,7 +52,7 @@ const Topics: NextPage = () => {
   );
   useEffect(() => {
     getTopicList();
-  }, [category]);
+  }, [category, router]);
 
   const getTopicList = () => {
     if (topic) {

@@ -139,11 +139,15 @@ const Header = () => {
   const { data: categoryList } = useSWR(
     `/api2/category/select`,
     CategorySelectfetcher,
+    { refreshInterval: 1000 },
   );
-  const { data: topic } = useSWR(`/api2/topic/list`, topicfetcher);
+  const { data: topic } = useSWR(`/api2/topic/list`, topicfetcher, {
+    refreshInterval: 1000,
+  });
   const { data: snbDatas, error: dataError } = useSWR(
     "/api2/category/snbdata",
     CategorySnbMenufetcher,
+    { refreshInterval: 1000 },
   );
   const { data: session, status } = useSession();
   const router = useRouter();

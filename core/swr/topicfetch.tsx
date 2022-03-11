@@ -28,7 +28,8 @@ export const topicfetcher = async (url: string) => {
   await axios.get(url).then(async res => {
     const topic = res.data.result;
     for (const content of topic) {
-      const ContentTime = new Date(content.wr_datetime);
+      let ContentTime = new Date(content.wr_datetime);
+      ContentTime.setHours(ContentTime.getHours() - 9);
       const elapsedTime = Math.ceil(
         (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
       );
@@ -96,10 +97,11 @@ export const topicComment = async (url: string) => {
   let result: any = [];
   let result2: any = [];
   await axios.get(url).then(async res => {
+    const CurrentTime = new Date();
     const comment = res.data.result;
     for (const item of comment) {
-      const CurrentTime = new Date();
-      const ContentTime = new Date(item.wr_datetime);
+      let ContentTime = new Date(item.wr_datetime);
+      ContentTime.setHours(ContentTime.getHours() - 9);
       const elapsedTime = Math.ceil(
         (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
       );
