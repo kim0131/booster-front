@@ -274,7 +274,7 @@ const Comment = ({ id, children, count }: IPropsComment) => {
     const idx: any = e.currentTarget.dataset.value;
     const content: string | null = e.currentTarget.textContent;
 
-    if (content == "수정하기") {
+    if (content == "댓글달기") {
       if (idx == replydata.wr_parent2) {
         setReply({ ...replydata, wr_parent2: 0, wr_content: "" });
       } else {

@@ -314,6 +314,12 @@ const Selectbox = ({
         onChange={onChange}
         onFocus={onFocus}
       >
+        {!value && (
+          <option value="" selected disabled hidden>
+            카테고리를 선택해주세요.
+          </option>
+        )}
+
         {options.map((option: any) => (
           <option key={option.id} value={option.value}>
             {option.content}

@@ -58,7 +58,6 @@ const CreateTopic: NextPage = () => {
   const onChangeSelcet = (e: any) => {
     const { value } = e.currentTarget;
     setData({ ...data, board: value });
-    console.log(data);
   };
 
   const onChangeTopic = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,7 +95,7 @@ const CreateTopic: NextPage = () => {
     if (image.image_file) {
       formData.append("file", image.image_file);
     }
-    console.log(data);
+
     await axios
       .post("/api2/topic/write", {
         wr_subject: data.wr_subject,
@@ -128,7 +127,7 @@ const CreateTopic: NextPage = () => {
             options={categoryList}
             placeholder={"카테고리"}
             onChange={onChangeSelcet}
-            value={data.board}
+            value={data.board ? data.board : ""}
           />
         )
       }
