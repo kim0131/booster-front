@@ -44,7 +44,9 @@ const TopicDetail: NextPage = () => {
       likeCnt: 0,
     },
   ]);
-  const { data: topic } = useSWR(`/api2/topic/list`, topicfetcher);
+  const { data: topic } = useSWR(`/api2/topic/list`, topicfetcher, {
+    refreshInterval: 1000,
+  });
   const { data, isValidating } = useSWR(`/api2/topic/list/${id}`, topicDetail, {
     onSuccess: (data, key, config) => {
       if (topic) {

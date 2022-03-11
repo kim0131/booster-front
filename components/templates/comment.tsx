@@ -284,12 +284,10 @@ const Comment = ({ id, children, count }: IPropsComment) => {
     if (content == "삭제하기") {
       let result = confirm("정말 삭제하시겠습니까?");
       if (result) {
-        await axios
-          .post(`/api2/topic/delete/${idx}`)
-          .then(res => {
-            alert("삭제되었습니다")
-            router.push(router.asPath)
-          });
+        await axios.post(`/api2/topic/delete/${idx}`).then(res => {
+          alert("삭제되었습니다");
+          router.push(router.asPath);
+        });
       }
     }
   };
@@ -492,55 +490,6 @@ const Comment = ({ id, children, count }: IPropsComment) => {
                 ) : (
                   ""
                 )}
-
-                {/* {comment.wr_reply.map((item: any) => {
-                  return (
-                    <React.Fragment key={comment.idx}>
-                      <Style.List.Container isReply={true} key={item.idx}>
-                        <Style.List.Header>
-                          <Style.List.Content>
-                            {item.wr_content}
-                          </Style.List.Content>
-                          <Style.List.Button>
-                            <IconMoreVertical
-                              size={20}
-                              color={theme.color.gray[500]}
-                            />
-                          </Style.List.Button>
-                        </Style.List.Header>
-                        <Style.List.Bottom.Container>
-                          <Style.List.Bottom.Info>
-                            <Style.List.Bottom.Badge>
-                              <IconProfile
-                                size={16}
-                                color={theme.color.gray[500]}
-                              />
-                              <Body3 color={theme.color.gray[500]}>
-                                {item.mb_name}
-                              </Body3>
-                            </Style.List.Bottom.Badge>
-                            <Style.List.Bottom.Badge>
-                              <IconLike
-                                size={16}
-                                color={theme.color.gray[500]}
-                              />
-                              <Body3 color={theme.color.gray[500]}>
-                                {item.wr_good}
-                              </Body3>
-                            </Style.List.Bottom.Badge>
-                          </Style.List.Bottom.Info>
-                          <Body3 color={theme.color.gray[500]}>
-                            {item.create > 24
-                              ? `${Math.ceil(item.create / 24)}일전`
-                              : item.create > 0
-                              ? `${item.create}시간전`
-                              : `방금전`}
-                          </Body3>
-                        </Style.List.Bottom.Container>
-                      </Style.List.Container>
-                    </React.Fragment>
-                  );
-                })} */}
               </React.Fragment>
             );
           })}

@@ -18,6 +18,10 @@ module.exports = {
         source: '/uploads/:path*',
         destination: 'http://localhost:3001/uploads/:path*' // Proxy to Backend
       },
+      {
+        source: "/json/",
+        destination: "https://geolocation-db.com/json/"
+      }
 
     ]
   }

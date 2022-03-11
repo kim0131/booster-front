@@ -174,7 +174,7 @@ const TopicContentLayout = ({
       if (result) {
         await axios.post(`/api2/topic/delete/${idx}`).then(res => {
           alert("삭제되었습니다");
-          router.push("topics");
+          router.push("/topics");
         });
       }
     }
@@ -192,13 +192,19 @@ const TopicContentLayout = ({
             .post(`/api2/topic/like/cancel/${id}`, {
               member_idx: parseInt(session?.user?.idx),
             })
-            .then(() => console.log("삭제"));
+            .then(() => {
+              console.log("삭제");
+              router.push(router.asPath);
+            });
         } else {
           await axios
             .post(`/api2/topic/like/insert/${id}`, {
               member_idx: parseInt(session?.user?.idx),
             })
-            .then(() => console.log("추가"));
+            .then(() => {
+              console.log("추가");
+              router.push(router.asPath);
+            });
         }
       });
   };
