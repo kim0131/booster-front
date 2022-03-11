@@ -95,23 +95,27 @@ const Style = {
 
 // Component
 
-// TODO : 전체 게시글, 한 페이지에 보여주는 게시글 수, 현재 페이지를 Props에 주입한다.
-
 interface IPropsPagination {
   totalContent?: number;
   line?: number;
   currentPage?: number;
+  onClick?: any;
+  MoveFront?: any;
+  MoveEnd?: any;
 }
 
 const Pagination = ({
   totalContent = 102581,
   line = 20,
-  currentPage = 5130,
+  currentPage = 0,
+  onClick,
+  MoveFront,
+  MoveEnd,
 }: IPropsPagination) => {
   const totalPage = Math.ceil(totalContent / line);
   const pageArr =
     totalPage < 3
-      ? [...Array(totalPage)].map((v, i) => i)
+      ? [...Array(totalPage)].map((v, i) => i + 1)
       : currentPage + 4 >= totalPage
       ? [totalPage - 4, totalPage - 3, totalPage - 2, totalPage - 1, totalPage]
       : currentPage < 3
@@ -126,15 +130,15 @@ const Pagination = ({
 
   return (
     <Style.Container>
-      <Style.Arrow disabled={currentPage === 1}>
+      <Style.Arrow disabled={currentPage === 1} onClick={MoveFront}>
         <IconChevronLeft size={16} />
       </Style.Arrow>
       {pageArr.map(num => (
-        <Style.Page key={num} isCurrent={num === currentPage}>
+        <Style.Page key={num} isCurrent={num === currentPage} onClick={onClick}>
           {num}
         </Style.Page>
       ))}
-      <Style.Arrow disabled={currentPage === totalPage}>
+      <Style.Arrow disabled={currentPage === totalPage} onClick={MoveEnd}>
         <IconChevronRight size={16} />
       </Style.Arrow>
     </Style.Container>

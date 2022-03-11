@@ -100,7 +100,7 @@ interface IPropsSnb {
 const Snb = ({ param }: IPropsSnb) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
-  console.log(1);
+
   const { data: snbDatas, error: dataError } = useSWR(
     "/api2/category/snbdata",
     CategorySnbMenufetcher,

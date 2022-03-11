@@ -141,17 +141,38 @@ const Board = ({ category, Datas, isLoading }: IPropsBoard) => {
   const [datas, setData] = useState(Datas);
   const [isLoading2, setLoading] = useState<any>(isLoading);
   const router = useRouter();
+  const [totalCount, setTotalCount] = useState(Datas.length);
+  const [line, setLine] = useState(10);
+  const [currentPage, setcurrentPage] = useState(1);
 
   useEffect(() => {
     getReplyDatas();
+  }, [currentPage, Datas]);
+
+  useEffect(() => {
+    setcurrentPage(1);
   }, [Datas]);
   const onClickRouter = (param: number) => {
     router.push(`/topics/detail?id=${param}`);
   };
 
   const getReplyDatas = () => {
-    setData(Datas);
+    setTotalCount(Datas.length);
+    const result = Datas.slice((currentPage - 1) * line, currentPage * line);
+    setData(result);
     setLoading(false);
+  };
+
+  const onClickPagenation = (e: any) => {
+    const value = parseInt(e.currentTarget.textContent);
+    setcurrentPage(value);
+  };
+
+  const onClickMoveFront = () => {
+    setcurrentPage(1);
+  };
+  const onClickMoveEnd = () => {
+    setcurrentPage(Math.ceil(totalCount / line));
   };
 
   return (
@@ -247,7 +268,14 @@ const Board = ({ category, Datas, isLoading }: IPropsBoard) => {
               ))
             )}
           </Style.BoardList.Container>
-          <Pagination totalContent={0} line={0} currentPage={0} />
+          <Pagination
+            totalContent={totalCount}
+            line={line}
+            currentPage={currentPage}
+            onClick={onClickPagenation}
+            MoveFront={onClickMoveFront}
+            MoveEnd={onClickMoveEnd}
+          />
         </Style.Container>
       )}
     </>

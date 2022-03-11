@@ -49,7 +49,7 @@ const CreateTopic: NextPage = () => {
   const onChangeheight = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     textAreaRef.current!.style.height = "auto";
     textAreaRef.current!.style.height = `${e.target.scrollHeight}px`;
-    console.log(e.currentTarget.scrollHeight);
+
     setState(e.currentTarget.value);
     const { value, name } = e.currentTarget;
     setData({ ...data, [name]: value });

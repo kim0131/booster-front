@@ -31,7 +31,6 @@ const Topics: NextPage = () => {
     `/api2/topic/list`,
     topicfetcher,
     {
-      refreshInterval: 1000,
       onSuccess: (data, key, config) => {
         if (data) {
           let result = data.filter((content: any) => {

@@ -19,9 +19,7 @@ const EditTopic: NextPage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   let { id } = router.query;
-  const { data: topicContent } = useSWR(`/api2/topic/list/${id}`, topicDetail, {
-    refreshInterval: 1000,
-  });
+  const { data: topicContent } = useSWR(`/api2/topic/list/${id}`, topicDetail);
   const [data, setData] = useState<any>({
     wr_subject: "",
     wr_content: "",
@@ -36,9 +34,6 @@ const EditTopic: NextPage = () => {
   const { data: categoryList } = useSWR(
     `/api2/category/select`,
     CategorySelectfetcher,
-    {
-      refreshInterval: 1000,
-    },
   );
 
   const [image, setImage] = useState<any>({
