@@ -29,7 +29,7 @@ export const topicfetcher = async (url: string) => {
   const CurrentTime = new Date();
   await axios.get(url).then(async res => {
     const topic = res.data.result;
-    topic.map( async(content : any, idx:any)=> {
+    topic.map(async (content: any, idx: any) => {
       let ContentTime = new Date(content.wr_datetime);
       ContentTime.setHours(ContentTime.getHours());
       const elapsedTime = Math.ceil(
@@ -49,20 +49,14 @@ export const topicfetcher = async (url: string) => {
         create: elapsedTime,
         likeCnt: content.likeCnt,
       });
-    })
+    });
   });
   return result;
 };
 
-const useTopicList =  () => {
-  const { data: topicList, mutate } = useSWR("/api2/topic/list", topicfetcher, {
-      onSuccess : ()=>{}
-  });
-  return  {topicList, mutate}
-  
+const useTopicList = () => {
+  const { data: topicList, mutate } = useSWR("/api2/topic/list", topicfetcher);
+  return { topicList, mutate };
 };
 
 export default useTopicList;
-
-
-

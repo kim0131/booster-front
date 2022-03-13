@@ -12,6 +12,7 @@ import {
   IconView,
 } from "@components/icons";
 import theme from "@components/styles/theme";
+import { useTopicComment } from "@core/hook/use-comment";
 import { topicComment, topicDetail } from "@core/swr/topicfetch";
 
 import styled from "@emotion/styled";
@@ -210,16 +211,7 @@ const Comment = ({ id, children, count }: IPropsComment) => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [comments, setComments] = useState([]);
-  const { data: commentsList, isValidating } = useSWR(
-    `/api2/topic/comment/${id}`,
-    topicComment,
-    {
-      onSuccess: (data, key, error) => {
-        setTotalCount(data.length);
-      },
-    },
-  );
-
+  const { commentsList } = useTopicComment(id);
   const [totalCount, setTotalCount] = useState(0);
   const [line, setLine] = useState(5);
   const [currentPage, setcurrentPage] = useState(1);
@@ -356,7 +348,7 @@ const Comment = ({ id, children, count }: IPropsComment) => {
     <Style.Container>
       <Style.Comment>
         <Style.AddComment.Container>
-          <Header5>{totalCount && totalCount}개의 댓글</Header5>
+          <Header5>{commentsList && commentsList.length}개의 댓글</Header5>
           <Style.AddComment.TextArea
             rows={3}
             name={"wr_content"}
@@ -486,7 +478,7 @@ const Comment = ({ id, children, count }: IPropsComment) => {
               </React.Fragment>
             );
           })}
-        {isValidating && <Loader color={"gray"} size={"large"} />}
+        {!commentsList && <Loader color={"gray"} size={"large"} />}
       </Style.Comment>
       <Pagination
         totalContent={totalCount}
