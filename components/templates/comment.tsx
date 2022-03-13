@@ -208,7 +208,7 @@ interface IPropsComment {
 
 const Comment = ({ id, children, count }: IPropsComment) => {
   const router = useRouter();
-  const [isLoading, setLoading] = useState<Boolean>(true);
+  const { data: session, status } = useSession();
   const [comments, setComments] = useState([]);
   const { data: commentsList, isValidating } = useSWR(
     `/api2/topic/comment/${id}`,
@@ -219,12 +219,7 @@ const Comment = ({ id, children, count }: IPropsComment) => {
       },
     },
   );
-  const { data: session, status } = useSession();
-  const { data: topicContent } = useSWR(`/api2/topic/list/${id}`, topicDetail, {
-    onSuccess: (data, key, error) => {
-      setTotalCount(data.commentCnt);
-    },
-  });
+
   const [totalCount, setTotalCount] = useState(0);
   const [line, setLine] = useState(5);
   const [currentPage, setcurrentPage] = useState(1);
@@ -304,7 +299,7 @@ const Comment = ({ id, children, count }: IPropsComment) => {
   };
 
   const getUserSet = async () => {
-    const res = await axios.get("/json/");
+    const res = await axios.get("/json/"); //IP 얻어오는 것
     setCommentData({
       ...commentdata,
       wr_ip: res.data.IPv4,

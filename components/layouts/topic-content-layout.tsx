@@ -155,10 +155,14 @@ const TopicContentLayout = ({
   children,
   id,
 }: IPropsTopicContentLayout) => {
+  const { data: session, status }: any = useSession();
   const router = useRouter();
   const topicContent = data;
-  const { data: session, status }: any = useSession();
+  const [likeCnt, setLikeCnt] = useState(0)
 
+  useEffect(()=>{
+    setLikeCnt(topicContent.likeCnt)
+  }, [topicContent])
   const onClickLink = async (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,
   ) => {
@@ -181,19 +185,20 @@ const TopicContentLayout = ({
   };
 
   const onClickLikeButton = async () => {
-    await axios
+    axios
       .post(`/api2/topic/like/${id}`, {
         member_idx: parseInt(session?.user?.idx),
       })
       .then(async res => {
-        const result = await res.data.result.length;
+        const result =  res.data.result.length;
         if (result) {
           await axios
             .post(`/api2/topic/like/cancel/${id}`, {
               member_idx: parseInt(session?.user?.idx),
             })
             .then(() => {
-              topicContent.likeCnt = topicContent.likeCnt - 1;
+              setLikeCnt(likeCnt-1)
+              
             });
         } else {
           await axios
@@ -201,7 +206,7 @@ const TopicContentLayout = ({
               member_idx: parseInt(session?.user?.idx),
             })
             .then(() => {
-              topicContent.likeCnt = topicContent.likeCnt + 1;
+              setLikeCnt(likeCnt+1)
             });
         }
       });
@@ -226,7 +231,7 @@ const TopicContentLayout = ({
                 <Style.Header.Bottom.Badge>
                   <IconLike size={16} color={theme.color.gray[500]} />
                   <Body3 color={theme.color.gray[500]}>
-                    {topicContent.likeCnt}
+                    {likeCnt}
                   </Body3>
                 </Style.Header.Bottom.Badge>
                 <Style.Header.Bottom.Badge>
@@ -265,7 +270,7 @@ const TopicContentLayout = ({
               <Style.Body.Button.Wrapper>
                 <Button color="transparent" onClick={onClickLikeButton}>
                   <IconLike />
-                  {topicContent.likeCnt}
+                  {likeCnt}
                 </Button>
                 <Button color="transparent">
                   <IconComment />

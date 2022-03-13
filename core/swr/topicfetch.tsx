@@ -21,36 +21,36 @@ const getCategoryName = (idx: any) => {
   }
 };
 
-export const topicfetcher = async (url: string) => {
-  onClickCategoryList();
-  let topicList: any = [];
-  const CurrentTime = new Date();
-  await axios.get(url).then(async res => {
-    const topic = res.data.result;
-    for (const content of topic) {
-      let ContentTime = new Date(content.wr_datetime);
-      ContentTime.setHours(ContentTime.getHours() - 9);
-      const elapsedTime = Math.ceil(
-        (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
-      );
-      topicList.push({
-        id: content.idx,
-        category: getCategoryName(content.board),
-        title: content.wr_subject,
-        content: content.wr_content,
-        writer: content.mb_name,
-        like: content.wr_good,
-        view: content.wr_view,
-        comments: content.commentCnt,
-        board: content.board,
-        bookmark: false, //추후필요
-        create: elapsedTime,
-        likeCnt: content.likeCnt,
-      });
-    }
-  });
-  return topicList;
-};
+// export const topicfetcher = async (url: string) => {
+//   onClickCategoryList();
+//   let topicList: any = [];
+//   const CurrentTime = new Date();
+//   await axios.get(url).then(async res => {
+//     const topic = res.data.result;
+//     for (const content of topic) {
+//       let ContentTime = new Date(content.wr_datetime);
+//       ContentTime.setHours(ContentTime.getHours() - 9);
+//       const elapsedTime = Math.ceil(
+//         (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
+//       );
+//       topicList.push({
+//         id: content.idx,
+//         category: getCategoryName(content.board),
+//         title: content.wr_subject,
+//         content: content.wr_content,
+//         writer: content.mb_name,
+//         like: content.wr_good,
+//         view: content.wr_view,
+//         comments: content.commentCnt,
+//         board: content.board,
+//         bookmark: false, //추후필요
+//         create: elapsedTime,
+//         likeCnt: content.likeCnt,
+//       });
+//     }
+//   });
+//   return topicList;
+// };
 
 export const topicDetail = async (url: any) => {
   let topicList: any = {};

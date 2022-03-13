@@ -2,8 +2,9 @@
 import SnbLayout from "@components/layouts/snb-layout";
 import Board from "@components/templates/board";
 import Snb from "@components/templates/snb";
+import useTopicList from "@core/hook/use-topicList";
 import { CategorySelectfetcher } from "@core/swr/categoryfetcher";
-import { topicfetcher } from "@core/swr/topicfetch";
+
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -12,6 +13,8 @@ import useSWR from "swr";
 const Topics: NextPage = () => {
   const router = useRouter();
   const { category } = router.query;
+  const { topicList} =  useTopicList();
+  const [topiclist, setTopicList] = useState(topicList) 
   const [boardDatas, setBoardDatas] = useState([
     {
       id: 0,
@@ -27,36 +30,16 @@ const Topics: NextPage = () => {
       likeCnt: 0,
     },
   ]);
-  const { data: topic, isValidating } = useSWR(
-    `/api2/topic/list`,
-    topicfetcher,
-    {
-      refreshInterval: 1000,
-      onSuccess: (data, key, config) => {
-        if (data) {
-          let result = data.filter((content: any) => {
-            if (category) {
-              return content.category == category;
-            } else {
-              return true;
-            }
-          });
-          if (result) {
-            setBoardDatas(result);
-          }
-        } else {
-          setBoardDatas(data);
-        }
-      },
-    },
-  );
   useEffect(() => {
     getTopicList();
-  }, [category, router]);
+    setTopicList(topicList)
+  }, [category, router, topicList, topiclist]);
+
+
 
   const getTopicList = () => {
-    if (topic) {
-      let result = topic.filter((content: any) => {
+    if (topicList) {
+      let result = topicList.filter((content: any) => {
         if (category) {
           return content.category == category;
         } else {
@@ -67,7 +50,7 @@ const Topics: NextPage = () => {
         setBoardDatas(result);
       }
     } else {
-      setBoardDatas(topic);
+      setBoardDatas(topicList);
     }
   };
 
