@@ -183,6 +183,9 @@ const InsightsContentLayout = ({
         }
       });
   };
+  const createMarkup = () => {
+    return { __html: insightDetail.wr_content };
+  };
   return (
     <Style.Container>
       <Style.Thumbnail photo={insightDetail.file_full_url} />
@@ -225,7 +228,9 @@ const InsightsContentLayout = ({
           </Style.Header.Bottom.Container>
         </Style.Header.Container>
         <Style.Body.Container>
-          <Style.Body.Content>{insightDetail.wr_content}</Style.Body.Content>
+          <Style.Body.Content
+            dangerouslySetInnerHTML={createMarkup()}
+          ></Style.Body.Content>
           <Style.Body.Button.Container>
             <Style.Body.Button.Wrapper>
               <Button color="transparent" onClick={onClickLikeButton}>
