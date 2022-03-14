@@ -14,7 +14,6 @@ import {
 } from "@components/icons";
 import theme from "@components/styles/theme";
 import { topicImageUrl } from "@core/config/imgurl";
-import { topicDetail } from "@core/swr/topicfetch";
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -158,11 +157,11 @@ const TopicContentLayout = ({
   const { data: session, status }: any = useSession();
   const router = useRouter();
   const topicContent = data;
-  const [likeCnt, setLikeCnt] = useState(0)
+  const [likeCnt, setLikeCnt] = useState(0);
 
-  useEffect(()=>{
-    setLikeCnt(topicContent.likeCnt)
-  }, [topicContent])
+  useEffect(() => {
+    setLikeCnt(topicContent.likeCnt);
+  }, [topicContent]);
   const onClickLink = async (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,
   ) => {
@@ -190,15 +189,14 @@ const TopicContentLayout = ({
         member_idx: parseInt(session?.user?.idx),
       })
       .then(async res => {
-        const result =  res.data.result.length;
+        const result = res.data.result.length;
         if (result) {
           await axios
             .post(`/api2/topic/like/cancel/${id}`, {
               member_idx: parseInt(session?.user?.idx),
             })
             .then(() => {
-              setLikeCnt(likeCnt-1)
-              
+              setLikeCnt(likeCnt - 1);
             });
         } else {
           await axios
@@ -206,7 +204,7 @@ const TopicContentLayout = ({
               member_idx: parseInt(session?.user?.idx),
             })
             .then(() => {
-              setLikeCnt(likeCnt+1)
+              setLikeCnt(likeCnt + 1);
             });
         }
       });
@@ -230,9 +228,7 @@ const TopicContentLayout = ({
                 </Style.Header.Bottom.Badge>
                 <Style.Header.Bottom.Badge>
                   <IconLike size={16} color={theme.color.gray[500]} />
-                  <Body3 color={theme.color.gray[500]}>
-                    {likeCnt}
-                  </Body3>
+                  <Body3 color={theme.color.gray[500]}>{likeCnt}</Body3>
                 </Style.Header.Bottom.Badge>
                 <Style.Header.Bottom.Badge>
                   <IconView size={16} color={theme.color.gray[500]} />

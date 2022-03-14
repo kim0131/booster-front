@@ -134,10 +134,10 @@ interface IPropsBoard {
     likeCnt: number;
   }[];
   isLoading?: Boolean;
-  onClick?: any;
+  onClickRouter?: any;
 }
 
-const Board = ({ category, Datas, isLoading, onClick }: IPropsBoard) => {
+const Board = ({ category, Datas, isLoading, onClickRouter }: IPropsBoard) => {
   const { isDesktop } = useDesktop();
   const [datas, setData] = useState(Datas);
   const [isLoading2, setLoading] = useState<any>(isLoading);
@@ -203,7 +203,7 @@ const Board = ({ category, Datas, isLoading, onClick }: IPropsBoard) => {
               datas.map(data => (
                 <Style.BoardList.Item.Container
                   key={data.id}
-                  onClick={() => onClick(data.id)}
+                  onClick={() => onClickRouter(data.id)}
                 >
                   <Style.BoardList.Item.Top.Container>
                     <Style.BoardList.Item.Top.Content.Container>

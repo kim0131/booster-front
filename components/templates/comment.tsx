@@ -13,8 +13,6 @@ import {
 } from "@components/icons";
 import theme from "@components/styles/theme";
 import { useTopicComment } from "@core/hook/use-comment";
-import { topicComment, topicDetail } from "@core/swr/topicfetch";
-
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";

@@ -13,8 +13,8 @@ import useSWR from "swr";
 const Topics: NextPage = () => {
   const router = useRouter();
   const { category } = router.query;
-  const { topicList} =  useTopicList();
-  const [topiclist, setTopicList] = useState(topicList) 
+  const { topicList } = useTopicList();
+  const [topiclist, setTopicList] = useState(topicList);
   const [boardDatas, setBoardDatas] = useState([
     {
       id: 0,
@@ -32,10 +32,8 @@ const Topics: NextPage = () => {
   ]);
   useEffect(() => {
     getTopicList();
-    setTopicList(topicList)
+    setTopicList(topicList);
   }, [category, router, topicList, topiclist]);
-
-
 
   const getTopicList = () => {
     if (topicList) {
@@ -67,7 +65,7 @@ const Topics: NextPage = () => {
             category={category}
             Datas={boardDatas}
             isLoading={false}
-            onClick={onClickRouter}
+            onClickRouter={onClickRouter}
           />
         )}
       </SnbLayout>
