@@ -11,6 +11,8 @@ import {
 } from "@components/icons";
 import theme from "@components/styles/theme";
 import styled from "@emotion/styled";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 interface IPropsStyle {
@@ -144,14 +146,43 @@ interface IPropsInsightsContentLayout {
   children?: React.ReactNode;
   comments?: React.ReactNode;
   insightDetail?: any;
+  id?: any;
 }
 
 const InsightsContentLayout = ({
   children,
   insightDetail,
   comments,
+  id,
 }: IPropsInsightsContentLayout) => {
-  console.log(insightDetail);
+  const { data: session, status }: any = useSession();
+  const [likeCnt, setLikeCnt] = useState(insightDetail.likeCnt);
+  const onClickLikeButton = async () => {
+    axios
+      .post(`/api2/insight/like/${id}`, {
+        member_idx: parseInt(session?.user?.idx),
+      })
+      .then(async res => {
+        const result = res.data.result.length;
+        if (result) {
+          await axios
+            .post(`/api2/insight/like/cancel/${id}`, {
+              member_idx: parseInt(session?.user?.idx),
+            })
+            .then(() => {
+              setLikeCnt(likeCnt - 1);
+            });
+        } else {
+          await axios
+            .post(`/api2/insight/like/insert/${id}`, {
+              member_idx: parseInt(session?.user?.idx),
+            })
+            .then(() => {
+              setLikeCnt(likeCnt + 1);
+            });
+        }
+      });
+  };
   return (
     <Style.Container>
       <Style.Thumbnail photo={insightDetail.file_full_url} />
@@ -171,9 +202,7 @@ const InsightsContentLayout = ({
               </Style.Header.Bottom.Badge>
               <Style.Header.Bottom.Badge>
                 <IconLike size={16} color={theme.color.gray[500]} />
-                <Body3 color={theme.color.gray[500]}>
-                  {insightDetail.likeCnt}
-                </Body3>
+                <Body3 color={theme.color.gray[500]}>{likeCnt}</Body3>
               </Style.Header.Bottom.Badge>
               <Style.Header.Bottom.Badge>
                 <IconView size={16} color={theme.color.gray[500]} />
@@ -189,7 +218,6 @@ const InsightsContentLayout = ({
               </Style.Header.Bottom.Badge>
             </Style.Header.Bottom.Info>
             <Body3 color={theme.color.gray[500]}>
-              {" "}
               {insightDetail.create > 24
                 ? `${Math.ceil(insightDetail.create / 24)}일전`
                 : `${insightDetail.create}시간전`}
@@ -200,9 +228,9 @@ const InsightsContentLayout = ({
           <Style.Body.Content>{insightDetail.wr_content}</Style.Body.Content>
           <Style.Body.Button.Container>
             <Style.Body.Button.Wrapper>
-              <Button color="transparent">
+              <Button color="transparent" onClick={onClickLikeButton}>
                 <IconLike />
-                {insightDetail.likeCnt}
+                {likeCnt}
               </Button>
               <Button color="transparent">
                 <IconComment />

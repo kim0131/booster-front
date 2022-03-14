@@ -26,6 +26,7 @@ const InsightId: NextPage = () => {
       {insightDetail && (
         <InsightsContentLayout
           insightDetail={insightDetail}
+          id={id}
           comments={<InsightComment id={id} />}
         >
           <LnbLayout>
