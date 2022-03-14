@@ -2,13 +2,14 @@
 import SnbLayout from "@components/layouts/snb-layout";
 import TopicContentLayout from "@components/layouts/topic-content-layout";
 import Board from "@components/templates/board";
-import Comment from "@components/templates/comment";
+import Comment from "@components/templates/topic-comment";
 import Snb from "@components/templates/snb";
 import { useTopicDetail } from "@core/hook/use-topicdetail";
 import useTopicList from "@core/hook/use-topicList";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import TopicComment from "@components/templates/topic-comment";
 
 interface IPropsSnb {
   snbDatas: {
@@ -26,6 +27,7 @@ const TopicDetail: NextPage = () => {
   const [category, setCategory] = useState();
   const { topicList } = useTopicList();
   const { topicDetail } = useTopicDetail(topicId);
+
   const [boardDatas, setBoardDatas] = useState([
     {
       id: 0,
@@ -78,7 +80,7 @@ const TopicDetail: NextPage = () => {
           <>
             <Snb param={category} />
             <TopicContentLayout id={topicId} data={topicDetail}>
-              <Comment id={topicId} />
+              <TopicComment id={topicId} />
               {boardDatas && (
                 <Board
                   category={category}

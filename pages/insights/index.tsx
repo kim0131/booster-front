@@ -1,6 +1,7 @@
 import LnbLayout from "@components/layouts/lnb-layout";
 import Lnb from "@components/templates/lnb";
 import Post from "@components/templates/post";
+import useInsightList from "@core/hook/use-insightList";
 import type { NextPage } from "next";
 import { useState } from "react";
 
@@ -12,6 +13,7 @@ const Insights: NextPage = () => {
       { id: 2, content: "메뉴2", param: "menu2" },
     ],
   });
+
   return (
     <LnbLayout>
       <Lnb lnbDatas={state.lnbDatas} param="전체" />

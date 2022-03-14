@@ -13,7 +13,11 @@ import theme from "@components/styles/theme";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-
+interface IPropsStyle {
+  thumbnail: {
+    photo?: string;
+  };
+}
 const Style = {
   Container: styled.div`
     display: flex;
@@ -25,9 +29,10 @@ const Style = {
       padding: 3rem;
     }
   `,
-  Thumbnail: styled.div`
+  Thumbnail: styled.div<IPropsStyle["thumbnail"]>`
     height: 16rem;
-    background-image: url("https://source.unsplash.com/random");
+    background-image: ${props =>
+      props.photo ? `url(${props.photo})` : "none"};
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -138,62 +143,70 @@ const Style = {
 interface IPropsInsightsContentLayout {
   children?: React.ReactNode;
   comments?: React.ReactNode;
+  insightDetail?: any;
 }
 
 const InsightsContentLayout = ({
   children,
+  insightDetail,
   comments,
 }: IPropsInsightsContentLayout) => {
+  console.log(insightDetail);
   return (
     <Style.Container>
-      <Style.Thumbnail />
+      <Style.Thumbnail photo={insightDetail.file_full_url} />
       <Style.Wrapper>
         <Style.Header.Container>
           <Style.Header.Badge>
-            <Badge size="large">뉴스</Badge>
+            <Badge size="large">{insightDetail.category}</Badge>
           </Style.Header.Badge>
-          <Style.Header.Title>
-            전) 알리페이 부사장이 알려주는 핀테크 기업에서 사업개발하기
-          </Style.Header.Title>
+          <Style.Header.Title>{insightDetail.wr_subject}</Style.Header.Title>
           <Style.Header.Bottom.Container>
             <Style.Header.Bottom.Info>
               <Style.Header.Bottom.Badge>
                 <IconProfile size={16} color={theme.color.gray[500]} />
-                <Body3 color={theme.color.gray[500]}>ㅁㄴㅇㄹ</Body3>
+                <Body3 color={theme.color.gray[500]}>
+                  {insightDetail.mb_name}
+                </Body3>
               </Style.Header.Bottom.Badge>
               <Style.Header.Bottom.Badge>
                 <IconLike size={16} color={theme.color.gray[500]} />
-                <Body3 color={theme.color.gray[500]}>1234</Body3>
+                <Body3 color={theme.color.gray[500]}>
+                  {insightDetail.likeCnt}
+                </Body3>
               </Style.Header.Bottom.Badge>
               <Style.Header.Bottom.Badge>
                 <IconView size={16} color={theme.color.gray[500]} />
-                <Body3 color={theme.color.gray[500]}>1234</Body3>
+                <Body3 color={theme.color.gray[500]}>
+                  {insightDetail.wr_view}
+                </Body3>
               </Style.Header.Bottom.Badge>
               <Style.Header.Bottom.Badge>
                 <IconComment size={16} color={theme.color.gray[500]} />
-                <Body3 color={theme.color.gray[500]}>23</Body3>
+                <Body3 color={theme.color.gray[500]}>
+                  {insightDetail.commentCnt}
+                </Body3>
               </Style.Header.Bottom.Badge>
             </Style.Header.Bottom.Info>
-            <Body3 color={theme.color.gray[500]}>24시간 전</Body3>
+            <Body3 color={theme.color.gray[500]}>
+              {" "}
+              {insightDetail.create > 24
+                ? `${Math.ceil(insightDetail.create / 24)}일전`
+                : `${insightDetail.create}시간전`}
+            </Body3>
           </Style.Header.Bottom.Container>
         </Style.Header.Container>
         <Style.Body.Container>
-          <Style.Body.Content>
-            폭발적으로 성장하고 있는 핀테크 산업, 그 가운데서도 가장 빠르게
-            변화하고 있는 중국, 알리페이에서 QR코드 결제를 처음 만들고 도입한
-            (전)알리페이 부사장 권현돈님을 모셨습니다. 핀테크 기업에서의
-            사업개발은 무엇이 다른지, 어떤 포인트가 폭발적인 성장과 더불어
-            매출과 유저수의 증대를 가져오는지 들어보세요!
-          </Style.Body.Content>
+          <Style.Body.Content>{insightDetail.wr_content}</Style.Body.Content>
           <Style.Body.Button.Container>
             <Style.Body.Button.Wrapper>
               <Button color="transparent">
                 <IconLike />
-                123
+                {insightDetail.likeCnt}
               </Button>
               <Button color="transparent">
                 <IconComment />
-                23
+                {insightDetail.commentCnt}
               </Button>
             </Style.Body.Button.Wrapper>
             <Style.Body.Button.Wrapper>
