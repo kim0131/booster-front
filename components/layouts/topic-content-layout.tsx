@@ -160,7 +160,9 @@ const TopicContentLayout = ({
   const [likeCnt, setLikeCnt] = useState(0);
 
   useEffect(() => {
-    setLikeCnt(topicContent.likeCnt);
+    if (topicContent) {
+      setLikeCnt(topicContent.likeCnt);
+    }
   }, [topicContent]);
   const onClickLink = async (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,

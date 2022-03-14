@@ -4,8 +4,8 @@ import TextAreaTopicContent from "@components/elements/text-area-topic-content";
 import TextField from "@components/elements/text-field";
 import TopicCreateLayout from "@components/layouts/topic-create-layout";
 import { topicImageUrl } from "@core/config/imgurl";
+import { useTopicDetail } from "@core/hook/use-topicdetail";
 import { CategorySelectfetcher } from "@core/swr/categoryfetcher";
-import { topicDetail, topicfetcher } from "@core/swr/topicfetch";
 import axios from "axios";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
@@ -19,14 +19,15 @@ const EditTopic: NextPage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   let { id } = router.query;
-  const { data: topicContent } = useSWR(`/api2/topic/list/${id}`, topicDetail);
+  const [topicId, setTopicId] = useState(id);
+  const { topicDetail } = useTopicDetail(topicId);
   const [data, setData] = useState<any>({
     wr_subject: "",
     wr_content: "",
     wr_ip: "",
     mb_id: "",
     mb_name: "",
-    board: topicContent ? topicContent.board : 0,
+    board: topicDetail ? topicDetail.board : 0,
     wr_datetime: new Date(),
     wr_update: new Date(),
   });
@@ -42,14 +43,13 @@ const EditTopic: NextPage = () => {
   });
 
   useEffect(() => {
+    setTopicId(id);
     getTopiceContent();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [topicContent]);
+  }, [id, router.query, topicDetail]);
 
   const getTopiceContent = async () => {
-    if (topicContent) {
-      const TopicContent = topicContent;
+    if (topicDetail) {
+      const TopicContent = topicDetail;
       TopicContent.category = router.query.category;
       TopicContent.bookmark = false; //추후필요
 
