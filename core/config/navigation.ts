@@ -10,7 +10,7 @@ export const globalNavigationMore = [
 ];
 
 export const globalNavigationMy = [
-  { id: 0, content: "내 정보", url: "/" },
+  { id: 0, content: "내 정보", url: "/my/profile" },
   { id: 1, content: "로그아웃", url: "logout" },
 ];
 

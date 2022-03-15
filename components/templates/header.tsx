@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Button from "@components/elements/button";
 import Logo from "@components/elements/logo";
 import TextField from "@components/elements/text-field";
@@ -14,13 +15,6 @@ import React, { useEffect } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Dropdown from "@components/elements/dropdown";
 import { accountsNavigation } from "@core/config/navigation";
-import axios from "axios";
-import useSWR from "swr";
-import {
-  CategorySelectfetcher,
-  CategorySnbMenufetcher,
-} from "@core/swr/categoryfetcher";
-
 
 interface IPropsStyle {
   isRoute?: boolean;

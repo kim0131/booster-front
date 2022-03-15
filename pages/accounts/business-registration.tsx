@@ -76,6 +76,9 @@ const BusinessRegistration: NextPage = () => {
     if (image.image_file) {
       formData.append("file", image.image_file);
     }
+    await axios.post(`/api2/user/update/${userIdx.idx}`, {
+      mb_business_certify: 1,
+    });
     await axios.post(
       `/api2/business/upload/${userIdx.mb_business_num}`,
       formData,

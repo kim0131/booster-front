@@ -1,7 +1,9 @@
+import useGetUser from "@core/hook/use-user";
 import axios from "axios";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import image from "next/image";
+import useSWR from "swr";
 
 export default NextAuth({
   providers: [
@@ -49,9 +51,11 @@ export default NextAuth({
   callbacks: {
     async session({ session, token, user }: any) {
       // Send properties to the client, like an access_token from a provider.
+
       session.accessToken = token.accessToken;
-      session.user.idx = session.user.image;
+      session.user.idx = parseInt(session.user.image);
       session.user.id = session.user.email;
+
       return session;
     },
   },
