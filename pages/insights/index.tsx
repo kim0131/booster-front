@@ -3,21 +3,25 @@ import Lnb from "@components/templates/lnb";
 import Post from "@components/templates/post";
 import useInsightList from "@core/hook/use-insightList";
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useRouter } from "next/router";
+
+import { useEffect, useState } from "react";
 
 const Insights: NextPage = () => {
-  const [state, setState] = useState({
-    lnbDatas: [
-      { id: 0, content: "전체", param: "all" },
-      { id: 1, content: "메뉴1", param: "menu1" },
-      { id: 2, content: "메뉴2", param: "menu2" },
-    ],
-  });
+  const router = useRouter();
+  const [selectCategory, setCategory] = useState<any>();
+  const { category } = router.query;
+  useEffect(() => {
+    setCategory(category);
+  }, [category]);
 
+  const onClickCategory = (content: any) => {
+    setCategory(content);
+  };
   return (
     <LnbLayout>
-      <Lnb lnbDatas={state.lnbDatas} param="전체" />
-      <Post />
+      <Lnb param={selectCategory} onClick={onClickCategory} />
+      <Post category={selectCategory} />
     </LnbLayout>
   );
 };

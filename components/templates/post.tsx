@@ -90,9 +90,10 @@ const Style = {
 
 interface IPropsPost {
   isLoading?: Boolean;
+  category?: any;
 }
 
-const Post = ({ isLoading }: IPropsPost) => {
+const Post = ({ isLoading, category }: IPropsPost) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
   const { insightList } = useInsightList();
@@ -107,26 +108,53 @@ const Post = ({ isLoading }: IPropsPost) => {
         <Style.Container>
           {insightList &&
             insightList.map((content: any) => {
-              return (
-                <React.Fragment key={content.idx}>
-                  <Style.PostItem.Container
-                    onClick={() => onClickRouterMove(content.idx)}
-                  >
-                    <Style.PostItem.Thumbnail photo={content.file_full_url} />
-                    <Style.PostItem.Badge>
-                      <Badge>{content.category}</Badge>
-                    </Style.PostItem.Badge>
-                    <Style.PostItem.Title>
-                      {content.wr_subject}
-                    </Style.PostItem.Title>
-                    <Body3 color={theme.color.gray[500]}>
-                      {content.create > 24
-                        ? `${Math.ceil(content.create / 24)}일전`
-                        : `${content.create}시간전`}
-                    </Body3>
-                  </Style.PostItem.Container>
-                </React.Fragment>
-              );
+              if (category) {
+                if (category == content.category) {
+                  return (
+                    <React.Fragment key={content.idx}>
+                      <Style.PostItem.Container
+                        onClick={() => onClickRouterMove(content.idx)}
+                      >
+                        <Style.PostItem.Thumbnail
+                          photo={content.file_full_url}
+                        />
+                        <Style.PostItem.Badge>
+                          <Badge>{content.category}</Badge>
+                        </Style.PostItem.Badge>
+                        <Style.PostItem.Title>
+                          {content.wr_subject}
+                        </Style.PostItem.Title>
+                        <Body3 color={theme.color.gray[500]}>
+                          {content.create > 24
+                            ? `${Math.ceil(content.create / 24)}일전`
+                            : `${content.create}시간전`}
+                        </Body3>
+                      </Style.PostItem.Container>
+                    </React.Fragment>
+                  );
+                }
+              } else {
+                return (
+                  <React.Fragment key={content.idx}>
+                    <Style.PostItem.Container
+                      onClick={() => onClickRouterMove(content.idx)}
+                    >
+                      <Style.PostItem.Thumbnail photo={content.file_full_url} />
+                      <Style.PostItem.Badge>
+                        <Badge>{content.category}</Badge>
+                      </Style.PostItem.Badge>
+                      <Style.PostItem.Title>
+                        {content.wr_subject}
+                      </Style.PostItem.Title>
+                      <Body3 color={theme.color.gray[500]}>
+                        {content.create > 24
+                          ? `${Math.ceil(content.create / 24)}일전`
+                          : `${content.create}시간전`}
+                      </Body3>
+                    </Style.PostItem.Container>
+                  </React.Fragment>
+                );
+              }
             })}
 
           <Style.Pagination>

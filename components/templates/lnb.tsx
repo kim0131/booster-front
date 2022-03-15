@@ -1,8 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Body2 } from "@components/elements/types";
 import { IconChevronDown } from "@components/icons";
+import useCategorySubSide from "@core/hook/use-categorySubSIde";
 import useDesktop from "@core/hook/use-desktop";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 interface IPropsStyle {
   isActive?: boolean;
@@ -92,48 +95,80 @@ const Style = {
 };
 
 interface IPropsLnb {
-  lnbDatas: {
-    id: number;
-    content: string;
-    param: string;
-  }[];
   param: string | string[] | undefined;
+  onClick?: any;
 }
 
-// TODO : LNB는 URL 쿼리스트링으로 카테고리를 받아온다.
-
-const Lnb = ({ lnbDatas, param }: IPropsLnb) => {
+const Lnb = ({ param, onClick }: IPropsLnb) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
+  const { categorySubSide } = useCategorySubSide("insight");
+  const [lnbData, setLnbData] = useState<any>();
 
-  const onClickRouter = (param: string) => {
-    router.push(`/topics/?category=${param}`);
-  };
-  return isDesktop ? (
-    <Style.Desktop.Container>
-      {lnbDatas.map(lnbData => (
-        <Style.Desktop.Button
-          key={lnbData.id}
-          onClick={() => {}}
-          isActive={lnbData.content === param}
-        >
-          {lnbData.content}
-        </Style.Desktop.Button>
-      ))}
-    </Style.Desktop.Container>
-  ) : (
-    <Style.Mobile.Wrapper>
-      <Style.Mobile.Selectbox defaultValue={param}>
-        {lnbDatas.map(lnbData => (
-          <option key={lnbData.id} value={lnbData.param} onClick={() => {}}>
-            {lnbData.content}
-          </option>
-        ))}
-      </Style.Mobile.Selectbox>
-      <Style.Mobile.Icon>
-        <IconChevronDown />
-      </Style.Mobile.Icon>
-    </Style.Mobile.Wrapper>
+  useEffect(() => {
+    console.log(lnbData);
+    if (categorySubSide) {
+      setLnbData(categorySubSide[0]);
+    }
+  }, [categorySubSide]);
+
+  return (
+    <>
+      {lnbData && isDesktop ? (
+        <Style.Desktop.Container>
+          <Style.Desktop.Button
+            key={"all"}
+            onClick={() => {
+              onClick("");
+            }}
+            isActive={!param}
+          >
+            {"전체"}
+          </Style.Desktop.Button>
+          {lnbData &&
+            lnbData.menus.map((lnbData: any) => (
+              <Style.Desktop.Button
+                key={lnbData.id}
+                onClick={() => {
+                  onClick(lnbData.content);
+                }}
+                isActive={lnbData.content === param}
+              >
+                {lnbData.content}
+              </Style.Desktop.Button>
+            ))}
+        </Style.Desktop.Container>
+      ) : (
+        <Style.Mobile.Wrapper>
+          <Style.Mobile.Selectbox defaultValue={param}>
+            <Style.Desktop.Button
+              key={"all"}
+              onClick={() => {
+                onClick("");
+              }}
+              isActive={!param}
+            >
+              {"전체"}
+            </Style.Desktop.Button>
+            {lnbData &&
+              lnbData.menus.map((lnbData: any) => (
+                <option
+                  key={lnbData.id}
+                  value={lnbData.param}
+                  onClick={() => {
+                    onClick(lnbData.content);
+                  }}
+                >
+                  {lnbData.content}
+                </option>
+              ))}
+          </Style.Mobile.Selectbox>
+          <Style.Mobile.Icon>
+            <IconChevronDown />
+          </Style.Mobile.Icon>
+        </Style.Mobile.Wrapper>
+      )}
+    </>
   );
 };
 

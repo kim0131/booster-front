@@ -1,10 +1,9 @@
 import { Body2 } from "@components/elements/types";
 import { IconChevronDown } from "@components/icons";
+import useCategorySubSide from "@core/hook/use-categorySubSIde";
 import useDesktop from "@core/hook/use-desktop";
-import { CategorySnbMenufetcher } from "@core/swr/categoryfetcher";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
-import useSWR from "swr";
 
 interface IPropsStyle {
   isRoute?: boolean;
@@ -100,11 +99,8 @@ interface IPropsSnb {
 const Snb = ({ param }: IPropsSnb) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
-
-  const { data: snbDatas, error: dataError } = useSWR(
-    "/api2/category/snbdata",
-    CategorySnbMenufetcher,
-  );
+  const { categorySubSide } = useCategorySubSide("topic");
+  console.log(categorySubSide);
 
   const onClickRouter = (param: string) => {
     router.push(`/topics/?category=${param}`);
@@ -112,9 +108,9 @@ const Snb = ({ param }: IPropsSnb) => {
 
   return isDesktop ? (
     <>
-      {snbDatas && (
+      {categorySubSide && (
         <Style.Desktop.Container>
-          {snbDatas.map((snbData: any) => (
+          {categorySubSide.map((snbData: any) => (
             <Style.Desktop.Category.Container key={snbData.id}>
               <Body2
                 isBold
@@ -143,10 +139,10 @@ const Snb = ({ param }: IPropsSnb) => {
     </>
   ) : (
     <>
-      {snbDatas && (
+      {categorySubSide && (
         <Style.Mobile.Wrapper>
           <Style.Mobile.Selectbox defaultValue={param}>
-            {snbDatas.map((snbData: any) => (
+            {categorySubSide.map((snbData: any) => (
               <optgroup key={snbData.id} label={snbData.category}>
                 {snbData.menus &&
                   snbData.menus.map((menu: any) => (

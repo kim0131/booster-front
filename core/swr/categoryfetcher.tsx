@@ -15,19 +15,3 @@ export const CategorySelectfetcher = async (url: string) => {
 
   return CategoryList;
 };
-
-export const CategorySnbMenufetcher = async (url: string) => {
-  let result: any = [{ id: 1, category: "전체", menus: [] }];
-
-  await axios.get("/api2/category").then(res => {
-    const Getcategory = res.data.result;
-    Getcategory.map((item: object, idx: number) => {
-      result[0].menus.push({
-        id: Getcategory[idx].idx,
-        content: Getcategory[idx].bo_subject,
-        param: Getcategory[idx].bo_table,
-      });
-    });
-  });
-  return result;
-};
