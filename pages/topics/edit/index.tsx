@@ -61,7 +61,7 @@ const EditTopic: NextPage = () => {
         file_url: TopicContent.file_url,
       });
       setImage({
-        image_file: "",
+        image_file: TopicContent.file_url,
         preview_URL: TopicContent.file_full_url,
       });
     }
@@ -131,8 +131,10 @@ const EditTopic: NextPage = () => {
         board: data.board,
       })
       .then(async res => {
+        if (image.image_file != data.file_url) {
         await axios.post(`/api2/topic/upload/${id}`, formData);
-        alert("토픽이 등록되었습니다");
+        }
+        alert("토픽이 수정되었습니다");
         router.push(`/topics`);
       });
   };
