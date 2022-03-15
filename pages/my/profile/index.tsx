@@ -80,6 +80,15 @@ const Profile: NextPage = () => {
             icon={<IconInfo />}
           ></Callout>
         );
+      case "4":
+        return (
+          <Callout
+            size="large"
+            // color="danger"
+            title="회사 정보 업데이트 심사중입니다."
+            icon={<IconInfo />}
+          ></Callout>
+        );
       default:
         return (
           <Callout

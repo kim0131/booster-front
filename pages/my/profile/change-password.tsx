@@ -88,13 +88,6 @@ const ChangePassword: NextPage = () => {
           alreadyPw_caption: "비밀번호가 유효하지 않습니다.",
         });
       });
-
-    // await axios
-    //   .post(`/api2/user/update/${userInfo.member.idx}`, data)
-    //   .then(() => {
-    //     alert("변경되었습니다.");
-    //     router.push(`/my/profile`);
-    //   });
   };
 
   const onFocusReset = (e: any) => {

@@ -112,8 +112,6 @@ const BusinessRegistration: NextPage = () => {
               <>
                 <Callout size="small" icon={<IconDocuments />}>
                   {image.image_file.name}
-                  {/* 미리보기 예시 */}
-                  <img src={image.preview_URL} alt="" />
                 </Callout>
                 <ButtonWrapper>
                   <Button
