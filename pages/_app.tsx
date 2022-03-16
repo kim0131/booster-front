@@ -9,10 +9,23 @@ import useToast from "@core/hook/use-toast";
 import Header from "@components/templates/header";
 import Footer from "@components/templates/footer";
 import { SWRConfig } from "swr";
+import * as gtag from "../lib/gtag";
+import { useRouter } from "next/router";
+const isProduction = process.env.NODE_ENV === "production";
+import { useEffect } from "react";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { message } = useToast();
-
+  const router = useRouter();
+  useEffect(() => {
+    const handleRouteChange = (url: URL) => {
+      if (isProduction) gtag.pageview(url);
+    };
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router.events]);
   return (
     <SWRConfig
       value={{
