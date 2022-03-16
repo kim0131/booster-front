@@ -135,7 +135,6 @@ const Header = () => {
   const { isDesktop } = useDesktop();
 
   useEffect(() => {
-    console.log(session);
     if (status == "unauthenticated" && router.route != "/accounts") {
       router.push("/accounts");
     }

@@ -58,7 +58,11 @@ const ChangePassword: NextPage = () => {
         mb_pw: data.alreadyPw,
       })
       .then(async res => {
-        const { value, error } = mb_pw_vaildate(data.newPw);
+        let { value, error } = { value: "", error: "" };
+        await mb_pw_vaildate(data.newPw).then(res => {
+          value = res.value;
+          error = res.error;
+        });
         if (!error) {
           if (data.newPw != data.newPw2) {
             setData({

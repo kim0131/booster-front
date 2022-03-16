@@ -141,7 +141,6 @@ const Board = ({ category, Datas, isLoading, onClickRouter }: IPropsBoard) => {
   const { isDesktop } = useDesktop();
   const [datas, setData] = useState(Datas);
   const [isLoading2, setLoading] = useState<any>(isLoading);
-  const router = useRouter();
   const [totalCount, setTotalCount] = useState(Datas.length);
   const [line, setLine] = useState(10);
   const [currentPage, setcurrentPage] = useState(1);

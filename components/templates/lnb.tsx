@@ -19,7 +19,7 @@ const Style = {
       justify-content: center;
       gap: 0.5rem;
     `,
-    Button: styled.button<IPropsStyle>`
+    Button: styled.div<IPropsStyle>`
       display: flex;
       align-items: center;
       justify-content: center;
@@ -101,12 +101,10 @@ interface IPropsLnb {
 
 const Lnb = ({ param, onClick }: IPropsLnb) => {
   const { isDesktop } = useDesktop();
-  const router = useRouter();
   const { categorySubSide } = useCategorySubSide("insight");
   const [lnbData, setLnbData] = useState<any>();
 
   useEffect(() => {
-    console.log(lnbData);
     if (categorySubSide) {
       setLnbData(categorySubSide[0]);
     }
@@ -141,15 +139,14 @@ const Lnb = ({ param, onClick }: IPropsLnb) => {
       ) : (
         <Style.Mobile.Wrapper>
           <Style.Mobile.Selectbox defaultValue={param}>
-            <Style.Desktop.Button
+            <option
               key={"all"}
               onClick={() => {
                 onClick("");
               }}
-              isActive={!param}
             >
               {"전체"}
-            </Style.Desktop.Button>
+            </option>
             {lnbData &&
               lnbData.menus.map((lnbData: any) => (
                 <option

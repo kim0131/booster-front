@@ -18,8 +18,6 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import useSWR from "swr";
-
 interface IPropsStyle {
   isReply: boolean;
 }
@@ -276,6 +274,7 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
       }
     }
   };
+
   const onClickPagenation = (e: any) => {
     const value = parseInt(e.currentTarget.textContent);
     setcurrentPage(value);

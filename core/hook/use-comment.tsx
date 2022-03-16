@@ -132,6 +132,7 @@ export const useTopicComment = (id: any) => {
   const { data: commentsList, mutate } = useSWR(
     `/api2/topic/comment/${id}`,
     topicComment,
+    { refreshInterval: 1000 },
   );
   return { commentsList, mutate };
 };
@@ -140,6 +141,7 @@ export const useInsightComment = (id: any) => {
   const { data: commentsList, mutate } = useSWR(
     `/api2/insight/comment/${id}`,
     insightComment,
+    { refreshInterval: 1000 },
   );
   return { commentsList, mutate };
 };

@@ -1,9 +1,5 @@
-import useGetUser from "@core/hook/use-user";
-import axios from "axios";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import image from "next/image";
-import useSWR from "swr";
 
 export default NextAuth({
   providers: [

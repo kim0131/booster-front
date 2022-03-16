@@ -4,23 +4,19 @@ import Selectbox from "@components/elements/selectbox";
 import TextAreaTopicContent from "@components/elements/text-area-topic-content";
 import TextField from "@components/elements/text-field";
 import TopicCreateLayout from "@components/layouts/topic-create-layout";
-import { CategorySelectfetcher } from "@core/swr/categoryfetcher";
+import useCategorySelect from "@core/hook/use-categorySeclect";
 import axios from "axios";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
-import useSWR from "swr";
-
 const CreateTopic: NextPage = () => {
   const router = useRouter();
   const [state, setState] = useState("");
   const { data: session, status } = useSession();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const { data: categoryList } = useSWR(
-    `/api2/category/select`,
-    CategorySelectfetcher,
-  );
+  const { categorySelect } = useCategorySelect("topic");
+
   const [image, setImage] = useState<any>({
     image_file: "",
     preview_URL: "",
@@ -122,9 +118,9 @@ const CreateTopic: NextPage = () => {
     <TopicCreateLayout
       header="글쓰기"
       category={
-        categoryList && (
+        categorySelect && (
           <Selectbox
-            options={categoryList}
+            options={categorySelect}
             placeholder={"카테고리"}
             onChange={onChangeSelcet}
             value={data.board ? data.board : ""}

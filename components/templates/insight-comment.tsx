@@ -18,7 +18,6 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import useSWR from "swr";
 
 interface IPropsStyle {
   isReply: boolean;

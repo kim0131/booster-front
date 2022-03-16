@@ -12,7 +12,7 @@ export const CategorySelectfetcher = async (url: string) => {
       if (item.sector == sector) {
         CategoryList.push({
           value: list[idx].idx,
-          label: list[idx].bo_subject,
+          content: list[idx].bo_subject,
         });
       }
     });
@@ -25,6 +25,7 @@ const useCategorySelect = (sector: string) => {
   const { data: categorySelect } = useSWR(
     `/api2/category/${sector}`,
     CategorySelectfetcher,
+    { refreshInterval: 1000 },
   );
 
   return { categorySelect };

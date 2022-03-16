@@ -23,7 +23,7 @@ const getCategoryName = (idx: any) => {
   }
 };
 
-export const topicfetcher = async (url: string) => {
+const topicfetcher = async (url: string) => {
   await onClickCategoryList();
   let result: any = [];
   const CurrentTime = new Date();
@@ -54,9 +54,54 @@ export const topicfetcher = async (url: string) => {
   return result;
 };
 
+const topicfilterfetcher = async (url: string) => {
+  const categoey = url.slice(17);
+  await onClickCategoryList();
+  let result: any = [];
+  const CurrentTime = new Date();
+  await axios.get("/api2/topic/list").then(async res => {
+    const topic = res.data.result;
+    topic.map(async (content: any, idx: any) => {
+      let ContentTime = new Date(content.wr_datetime);
+      ContentTime.setHours(ContentTime.getHours());
+      const elapsedTime = Math.ceil(
+        (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
+      );
+      const contentCategory = await getCategoryName(content.board);
+      if (contentCategory == categoey) {
+        result.push({
+          id: content.idx,
+          category: contentCategory,
+          title: content.wr_subject,
+          content: content.wr_content,
+          writer: content.mb_name,
+          like: content.wr_good,
+          view: content.wr_view,
+          comments: content.commentCnt,
+          board: content.board,
+          bookmark: false, //추후필요
+          create: elapsedTime,
+          likeCnt: content.likeCnt,
+        });
+      }
+    });
+  });
+  return result;
+};
+
 const useTopicList = () => {
   const { data: topicList, mutate } = useSWR("/api2/topic/list", topicfetcher);
   return { topicList, mutate };
+};
+
+export const useTopicListFilter = (category: any) => {
+  const {
+    data: topicListFilter,
+    mutate,
+    isValidating,
+  } = useSWR(`/api2/topic/list/${category}`, topicfilterfetcher);
+
+  return { topicListFilter, isValidating };
 };
 
 export default useTopicList;

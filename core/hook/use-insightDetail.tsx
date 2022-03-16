@@ -48,6 +48,7 @@ export const useInsightDetail = (id: any) => {
   const { data: insightDetail, mutate } = useSWR(
     `/api2/insight/list/${id}`,
     insightDetailfetcher,
+    { refreshInterval: 1000 },
   );
 
   return { insightDetail, mutate };

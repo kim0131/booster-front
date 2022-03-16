@@ -60,6 +60,7 @@ const useInsightList = () => {
   const { data: insightList, mutate } = useSWR(
     "/api2/insight/list",
     insightfetcher,
+    { refreshInterval: 1000 },
   );
   return { insightList, mutate };
 };

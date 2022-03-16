@@ -1,23 +1,23 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Button from "@components/elements/button";
 import Selectbox from "@components/elements/selectbox";
 import TextAreaTopicContent from "@components/elements/text-area-topic-content";
 import TextField from "@components/elements/text-field";
 import TopicCreateLayout from "@components/layouts/topic-create-layout";
 import { topicImageUrl } from "@core/config/imgurl";
+import useCategorySelect from "@core/hook/use-categorySeclect";
 import { useTopicDetail } from "@core/hook/use-topicdetail";
-import { CategorySelectfetcher } from "@core/swr/categoryfetcher";
 import axios from "axios";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
-import useSWR from "swr";
 
 const EditTopic: NextPage = () => {
+  const router = useRouter();
   const [state, setState] = useState("");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const { data: session, status } = useSession();
-  const router = useRouter();
   let { id } = router.query;
   const [topicId, setTopicId] = useState(id);
   const { topicDetail } = useTopicDetail(topicId);
@@ -31,11 +31,7 @@ const EditTopic: NextPage = () => {
     wr_datetime: new Date(),
     wr_update: new Date(),
   });
-
-  const { data: categoryList } = useSWR(
-    `/api2/category/select`,
-    CategorySelectfetcher,
-  );
+  const { categorySelect } = useCategorySelect("topic");
 
   const [image, setImage] = useState<any>({
     image_file: "",
@@ -45,7 +41,7 @@ const EditTopic: NextPage = () => {
   useEffect(() => {
     setTopicId(id);
     getTopiceContent();
-  }, [id, router.query, topicDetail]);
+  }, [topicDetail, id]);
 
   const getTopiceContent = async () => {
     if (topicDetail) {
@@ -132,7 +128,7 @@ const EditTopic: NextPage = () => {
       })
       .then(async res => {
         if (image.image_file != data.file_url) {
-        await axios.post(`/api2/topic/upload/${id}`, formData);
+          await axios.post(`/api2/topic/upload/${id}`, formData);
         }
         alert("토픽이 수정되었습니다");
         router.push(`/topics`);
@@ -143,9 +139,9 @@ const EditTopic: NextPage = () => {
     <TopicCreateLayout
       header="수정하기"
       category={
-        categoryList && (
+        categorySelect && (
           <Selectbox
-            options={categoryList}
+            options={categorySelect}
             placeholder={"카테고리"}
             onChange={onChangeSelcet}
             value={data.board}

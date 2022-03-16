@@ -63,7 +63,7 @@ export const mb_id_vaildate = async (mb_id: string | undefined) => {
   return { value, error };
 };
 
-export const mb_pw_vaildate = (mb_pw: string | undefined) => {
+export const mb_pw_vaildate = async (mb_pw: string | undefined) => {
   let { value, error } = pw_schema.validate({ mb_pw: mb_pw });
 
   if (

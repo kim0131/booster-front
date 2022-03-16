@@ -19,7 +19,9 @@ const userFetcher = async (url: string) => {
 };
 
 const useGetUser = (id: any) => {
-  const { data: userInfo } = useSWR(`/api2/user/${id}`, userFetcher);
+  const { data: userInfo } = useSWR(`/api2/user/${id}`, userFetcher, {
+    refreshInterval: 1000,
+  });
 
   return { userInfo };
 };

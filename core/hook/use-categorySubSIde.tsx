@@ -25,6 +25,7 @@ const useCategorySubSide = (sector: string) => {
   const { data: categorySubSide } = useSWR(
     `/api2/category/sub/${sector}`,
     CategorySnbMenufetcher,
+    { refreshInterval: 1000 },
   );
 
   return { categorySubSide };
