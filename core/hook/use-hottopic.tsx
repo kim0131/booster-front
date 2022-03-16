@@ -36,14 +36,14 @@ const hotTopicFetcher = async () => {
         (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600 * 24),
       );
       const T = content.wr_subject.length;
-      const V = content.view;
+      const V = content.wr_view;
       const L = content.likeCnt;
       const C = content.commentCnt;
       let hotPoint;
       if (elapsedTime < 7) {
-        hotPoint = (elapsedTime + 7) * ((T + V + C + L) ^ 2);
+        hotPoint = (elapsedTime + 7) * (T + V + C + L ** 2);
       } else {
-        hotPoint = (T + V + C + L) ^ 2;
+        hotPoint = T + V + C + L ** 2;
       }
       result.push({
         id: content.idx,

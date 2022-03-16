@@ -10,7 +10,7 @@ import styled from "@emotion/styled";
 
 const Flex = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
 `;
 
 const Home: NextPage = () => {
@@ -70,6 +70,7 @@ const Home: NextPage = () => {
                   <div className="like"> 좋아요 : {item.likeCnt}</div>
                   <div className="view">조회수 : {item.view}</div>
                   <div className="comment"> 댓글수 : {item.comments}</div>
+                  <div className="comment"> 포인트 : {item.hotPoint}</div>
                 </Flex>
               </React.Fragment>
             );
