@@ -6,6 +6,7 @@ import Dropdown from "@components/elements/dropdown";
 import { Body3, Header5 } from "@components/elements/types";
 import {
   IconBookmark,
+  IconBookmarkFill,
   IconComment,
   IconLike,
   IconMoreVertical,
@@ -210,6 +211,24 @@ const TopicContentLayout = ({
         }
       });
   };
+  const onClickBookmark = (result: boolean) => {
+    topicContent.bookmark = result;
+  };
+
+  const onClickScrap = async (id: any, bookmark: any) => {
+    console.log(bookmark);
+    if (bookmark) {
+      await axios.post(`/api2/topic/scrap/cancel/${id}`, {
+        member_idx: session?.user?.idx,
+        sector: "topic",
+      });
+    } else {
+      await axios.post(`/api2/topic/scrap/insert/${id}`, {
+        member_idx: session?.user?.idx,
+        sector: "topic",
+      });
+    }
+  };
   return (
     <>
       {topicContent && (
@@ -276,7 +295,28 @@ const TopicContentLayout = ({
               </Style.Body.Button.Wrapper>
               <Style.Body.Button.Wrapper>
                 <Button color="transparent">
-                  <IconBookmark />
+                  {topicContent.bookmark ? (
+                    <div
+                      onClick={() => {
+                        onClickScrap(topicContent.idx, topicContent.bookmark);
+                        onClickBookmark(false);
+                      }}
+                    >
+                      <IconBookmarkFill
+                        size={20}
+                        color={theme.color.blue[600]}
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      onClick={() => {
+                        onClickScrap(topicContent.idx, topicContent.bookmark);
+                        onClickBookmark(true);
+                      }}
+                    >
+                      <IconBookmark size={20} color={theme.color.gray[500]} />
+                    </div>
+                  )}
                   스크랩
                 </Button>
 

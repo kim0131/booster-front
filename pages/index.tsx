@@ -16,7 +16,7 @@ const Flex = styled.div`
 const Home: NextPage = () => {
   const toast = useToast();
   const { hotTopic } = useHotTopic();
-  console.log(hotTopic);
+
   return (
     <div
       style={{

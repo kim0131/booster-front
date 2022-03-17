@@ -120,14 +120,7 @@ const Snb = ({ category }: IPropsSnb) => {
             {lnbData &&
               lnbData.map((snbData: any) => (
                 <Style.Desktop.Category.Container key={snbData.id}>
-                  <Body2
-                    isBold
-                    onClick={() => {
-                      router.push("/topics");
-                    }}
-                  >
-                    {snbData.category}
-                  </Body2>
+                  <Body2 isBold>{snbData.category}</Body2>
                   <Style.Desktop.Category.Block>
                     {snbData.menus &&
                       snbData.menus.map((menu: any) => (

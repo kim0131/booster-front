@@ -309,7 +309,6 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
     await axios.post(`/api2/topic/write`, commentdata).then(res => {
       alert("댓글이 등록되었습니다");
       setCommentData({ ...commentdata, wr_content: "" });
-      router.push(router.asPath);
     });
   };
   const onClickWriteReply = async () => {

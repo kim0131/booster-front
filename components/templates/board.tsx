@@ -132,12 +132,20 @@ interface IPropsBoard {
     bookmark: boolean;
     create: number;
     likeCnt: number;
+    rn: number;
   }[];
   isLoading?: Boolean;
   onClickRouter?: any;
+  onClickScrap?: any;
 }
 
-const Board = ({ category, Datas, isLoading, onClickRouter }: IPropsBoard) => {
+const Board = ({
+  category,
+  Datas,
+  isLoading,
+  onClickRouter,
+  onClickScrap,
+}: IPropsBoard) => {
   const { isDesktop } = useDesktop();
   const [datas, setData] = useState(Datas);
   const [isLoading2, setLoading] = useState<any>(isLoading);
@@ -171,6 +179,11 @@ const Board = ({ category, Datas, isLoading, onClickRouter }: IPropsBoard) => {
     setcurrentPage(Math.ceil(totalCount / line));
   };
 
+  const onClickBookmark = (idx: any, result: boolean) => {
+    datas[idx].bookmark = result;
+    setData(datas);
+  };
+
   return (
     <>
       {isLoading2 ? (
@@ -199,13 +212,12 @@ const Board = ({ category, Datas, isLoading, onClickRouter }: IPropsBoard) => {
                 </Style.BoardList.Item.Bottom.Container>
               </Style.BoardList.Item.Container>
             ) : (
-              datas.map(data => (
-                <Style.BoardList.Item.Container
-                  key={data.id}
-                  onClick={() => onClickRouter(data.id)}
-                >
+              datas.map((data, idx) => (
+                <Style.BoardList.Item.Container key={data.id}>
                   <Style.BoardList.Item.Top.Container>
-                    <Style.BoardList.Item.Top.Content.Container>
+                    <Style.BoardList.Item.Top.Content.Container
+                      onClick={() => onClickRouter(data.id)}
+                    >
                       {data.category && (
                         <Style.BoardList.Item.Top.Content.Badge>
                           <Badge>{data.category}</Badge>
@@ -220,16 +232,35 @@ const Board = ({ category, Datas, isLoading, onClickRouter }: IPropsBoard) => {
                     </Style.BoardList.Item.Top.Content.Container>
                     <Style.BoardList.Item.Top.Button>
                       {data.bookmark ? (
-                        <IconBookmarkFill
-                          size={20}
-                          color={theme.color.blue[600]}
-                        />
+                        <div
+                          onClick={() => {
+                            onClickScrap(data.id, data.bookmark, data.rn);
+                            onClickBookmark(idx, false);
+                          }}
+                        >
+                          <IconBookmarkFill
+                            size={20}
+                            color={theme.color.blue[600]}
+                          />
+                        </div>
                       ) : (
-                        <IconBookmark size={20} color={theme.color.gray[500]} />
+                        <div
+                          onClick={() => {
+                            onClickScrap(data.id, data.bookmark, data.rn);
+                            onClickBookmark(idx, true);
+                          }}
+                        >
+                          <IconBookmark
+                            size={20}
+                            color={theme.color.gray[500]}
+                          />
+                        </div>
                       )}
                     </Style.BoardList.Item.Top.Button>
                   </Style.BoardList.Item.Top.Container>
-                  <Style.BoardList.Item.Bottom.Container>
+                  <Style.BoardList.Item.Bottom.Container
+                    onClick={() => onClickRouter(data.id)}
+                  >
                     <Style.BoardList.Item.Bottom.Info>
                       <Style.BoardList.Item.Bottom.Badge>
                         <IconProfile size={16} color={theme.color.gray[500]} />

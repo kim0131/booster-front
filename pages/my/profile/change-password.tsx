@@ -58,33 +58,30 @@ const ChangePassword: NextPage = () => {
         mb_pw: data.alreadyPw,
       })
       .then(async res => {
-        let { value, error } = { value: "", error: "" };
         await mb_pw_vaildate(data.newPw).then(res => {
-          value = res.value;
-          error = res.error;
-        });
-        if (!error) {
-          if (data.newPw != data.newPw2) {
+          if (res) {
             setData({
               ...data,
-              new2Pw_caption: "비밀번호가 일치하지 않습니다.",
+              newPw_caption: res,
             });
           } else {
-            await axios
-              .post(`/api2/user/update/${userInfo.member.idx}`, {
-                mb_pw: data.newPw,
-              })
-              .then(res => {
-                alert("비밀번호가 수정되었습니다.");
-                router.push("/my/profile");
+            if (data.newPw != data.newPw2) {
+              setData({
+                ...data,
+                new2Pw_caption: "비밀번호가 일치하지 않습니다.",
               });
+            } else {
+              axios
+                .post(`/api2/user/update/${userInfo.member.idx}`, {
+                  mb_pw: data.newPw,
+                })
+                .then(res => {
+                  alert("비밀번호가 수정되었습니다.");
+                  router.push("/my/profile");
+                });
+            }
           }
-        } else {
-          setData({
-            ...data,
-            newPw_caption: error,
-          });
-        }
+        });
       })
       .catch(error => {
         setData({

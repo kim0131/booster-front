@@ -23,7 +23,7 @@ const TopicDetail: NextPage = () => {
     if (topicDetail) {
       setCategory(topicDetail.category);
     }
-  }, [category, id, router.query, topicDetail]);
+  }, [category, router, topicDetail]);
 
   const onClickRouter = (param: any) => {
     router.push(`/topics/detail?id=${param}`);

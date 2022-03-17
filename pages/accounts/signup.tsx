@@ -13,6 +13,7 @@ import { accountsDescription } from "@core/config/description";
 import {
   mb_email_vaildate,
   mb_id_vaildate,
+  mb_name_vaildate,
   mb_nick_vaildate,
   mb_ph_vaildate,
   mb_pw_vaildate,
@@ -57,7 +58,12 @@ const Signup: NextPage = () => {
   });
 
   const onChangeSignup = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.currentTarget;
+    let { name, value } = e.currentTarget;
+
+    if (name == "mb_pw") {
+      value = value.toLowerCase();
+    }
+
     setState({
       ...state,
       data: {
@@ -82,110 +88,107 @@ const Signup: NextPage = () => {
     });
   };
 
-  const onClickNext = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    setState({ ...state, isLoading: true });
-
+  const onClickNext = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     let pass_fail = true;
-    await mb_id_vaildate(state.data.mb_id).then(res => {
-      if (res.error) {
+    mb_id_vaildate(state.data.mb_id).then(res => {
+      if (res) {
         setState({
           ...state,
-          invalid: { ...state.invalid, mb_id: res.error },
+          invalid: { ...state.invalid, mb_id: res },
         });
-        pass_fail = false;
+      } else {
+        mb_pw_vaildate(state.data.mb_pw).then(res => {
+          if (res) {
+            setState({
+              ...state,
+              invalid: { ...state.invalid, mb_pw: res },
+            });
+          } else {
+            if (state.data.mb_pw != state.data.mb_pw2) {
+              setState({
+                ...state,
+                invalid: {
+                  ...state.invalid,
+                  mb_pw2: "비밀번호가 일치하지 않습니다.",
+                },
+              });
+            } else {
+              setState({ ...state, page: state.page + 1 });
+            }
+          }
+        });
       }
     });
-
-    await mb_pw_vaildate(state.data.mb_pw).then(res => {
-      if (res.error) {
-        setState({ ...state, invalid: { ...state.invalid, mb_pw: res.error } });
-        pass_fail = false;
-      }
-    });
-
-    if (state.data.mb_pw != state.data.mb_pw2) {
-      setState({
-        ...state,
-        invalid: { ...state.invalid, mb_pw2: "비밀번호가 일치하지 않습니다." },
-      });
-      pass_fail = false;
-    }
-
-    if (pass_fail) {
-      setState({ ...state, page: 2 });
-    }
   };
 
   const onClickConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setState({ ...state, isLoading: true });
-    let pass_fail = true;
-    await mb_nick_vaildate(state.data.mb_nick).then(res => {
-      if (res.error) {
-        setState({ ...state, invalid: { mb_nick: res.error } });
-        pass_fail = false;
-      }
-    });
-    await mb_email_vaildate(state.data.mb_email).then(res => {
-      if (res.error) {
-        setState({ ...state, invalid: { mb_email: res.error } });
-        pass_fail = false;
-      }
-    });
-    await mb_ph_vaildate(state.data.mb_ph).then(res => {
-      if (res.error) {
-        setState({ ...state, invalid: { mb_ph: res.error } });
-        pass_fail = false;
-      }
-    });
-    if (pass_fail == true) {
-      await axios
-        .post("/api2/signup", {
-          mb_id: state.data.mb_id,
-          mb_pw: state.data.mb_pw,
-          mb_email: state.data.mb_email,
-          mb_name: state.data.mb_name,
-          mb_ph: state.data.mb_ph,
-          mb_pw_token: state.data.mb_pw_token,
-          mb_datetime: state.data.mb_datetime,
-          mb_business_num: state.data.mb_business_num,
-          mb_nick: state.data.mb_nick,
-        })
-        .then(async (res: any) => {
-          const mb_idx = res.data.result.idx;
-          await axios
-            .post(`/api2/business/write`, {
-              mb_idx: mb_idx,
-            })
-            .then(async res => {
-              const business_idx = res.data.result.idx;
-              await axios.post(`/api2/user/update/${mb_idx}`, {
-                mb_business_num: business_idx,
-                mb_business_certify: 0,
-              });
-            });
-          signIn("username-password", {
-            mb_id: state.data.mb_id,
-            mb_pw: state.data.mb_pw,
-            mb_nick: state.data.mb_nick,
-            redirect: false,
-          });
-          router.push("/accounts/business-registration");
-        })
-        .catch(function (error) {
-          if (error.response) {
-            // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
-            console.log(error.response.data);
-          } else if (error.request) {
-            console.log(error.request);
+
+    mb_nick_vaildate(state.data.mb_nick).then(res => {
+      if (res) {
+        setState({ ...state, invalid: { mb_nick: res } });
+      } else {
+        mb_email_vaildate(state.data.mb_email).then(res => {
+          if (res) {
+            setState({ ...state, invalid: { mb_email: res } });
           } else {
-            // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
-            console.log("Error", error.message);
+            mb_name_vaildate(state.data.mb_name).then(res => {
+              if (res) {
+                setState({ ...state, invalid: { mb_name: res } });
+              } else {
+                mb_ph_vaildate(state.data.mb_ph).then(res => {
+                  console.log(res);
+                  if (res) {
+                    setState({ ...state, invalid: { mb_ph: res } });
+                  } else {
+                    setState({ ...state, isLoading: true });
+                    axios
+                      .post("/api2/signup", {
+                        mb_id: state.data.mb_id,
+                        mb_pw: state.data.mb_pw,
+                        mb_email: state.data.mb_email,
+                        mb_name: state.data.mb_name,
+                        mb_ph: state.data.mb_ph,
+                        mb_pw_token: state.data.mb_pw_token,
+                        mb_datetime: state.data.mb_datetime,
+                        mb_business_num: state.data.mb_business_num,
+                        mb_nick: state.data.mb_nick,
+                      })
+                      .then(async (res: any) => {
+                        console.log(res);
+                        const mb_idx = res.data.result.idx;
+                        await axios
+                          .post(`/api2/business/write`, {
+                            mb_idx: mb_idx,
+                          })
+                          .then(async res => {
+                            const business_idx = res.data.result.idx;
+                            await axios.post(`/api2/user/update/${mb_idx}`, {
+                              mb_business_num: business_idx,
+                              mb_business_certify: 0,
+                            });
+                          });
+                        signIn("username-password", {
+                          mb_id: state.data.mb_id,
+                          mb_pw: state.data.mb_pw,
+                          mb_nick: state.data.mb_nick,
+                          redirect: false,
+
+                          mb_idx: mb_idx,
+                        });
+                        router.push("/accounts/business-registration");
+                      })
+                      .catch(error => {});
+                    setState({ ...state, isLoading: false });
+                  }
+                });
+              }
+            });
           }
         });
-    }
-    setState({ ...state, isLoading: false });
+      }
+    });
   };
 
   const onClickCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -282,7 +285,7 @@ const Signup: NextPage = () => {
             />
             <TextField
               name="mb_ph"
-              placeholder="휴대폰 번호를 입력하세요"
+              placeholder='휴대폰 번호를 입력하세요 ("-" 표시 제외)'
               size="large"
               value={state.data.mb_ph}
               error={state.invalid.mb_ph}
