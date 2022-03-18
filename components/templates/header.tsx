@@ -21,7 +21,6 @@ import {
   CategorySnbMenufetcher,
 } from "@core/swr/categoryfetcher";
 
-
 interface IPropsStyle {
   isRoute?: boolean;
 }
@@ -143,7 +142,8 @@ const Header = () => {
   useEffect(() => {
     console.log(session);
     if (status == "unauthenticated" && router.route != "/accounts") {
-      router.push("/accounts");
+      // router.push("/accounts");
+      console.log("아냐");
     }
   }, [router, status]);
 

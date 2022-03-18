@@ -4,52 +4,155 @@ import TextField from "@components/elements/text-field";
 import { IconAdd } from "@components/icons";
 import useToast from "@core/hook/use-toast";
 import TextAreaTopicContent from "@components/elements/text-area-topic-content";
+import Carousel from "@components/templates/carousel";
+import HomeLayout from "@components/layouts/home-layout";
+import BestWidget from "@components/templates/best-widget";
+
+const sampleDatas = {
+  best: [
+    {
+      id: 0,
+      category: "게임",
+      title: "격리중인 공무원 무물 ㅠ",
+      view: 1200,
+      like: 32,
+      comments: 12,
+    },
+    {
+      id: 1,
+      category: "게임",
+      title: "격리중인 공무원 무물 ㅠ",
+      view: 1200,
+      like: 32,
+      comments: 12,
+    },
+    {
+      id: 2,
+      category: "게임",
+      title: "격리중인 공무원 무물 ㅠ",
+      view: 1200,
+      like: 32,
+      comments: 12,
+    },
+    {
+      id: 3,
+      category: "게임",
+      title: "격리중인 공무원 무물 ㅠ",
+      view: 1200,
+      like: 32,
+      comments: 12,
+    },
+    {
+      id: 4,
+      category: "게임",
+      title: "격리중인 공무원 무물 ㅠ",
+      view: 1200,
+      like: 32,
+      comments: 12,
+    },
+    {
+      id: 5,
+      category: "게임",
+      title: "격리중인 공무원 무물 ㅠ",
+      view: 1200,
+      like: 32,
+      comments: 12,
+    },
+    {
+      id: 6,
+      category: "게임",
+      title: "격리중인 공무원 무물 ㅠ",
+      view: 1200,
+      like: 32,
+      comments: 12,
+    },
+    {
+      id: 7,
+      category: "게임",
+      title: "격리중인 공무원 무물 ㅠ",
+      view: 1200,
+      like: 32,
+      comments: 12,
+    },
+    {
+      id: 8,
+      category: "게임",
+      title: "격리중인 공무원 무물 ㅠ",
+      view: 1200,
+      like: 32,
+      comments: 12,
+    },
+    {
+      id: 9,
+      category: "게임",
+      title: "격리중인 공무원 무물 ㅠ",
+      view: 1200,
+      like: 32,
+      comments: 12,
+    },
+    {
+      id: 10,
+      category: "게임",
+      title: "격리중인 공무원 무물 ㅠ",
+      view: 1200,
+      like: 32,
+      comments: 12,
+    },
+  ],
+  list: [
+    {
+      id: 0,
+      title: "격리중인 공무원 무물 ㅠ",
+      view: 1200,
+      like: 32,
+    },
+    {
+      id: 1,
+      title: "격리중인 공무원 무물 ㅠ",
+      view: 1200,
+      like: 32,
+    },
+    {
+      id: 2,
+      title: "격리중인 공무원 무물 ㅠ",
+      view: 1200,
+      like: 32,
+    },
+    {
+      id: 3,
+      title: "격리중인 공무원 무물 ㅠ",
+      view: 1200,
+      like: 32,
+    },
+    {
+      id: 4,
+      title: "격리중인 공무원 무물 ㅠ",
+      view: 1200,
+      like: 32,
+    },
+  ],
+};
 
 const Home: NextPage = () => {
   const toast = useToast();
   return (
-    <div
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: "8px",
-        padding: "1rem",
-      }}
-    >
-      <Button isDisabled>
-        <IconAdd />
-        {toast.message}
-      </Button>
-      <Button
-        variants="ghost"
-        color="primary"
-        size="small"
-        isLoading={true}
-        onClick={() => console.log("ddd")}
-      >
-        <IconAdd />
-        dpsjw
-      </Button>
-      <Button
-        variants="solid"
-        color="primary"
-        size="large"
-        onClick={() => {
-          toast.mutate("성공");
-        }}
-      >
-        <IconAdd />
-        ㅠㅠ
-      </Button>
-      <TextField
-        label="dada"
-        prefix={<IconAdd />}
-        size="large"
-        placeholder="test"
-        error="아아하하"
-      />
-      <TextAreaTopicContent />
-    </div>
+    <>
+      <Carousel />
+      <HomeLayout>
+        <BestWidget title="인기 토픽" col={2} datas={sampleDatas.best} />
+        <BestWidget title="자동차" col={1} datas={sampleDatas.list} />
+        <BestWidget title="자동차" col={1} datas={sampleDatas.list} />
+        <BestWidget title="자동차" col={1} datas={sampleDatas.list} />
+        <BestWidget title="자동차" col={1} datas={sampleDatas.list} />
+        <BestWidget title="자동차" col={1} datas={sampleDatas.list} />
+        <BestWidget title="자동차" col={1} datas={sampleDatas.list} />
+        <BestWidget title="자동차" col={1} datas={sampleDatas.list} />
+        <BestWidget title="자동차" col={1} datas={sampleDatas.list} />
+        <BestWidget title="자동차" col={1} datas={sampleDatas.list} />
+        <BestWidget title="자동차" col={1} datas={sampleDatas.list} />
+        {/* <BestWidget col={1} /> */}
+      </HomeLayout>
+    </>
   );
 };
 
