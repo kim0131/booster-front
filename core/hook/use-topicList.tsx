@@ -41,7 +41,7 @@ const topicfetcher = async (param: any) => {
   return result;
 };
 
-const topicfilterfetcher = async (param: any) => {
+export const topicfilterfetcher = async (param: any) => {
   const categoey = param.url.slice(17);
   const member_idx = param.idx;
   let result: any = [];

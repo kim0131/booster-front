@@ -4,6 +4,7 @@ import { Body3, Header5 } from "@components/elements/types";
 import { IconComment, IconLike, IconView } from "@components/icons";
 import theme from "@components/styles/theme";
 import styled from "@emotion/styled";
+import { useRouter } from "next/router";
 
 interface IStyle {
   container: {
@@ -106,53 +107,64 @@ const Style = {
 interface IPropsBestWidget {
   col?: number;
   title?: string;
+  url?: string;
   datas: {
     id: number;
     category?: string;
     title: string;
     view?: number;
-    like?: number;
+    likeCnt?: number;
     comments?: number;
   }[];
 }
 
-const BestWidget = ({ col = 1, datas, title }: IPropsBestWidget) => {
+const BestWidget = ({ col = 1, url, datas, title }: IPropsBestWidget) => {
+  const router = useRouter();
+  const onClickRouterCategory = () => {
+    router.push(`/topics?category=${url}`);
+  };
+  const onClickRouterDetail = (id: any) => {
+    router.push(`/topics/detail?id=${id}`);
+  };
+
   return (
     <Style.Container col={col}>
       <Style.Header.Container>
         <Header5>{title}</Header5>
-        <Button color="transparent" size="small">
+        <Button
+          color="transparent"
+          size="small"
+          onClick={onClickRouterCategory}
+        >
           더 보기
         </Button>
       </Style.Header.Container>
       <Style.List.Container>
         {datas.map(data => (
           <Style.List.Wrapper key={data.id}>
-            {data.category && (
+            {datas.length > 5 && (
               <Style.List.Category>
-                <Badge>1234</Badge>
+                <Badge>{data.category}</Badge>
               </Style.List.Category>
             )}
-            <Style.List.Title>{data.title}</Style.List.Title>
+            <Style.List.Title onClick={() => onClickRouterDetail(data.id)}>
+              {data.title}
+            </Style.List.Title>
             <Style.List.Info>
-              {data.like && (
-                <Style.List.Badge>
-                  <IconLike size={16} color={theme.color.gray[500]} />
-                  <Body3 color={theme.color.gray[500]}>{data.like}</Body3>
-                </Style.List.Badge>
-              )}
-              {data.view && (
-                <Style.List.Badge>
-                  <IconView size={16} color={theme.color.gray[500]} />
-                  <Body3 color={theme.color.gray[500]}>{data.view}</Body3>
-                </Style.List.Badge>
-              )}
-              {data.comments && (
-                <Style.List.Badge>
-                  <IconComment size={16} color={theme.color.gray[500]} />
-                  <Body3 color={theme.color.gray[500]}>{data.comments}</Body3>
-                </Style.List.Badge>
-              )}
+              <Style.List.Badge>
+                <IconLike size={16} color={theme.color.gray[500]} />
+                <Body3 color={theme.color.gray[500]}>{data.likeCnt}</Body3>
+              </Style.List.Badge>
+
+              <Style.List.Badge>
+                <IconView size={16} color={theme.color.gray[500]} />
+                <Body3 color={theme.color.gray[500]}>{data.view}</Body3>
+              </Style.List.Badge>
+
+              <Style.List.Badge>
+                <IconComment size={16} color={theme.color.gray[500]} />
+                <Body3 color={theme.color.gray[500]}>{data.comments}</Body3>
+              </Style.List.Badge>
             </Style.List.Info>
           </Style.List.Wrapper>
         ))}
