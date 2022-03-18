@@ -12,14 +12,13 @@ import {
   IconView,
 } from "@components/icons";
 import theme from "@components/styles/theme";
-import { topicComment, topicDetail } from "@core/swr/topicfetch";
-
+import { getCreateTime } from "@core/config/setCreateTime";
+import { useInsightComment, useTopicComment } from "@core/hook/use-comment";
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import useSWR from "swr";
 
 interface IPropsStyle {
   isReply: boolean;
@@ -206,20 +205,11 @@ interface IPropsComment {
   count?: number;
 }
 
-const Comment = ({ id, children, count }: IPropsComment) => {
+const InsightComment = ({ id, children, count }: IPropsComment) => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [comments, setComments] = useState([]);
-  const { data: commentsList, isValidating } = useSWR(
-    `/api2/topic/comment/${id}`,
-    topicComment,
-    {
-      onSuccess: (data, key, error) => {
-        setTotalCount(data.length);
-      },
-    },
-  );
-
+  const { commentsList } = useInsightComment(id);
   const [totalCount, setTotalCount] = useState(0);
   const [line, setLine] = useState(5);
   const [currentPage, setcurrentPage] = useState(1);
@@ -279,7 +269,7 @@ const Comment = ({ id, children, count }: IPropsComment) => {
     if (content == "삭제하기") {
       let result = confirm("정말 삭제하시겠습니까?");
       if (result) {
-        await axios.post(`/api2/topic/delete/${idx}`).then(res => {
+        await axios.post(`/api2/insight/delete/${idx}`).then(res => {
           alert("삭제되었습니다");
           router.push(router.asPath);
         });
@@ -317,14 +307,14 @@ const Comment = ({ id, children, count }: IPropsComment) => {
   };
 
   const onClickWriteComment = async () => {
-    await axios.post(`/api2/topic/write`, commentdata).then(res => {
+    await axios.post(`/api2/insight/write`, commentdata).then(res => {
       alert("댓글이 등록되었습니다");
       setCommentData({ ...commentdata, wr_content: "" });
       router.push(router.asPath);
     });
   };
   const onClickWriteReply = async () => {
-    await axios.post(`/api2/topic/write`, replydata).then(res => {
+    await axios.post(`/api2/insight/write`, replydata).then(res => {
       alert("댓글이 등록되었습니다");
       setReply({ ...replydata, wr_parent2: 0, wr_content: "" });
       router.push(router.asPath);
@@ -356,7 +346,7 @@ const Comment = ({ id, children, count }: IPropsComment) => {
     <Style.Container>
       <Style.Comment>
         <Style.AddComment.Container>
-          <Header5>{totalCount && totalCount}개의 댓글</Header5>
+          <Header5>{commentsList && commentsList.length}개의 댓글</Header5>
           <Style.AddComment.TextArea
             rows={3}
             name={"wr_content"}
@@ -446,11 +436,7 @@ const Comment = ({ id, children, count }: IPropsComment) => {
                       </Style.List.Bottom.Badge>
                     </Style.List.Bottom.Info>
                     <Body3 color={theme.color.gray[500]}>
-                      {comment.wr_create > 24
-                        ? `${Math.ceil(comment.wr_create / 24)}일전`
-                        : comment.wr_create > 0
-                        ? `${comment.wr_create}시간전`
-                        : `방금전`}
+                      {getCreateTime(comment.wr_create)}
                     </Body3>
                   </Style.List.Bottom.Container>
                 </Style.List.Container>
@@ -486,7 +472,7 @@ const Comment = ({ id, children, count }: IPropsComment) => {
               </React.Fragment>
             );
           })}
-        {isValidating && <Loader color={"gray"} size={"large"} />}
+        {!commentsList && <Loader color={"gray"} size={"large"} />}
       </Style.Comment>
       <Pagination
         totalContent={totalCount}
@@ -500,4 +486,4 @@ const Comment = ({ id, children, count }: IPropsComment) => {
   );
 };
 
-export default Comment;
+export default InsightComment;

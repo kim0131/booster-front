@@ -3,9 +3,18 @@ import Loader from "@components/elements/loader";
 import Pagination from "@components/elements/pagination";
 import { Body3 } from "@components/elements/types";
 import theme from "@components/styles/theme";
+import { getCreateTime } from "@core/config/setCreateTime";
 import useDesktop from "@core/hook/use-desktop";
+import useInsightList from "@core/hook/use-insightList";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
+import React from "react";
+
+interface IPropsStyle {
+  thumbnail: {
+    photo?: string;
+  };
+}
 
 const Style = {
   Container: styled.div`
@@ -35,9 +44,10 @@ const Style = {
       flex-direction: column;
       gap: 0.75rem;
     `,
-    Thumbnail: styled.div`
+    Thumbnail: styled.div<IPropsStyle["thumbnail"]>`
       aspect-ratio: 4 / 3;
-      background-image: url("https://source.unsplash.com/random");
+      background-image: ${props =>
+        props.photo ? `url(${props.photo})` : "none"};
       background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
@@ -80,99 +90,69 @@ const Style = {
 };
 
 interface IPropsPost {
-  isLoading?: Boolean;
+  category?: any;
 }
 
-const Post = ({ isLoading }: IPropsPost) => {
+const Post = ({ category }: IPropsPost) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
-
+  const { insightList } = useInsightList();
+  const onClickRouterMove = (id: any) => {
+    router.push(`/insights/${id}`);
+  };
   return (
     <>
-      {isLoading ? (
+      {!insightList ? (
         <Loader color="gray" />
       ) : (
         <Style.Container>
-          <Style.PostItem.Container>
-            <Style.PostItem.Thumbnail />
-            <Style.PostItem.Badge>
-              <Badge>뉴스</Badge>
-            </Style.PostItem.Badge>
-            <Style.PostItem.Title>
-              코스피 -3% 하락이 자주 있는 일인가요?😨
-            </Style.PostItem.Title>
-            <Body3 color={theme.color.gray[500]}>24시간 전</Body3>
-          </Style.PostItem.Container>
-          <Style.PostItem.Container>
-            <Style.PostItem.Thumbnail />
-            <Style.PostItem.Badge>
-              <Badge>뉴스</Badge>
-            </Style.PostItem.Badge>
-            <Style.PostItem.Title>
-              코스피 -3% 하락이 자주 있는 일인가요?😨
-            </Style.PostItem.Title>
-            <Body3 color={theme.color.gray[500]}>24시간 전</Body3>
-          </Style.PostItem.Container>
-          <Style.PostItem.Container>
-            <Style.PostItem.Thumbnail />
-            <Style.PostItem.Badge>
-              <Badge>뉴스</Badge>
-            </Style.PostItem.Badge>
-            <Style.PostItem.Title>
-              코스피 -3% 하락이 자주 있는 일인가요?😨
-            </Style.PostItem.Title>
-            <Body3 color={theme.color.gray[500]}>24시간 전</Body3>
-          </Style.PostItem.Container>
-          <Style.PostItem.Container>
-            <Style.PostItem.Thumbnail />
-            <Style.PostItem.Badge>
-              <Badge>뉴스</Badge>
-            </Style.PostItem.Badge>
-            <Style.PostItem.Title>
-              코스피 -3% 하락이 자주 있는 일인가요?😨
-            </Style.PostItem.Title>
-            <Body3 color={theme.color.gray[500]}>24시간 전</Body3>
-          </Style.PostItem.Container>
-          <Style.PostItem.Container>
-            <Style.PostItem.Thumbnail />
-            <Style.PostItem.Badge>
-              <Badge>뉴스</Badge>
-            </Style.PostItem.Badge>
-            <Style.PostItem.Title>
-              코스피 -3% 하락이 자주 있는 일인가요?😨
-            </Style.PostItem.Title>
-            <Body3 color={theme.color.gray[500]}>24시간 전</Body3>
-          </Style.PostItem.Container>
-          <Style.PostItem.Container>
-            <Style.PostItem.Thumbnail />
-            <Style.PostItem.Badge>
-              <Badge>뉴스</Badge>
-            </Style.PostItem.Badge>
-            <Style.PostItem.Title>
-              코스피 -3% 하락이 자주 있는 일인가요?😨
-            </Style.PostItem.Title>
-            <Body3 color={theme.color.gray[500]}>24시간 전</Body3>
-          </Style.PostItem.Container>
-          <Style.PostItem.Container>
-            <Style.PostItem.Thumbnail />
-            <Style.PostItem.Badge>
-              <Badge>뉴스</Badge>
-            </Style.PostItem.Badge>
-            <Style.PostItem.Title>
-              코스피 -3% 하락이 자주 있는 일인가요?😨
-            </Style.PostItem.Title>
-            <Body3 color={theme.color.gray[500]}>24시간 전</Body3>
-          </Style.PostItem.Container>
-          <Style.PostItem.Container>
-            <Style.PostItem.Thumbnail />
-            <Style.PostItem.Badge>
-              <Badge>뉴스</Badge>
-            </Style.PostItem.Badge>
-            <Style.PostItem.Title>
-              코스피 -3% 하락이 자주 있는 일인가요?😨
-            </Style.PostItem.Title>
-            <Body3 color={theme.color.gray[500]}>24시간 전</Body3>
-          </Style.PostItem.Container>
+          {insightList &&
+            insightList.map((content: any) => {
+              if (category) {
+                if (category == content.category) {
+                  return (
+                    <React.Fragment key={content.idx}>
+                      <Style.PostItem.Container
+                        onClick={() => onClickRouterMove(content.idx)}
+                      >
+                        <Style.PostItem.Thumbnail
+                          photo={content.file_full_url}
+                        />
+                        <Style.PostItem.Badge>
+                          <Badge>{content.category}</Badge>
+                        </Style.PostItem.Badge>
+                        <Style.PostItem.Title>
+                          {content.wr_subject}
+                        </Style.PostItem.Title>
+                        <Body3 color={theme.color.gray[500]}>
+                          {getCreateTime(content.create)}
+                        </Body3>
+                      </Style.PostItem.Container>
+                    </React.Fragment>
+                  );
+                }
+              } else {
+                return (
+                  <React.Fragment key={content.idx}>
+                    <Style.PostItem.Container
+                      onClick={() => onClickRouterMove(content.idx)}
+                    >
+                      <Style.PostItem.Thumbnail photo={content.file_full_url} />
+                      <Style.PostItem.Badge>
+                        <Badge>{content.category}</Badge>
+                      </Style.PostItem.Badge>
+                      <Style.PostItem.Title>
+                        {content.wr_subject}
+                      </Style.PostItem.Title>
+                      <Body3 color={theme.color.gray[500]}>
+                        {getCreateTime(content.create)}
+                      </Body3>
+                    </Style.PostItem.Container>
+                  </React.Fragment>
+                );
+              }
+            })}
+
           <Style.Pagination>
             <Pagination totalContent={0} line={0} currentPage={0} />
           </Style.Pagination>

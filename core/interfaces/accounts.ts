@@ -7,6 +7,5 @@ export interface IAccountsData {
   mb_nick: string;
   mb_ph: string;
   mb_pw_token: string;
-  mb_datetime: Date;
   mb_business_num: number;
 }

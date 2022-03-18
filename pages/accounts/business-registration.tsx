@@ -76,6 +76,9 @@ const BusinessRegistration: NextPage = () => {
     if (image.image_file) {
       formData.append("file", image.image_file);
     }
+    await axios.post(`/api2/user/update/${userIdx.idx}`, {
+      mb_business_certify: 1,
+    });
     await axios.post(
       `/api2/business/upload/${userIdx.mb_business_num}`,
       formData,
@@ -109,8 +112,6 @@ const BusinessRegistration: NextPage = () => {
               <>
                 <Callout size="small" icon={<IconDocuments />}>
                   {image.image_file.name}
-                  {/* 미리보기 예시 */}
-                  <img src={image.preview_URL} alt="" />
                 </Callout>
                 <ButtonWrapper>
                   <Button

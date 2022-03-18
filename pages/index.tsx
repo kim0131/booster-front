@@ -7,6 +7,9 @@ import TextAreaTopicContent from "@components/elements/text-area-topic-content";
 import Carousel from "@components/templates/carousel";
 import HomeLayout from "@components/layouts/home-layout";
 import BestWidget from "@components/templates/best-widget";
+import useHotTopic from "@core/hook/use-hottopic";
+import React from "react";
+import styled from "@emotion/styled";
 
 const sampleDatas = {
   best: [
@@ -133,8 +136,15 @@ const sampleDatas = {
   ],
 };
 
+const Flex = styled.div`
+  display: flex;
+  justify-content: space-around;
+`;
+
 const Home: NextPage = () => {
   const toast = useToast();
+  const { hotTopic } = useHotTopic();
+
   return (
     <>
       <Carousel />
@@ -151,6 +161,24 @@ const Home: NextPage = () => {
         <BestWidget title="자동차" col={1} datas={sampleDatas.list} />
         <BestWidget title="자동차" col={1} datas={sampleDatas.list} />
         {/* <BestWidget col={1} /> */}
+        {hotTopic && (
+          <div className="hoptopic">
+            {hotTopic.map((item: any, idx: any) => {
+              return (
+                <React.Fragment key={item.id}>
+                  <Flex>
+                    <div className="category">카테고리 : {item.category}</div>
+                    <div className="title">제목 : {item.title}</div>
+                    <div className="like"> 좋아요 : {item.likeCnt}</div>
+                    <div className="view">조회수 : {item.view}</div>
+                    <div className="comment"> 댓글수 : {item.comments}</div>
+                    <div className="comment"> 포인트 : {item.hotPoint}</div>
+                  </Flex>
+                </React.Fragment>
+              );
+            })}
+          </div>
+        )}
       </HomeLayout>
     </>
   );

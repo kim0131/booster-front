@@ -1,40 +1,36 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Button from "@components/elements/button";
 import Selectbox from "@components/elements/selectbox";
 import TextAreaTopicContent from "@components/elements/text-area-topic-content";
 import TextField from "@components/elements/text-field";
 import TopicCreateLayout from "@components/layouts/topic-create-layout";
 import { topicImageUrl } from "@core/config/imgurl";
-import { CategorySelectfetcher } from "@core/swr/categoryfetcher";
-import { topicDetail, topicfetcher } from "@core/swr/topicfetch";
+import useCategorySelect from "@core/hook/use-categorySeclect";
+import { useTopicDetail } from "@core/hook/use-topicdetail";
 import axios from "axios";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
-import useSWR from "swr";
 
 const EditTopic: NextPage = () => {
+  const router = useRouter();
   const [state, setState] = useState("");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const { data: session, status } = useSession();
-  const router = useRouter();
   let { id } = router.query;
-  const { data: topicContent } = useSWR(`/api2/topic/list/${id}`, topicDetail);
+  const [topicId, setTopicId] = useState(id);
+  const { topicDetail } = useTopicDetail(topicId);
   const [data, setData] = useState<any>({
     wr_subject: "",
     wr_content: "",
     wr_ip: "",
     mb_id: "",
     mb_name: "",
-    board: topicContent ? topicContent.board : 0,
-    wr_datetime: new Date(),
+    board: topicDetail ? topicDetail.board : 0,
     wr_update: new Date(),
   });
-
-  const { data: categoryList } = useSWR(
-    `/api2/category/select`,
-    CategorySelectfetcher,
-  );
+  const { categorySelect } = useCategorySelect("topic");
 
   const [image, setImage] = useState<any>({
     image_file: "",
@@ -42,14 +38,13 @@ const EditTopic: NextPage = () => {
   });
 
   useEffect(() => {
+    setTopicId(id);
     getTopiceContent();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [topicContent]);
+  }, [topicDetail, id]);
 
   const getTopiceContent = async () => {
-    if (topicContent) {
-      const TopicContent = topicContent;
+    if (topicDetail) {
+      const TopicContent = topicDetail;
       TopicContent.category = router.query.category;
       TopicContent.bookmark = false; //추후필요
 
@@ -61,7 +56,7 @@ const EditTopic: NextPage = () => {
         file_url: TopicContent.file_url,
       });
       setImage({
-        image_file: "",
+        image_file: TopicContent.file_url,
         preview_URL: TopicContent.file_full_url,
       });
     }
@@ -131,8 +126,10 @@ const EditTopic: NextPage = () => {
         board: data.board,
       })
       .then(async res => {
-        await axios.post(`/api2/topic/upload/${id}`, formData);
-        alert("토픽이 등록되었습니다");
+        if (image.image_file != data.file_url) {
+          await axios.post(`/api2/topic/upload/${id}`, formData);
+        }
+        alert("토픽이 수정되었습니다");
         router.push(`/topics`);
       });
   };
@@ -141,9 +138,9 @@ const EditTopic: NextPage = () => {
     <TopicCreateLayout
       header="수정하기"
       category={
-        categoryList && (
+        categorySelect && (
           <Selectbox
-            options={categoryList}
+            options={categorySelect}
             placeholder={"카테고리"}
             onChange={onChangeSelcet}
             value={data.board}

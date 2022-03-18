@@ -15,7 +15,6 @@ interface IStateFindId {
   result: { [key in string]: string };
   invalid: { [key in string]: string };
 }
-interface IStateFindIdResult {}
 const FindId: NextPage = () => {
   const router = useRouter();
   const [state, setState] = useState<IStateFindId>({
@@ -28,7 +27,6 @@ const FindId: NextPage = () => {
       mb_nick: "",
       mb_ph: "",
       mb_pw_token: "",
-      mb_datetime: new Date(),
       mb_business_num: 0,
     },
     result: {
@@ -95,26 +93,6 @@ const FindId: NextPage = () => {
               date: date,
             },
           });
-        })
-        .catch(function (error) {
-          if (error.response) {
-            // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
-            console.log(error.response.data);
-            setState({
-              ...state,
-              result: {
-                ...state.result,
-                mb_id: "",
-                date: "",
-                message: error.response.data.msg,
-              },
-            });
-          } else if (error.request) {
-            console.log(error.request);
-          } else {
-            // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
-            console.log("Error", error.message);
-          }
         });
     }
   };

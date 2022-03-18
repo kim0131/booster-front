@@ -6,6 +6,7 @@ import Dropdown from "@components/elements/dropdown";
 import { Body3, Header5 } from "@components/elements/types";
 import {
   IconBookmark,
+  IconBookmarkFill,
   IconComment,
   IconLike,
   IconMoreVertical,
@@ -14,13 +15,12 @@ import {
 } from "@components/icons";
 import theme from "@components/styles/theme";
 import { topicImageUrl } from "@core/config/imgurl";
-import { topicDetail } from "@core/swr/topicfetch";
+import { getCreateTime } from "@core/config/setCreateTime";
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import useSWR from "swr";
 
 const Style = {
   Container: styled.div`
@@ -158,11 +158,13 @@ const TopicContentLayout = ({
   const { data: session, status }: any = useSession();
   const router = useRouter();
   const topicContent = data;
-  const [likeCnt, setLikeCnt] = useState(0)
+  const [likeCnt, setLikeCnt] = useState(0);
 
-  useEffect(()=>{
-    setLikeCnt(topicContent.likeCnt)
-  }, [topicContent])
+  useEffect(() => {
+    if (topicContent) {
+      setLikeCnt(topicContent.likeCnt);
+    }
+  }, [topicContent]);
   const onClickLink = async (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,
   ) => {
@@ -190,15 +192,14 @@ const TopicContentLayout = ({
         member_idx: parseInt(session?.user?.idx),
       })
       .then(async res => {
-        const result =  res.data.result.length;
+        const result = res.data.result.length;
         if (result) {
           await axios
             .post(`/api2/topic/like/cancel/${id}`, {
               member_idx: parseInt(session?.user?.idx),
             })
             .then(() => {
-              setLikeCnt(likeCnt-1)
-              
+              setLikeCnt(likeCnt - 1);
             });
         } else {
           await axios
@@ -206,10 +207,28 @@ const TopicContentLayout = ({
               member_idx: parseInt(session?.user?.idx),
             })
             .then(() => {
-              setLikeCnt(likeCnt+1)
+              setLikeCnt(likeCnt + 1);
             });
         }
       });
+  };
+  const onClickBookmark = (result: boolean) => {
+    topicContent.bookmark = result;
+  };
+
+  const onClickScrap = async (id: any, bookmark: any) => {
+    console.log(bookmark);
+    if (bookmark) {
+      await axios.post(`/api2/topic/scrap/cancel/${id}`, {
+        member_idx: session?.user?.idx,
+        sector: "topic",
+      });
+    } else {
+      await axios.post(`/api2/topic/scrap/insert/${id}`, {
+        member_idx: session?.user?.idx,
+        sector: "topic",
+      });
+    }
   };
   return (
     <>
@@ -230,9 +249,7 @@ const TopicContentLayout = ({
                 </Style.Header.Bottom.Badge>
                 <Style.Header.Bottom.Badge>
                   <IconLike size={16} color={theme.color.gray[500]} />
-                  <Body3 color={theme.color.gray[500]}>
-                    {likeCnt}
-                  </Body3>
+                  <Body3 color={theme.color.gray[500]}>{likeCnt}</Body3>
                 </Style.Header.Bottom.Badge>
                 <Style.Header.Bottom.Badge>
                   <IconView size={16} color={theme.color.gray[500]} />
@@ -248,9 +265,7 @@ const TopicContentLayout = ({
                 </Style.Header.Bottom.Badge>
               </Style.Header.Bottom.Info>
               <Body3 color={theme.color.gray[500]}>
-                {topicContent.create > 24
-                  ? `${Math.ceil(topicContent.create / 24)}일전`
-                  : `${topicContent.create}시간전`}
+                {getCreateTime(topicContent.create)}
               </Body3>
             </Style.Header.Bottom.Container>
           </Style.Header.Container>
@@ -279,7 +294,28 @@ const TopicContentLayout = ({
               </Style.Body.Button.Wrapper>
               <Style.Body.Button.Wrapper>
                 <Button color="transparent">
-                  <IconBookmark />
+                  {topicContent.bookmark ? (
+                    <div
+                      onClick={() => {
+                        onClickScrap(topicContent.idx, topicContent.bookmark);
+                        onClickBookmark(false);
+                      }}
+                    >
+                      <IconBookmarkFill
+                        size={20}
+                        color={theme.color.blue[600]}
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      onClick={() => {
+                        onClickScrap(topicContent.idx, topicContent.bookmark);
+                        onClickBookmark(true);
+                      }}
+                    >
+                      <IconBookmark size={20} color={theme.color.gray[500]} />
+                    </div>
+                  )}
                   스크랩
                 </Button>
 
