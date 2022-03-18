@@ -32,7 +32,7 @@ const TopicDetail: NextPage = () => {
   return (
     <>
       <SnbLayout>
-        {topicId && (
+        {topicDetail && (
           <>
             <Snb category={category} />
             <TopicContentLayout id={topicId} data={topicDetail}>

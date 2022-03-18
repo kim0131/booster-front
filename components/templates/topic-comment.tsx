@@ -12,6 +12,7 @@ import {
   IconView,
 } from "@components/icons";
 import theme from "@components/styles/theme";
+import { getCreateTime } from "@core/config/setCreateTime";
 import { useTopicComment } from "@core/hook/use-comment";
 import styled from "@emotion/styled";
 import axios from "axios";
@@ -434,11 +435,7 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
                       </Style.List.Bottom.Badge>
                     </Style.List.Bottom.Info>
                     <Body3 color={theme.color.gray[500]}>
-                      {comment.wr_create > 24
-                        ? `${Math.ceil(comment.wr_create / 24)}일전`
-                        : comment.wr_create > 0
-                        ? `${comment.wr_create}시간전`
-                        : `방금전`}
+                      {getCreateTime(comment.wr_create)}
                     </Body3>
                   </Style.List.Bottom.Container>
                 </Style.List.Container>

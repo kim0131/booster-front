@@ -25,7 +25,6 @@ const useCategorySelect = (sector: string) => {
   const { data: categorySelect } = useSWR(
     `/api2/category/${sector}`,
     CategorySelectfetcher,
-    { refreshInterval: 1000 },
   );
 
   return { categorySelect };

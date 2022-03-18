@@ -1,9 +1,7 @@
 import type { NextPage } from "next";
-import styled from "@emotion/styled";
 import { useState } from "react";
 import axios from "axios";
 import router from "next/router";
-import moment from "momnet";
 import Button from "@components/elements/button";
 import TextField from "@components/elements/text-field";
 import { IAccountsData } from "@core/interfaces/accounts";
@@ -24,7 +22,6 @@ interface IStateSignup {
   data: IAccountsData;
   invalid: { [key in string]: string };
   page: number;
-  isLoading: boolean;
 }
 
 const Signup: NextPage = () => {
@@ -38,7 +35,7 @@ const Signup: NextPage = () => {
       mb_nick: "",
       mb_ph: "",
       mb_pw_token: "",
-      mb_datetime: new Date(),
+
       mb_business_num: 0,
     },
     invalid: {
@@ -50,11 +47,10 @@ const Signup: NextPage = () => {
       mb_nick: "",
       mb_ph: "",
       mb_pw_token: "",
-      mb_datetime: "",
+
       mb_business_num: "",
     },
     page: 1,
-    isLoading: false,
   });
 
   const onChangeSignup = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -138,11 +134,9 @@ const Signup: NextPage = () => {
                 setState({ ...state, invalid: { mb_name: res } });
               } else {
                 mb_ph_vaildate(state.data.mb_ph).then(res => {
-                  console.log(res);
                   if (res) {
                     setState({ ...state, invalid: { mb_ph: res } });
                   } else {
-                    setState({ ...state, isLoading: true });
                     axios
                       .post("/api2/signup", {
                         mb_id: state.data.mb_id,
@@ -151,12 +145,10 @@ const Signup: NextPage = () => {
                         mb_name: state.data.mb_name,
                         mb_ph: state.data.mb_ph,
                         mb_pw_token: state.data.mb_pw_token,
-                        mb_datetime: state.data.mb_datetime,
                         mb_business_num: state.data.mb_business_num,
                         mb_nick: state.data.mb_nick,
                       })
                       .then(async (res: any) => {
-                        console.log(res);
                         const mb_idx = res.data.result.idx;
                         await axios
                           .post(`/api2/business/write`, {
@@ -178,9 +170,7 @@ const Signup: NextPage = () => {
                           mb_idx: mb_idx,
                         });
                         router.push("/accounts/business-registration");
-                      })
-                      .catch(error => {});
-                    setState({ ...state, isLoading: false });
+                      });
                   }
                 });
               }
@@ -303,7 +293,6 @@ const Signup: NextPage = () => {
               variants="solid"
               color="primary"
               size="large"
-              isLoading={state.isLoading}
               onClick={onClickNext}
             >
               다음
@@ -313,7 +302,6 @@ const Signup: NextPage = () => {
               variants="solid"
               color="primary"
               size="large"
-              isLoading={state.isLoading}
               onClick={onClickConfirm}
             >
               완료

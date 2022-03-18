@@ -15,6 +15,7 @@ import {
 } from "@components/icons";
 import theme from "@components/styles/theme";
 import { topicImageUrl } from "@core/config/imgurl";
+import { getCreateTime } from "@core/config/setCreateTime";
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -264,9 +265,7 @@ const TopicContentLayout = ({
                 </Style.Header.Bottom.Badge>
               </Style.Header.Bottom.Info>
               <Body3 color={theme.color.gray[500]}>
-                {topicContent.create > 24
-                  ? `${Math.ceil(topicContent.create / 24)}일전`
-                  : `${topicContent.create}시간전`}
+                {getCreateTime(topicContent.create)}
               </Body3>
             </Style.Header.Bottom.Container>
           </Style.Header.Container>

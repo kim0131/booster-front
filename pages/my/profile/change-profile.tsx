@@ -8,7 +8,6 @@ import TextField from "@components/elements/text-field";
 import { useSession } from "next-auth/react";
 import useGetUser from "@core/hook/use-user";
 import { useEffect, useState } from "react";
-import { string } from "joi";
 import axios from "axios";
 import router from "next/router";
 

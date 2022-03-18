@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { businessImageUrl } from "@core/config/imgurl";
 import axios from "axios";
 import useSWR from "swr";
 
@@ -70,7 +69,6 @@ const useCategorySubSide = (sector: string) => {
   const { data: categorySubSide } = useSWR(
     `/api2/category/sub/${sector}`,
     CategorySnbMenufetcher,
-    { refreshInterval: 1000 },
   );
 
   return { categorySubSide };

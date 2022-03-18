@@ -11,69 +11,41 @@ import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useSWRConfig } from "swr";
 
 const Topics: NextPage = () => {
   const router = useRouter();
-  const { data: session, status }: any = useSession();
   const { category } = router.query;
-  const { topicList, topickListMutate } = useTopicList();
-  const { topicListFilter } = useTopicListFilter(category);
+  const [selectCategory, setCategory] = useState<any>("");
   const { categorySubSide } = useCategorySubSide("topic");
   const { hotTopic } = useHotTopic();
-  const [selectCategory, setCategory] = useState<any>("");
-  const [boardDatas, setBoardDatas] = useState<any>();
+  const { topicListFilter, isValidating } = useTopicListFilter(selectCategory);
 
   useEffect(() => {
     setCategory(category);
-    selectBoardDatas();
-  }, [category, router, topicListFilter, topicList, hotTopic]);
-
-  const selectBoardDatas = () => {
-    if (category == undefined || category == "전체") {
-      setCategory("전체");
-      setBoardDatas(topicList);
-    } else if (category == "인기글") {
-      setBoardDatas(hotTopic);
-    } else {
-      setBoardDatas(topicListFilter);
-    }
-  };
+  }, [category, router, topicListFilter, hotTopic]);
 
   const onClickRouter = (param: any) => {
     router.push(`/topics/detail?id=${param}`);
   };
 
-  const onClickScrap = async (id: any, bookmark: any) => {
-    if (bookmark) {
-      await axios.post(`/api2/topic/scrap/cancel/${id}`, {
-        member_idx: session?.user?.idx,
-        sector: "topic",
-      });
-    } else {
-      await axios.post(`/api2/topic/scrap/insert/${id}`, {
-        member_idx: session?.user?.idx,
-        sector: "topic",
-      });
-    }
-  };
-
   return (
     <>
-      {topicList && (
-        <SnbLayout>
-          {categorySubSide && <Snb category={selectCategory} />}
-          {Boolean(boardDatas) && (
-            <Board
-              category={selectCategory}
-              Datas={category ? boardDatas : topicList}
-              isLoading={false}
-              onClickRouter={onClickRouter}
-              onClickScrap={onClickScrap}
-            />
-          )}
-          {Boolean(!boardDatas) && <Loader color="gray"></Loader>}
-        </SnbLayout>
-      )}
+      <SnbLayout>
+        {categorySubSide && <Snb category={selectCategory} />}
+        {topicListFilter && (
+          <>
+            {!isValidating && (
+              <Board
+                category={selectCategory}
+                Datas={category == "인기글" ? hotTopic : topicListFilter}
+                onClickRouter={onClickRouter}
+              />
+            )}
+          </>
+        )}
+        {isValidating && <Loader color="gray"></Loader>}
+      </SnbLayout>
     </>
   );
 };

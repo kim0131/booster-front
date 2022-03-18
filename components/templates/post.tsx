@@ -3,6 +3,7 @@ import Loader from "@components/elements/loader";
 import Pagination from "@components/elements/pagination";
 import { Body3 } from "@components/elements/types";
 import theme from "@components/styles/theme";
+import { getCreateTime } from "@core/config/setCreateTime";
 import useDesktop from "@core/hook/use-desktop";
 import useInsightList from "@core/hook/use-insightList";
 import styled from "@emotion/styled";
@@ -89,11 +90,10 @@ const Style = {
 };
 
 interface IPropsPost {
-  isLoading?: Boolean;
   category?: any;
 }
 
-const Post = ({ isLoading, category }: IPropsPost) => {
+const Post = ({ category }: IPropsPost) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
   const { insightList } = useInsightList();
@@ -102,7 +102,7 @@ const Post = ({ isLoading, category }: IPropsPost) => {
   };
   return (
     <>
-      {isLoading ? (
+      {!insightList ? (
         <Loader color="gray" />
       ) : (
         <Style.Container>
@@ -125,9 +125,7 @@ const Post = ({ isLoading, category }: IPropsPost) => {
                           {content.wr_subject}
                         </Style.PostItem.Title>
                         <Body3 color={theme.color.gray[500]}>
-                          {content.create > 24
-                            ? `${Math.ceil(content.create / 24)}일전`
-                            : `${content.create}시간전`}
+                          {getCreateTime(content.create)}
                         </Body3>
                       </Style.PostItem.Container>
                     </React.Fragment>
@@ -147,9 +145,7 @@ const Post = ({ isLoading, category }: IPropsPost) => {
                         {content.wr_subject}
                       </Style.PostItem.Title>
                       <Body3 color={theme.color.gray[500]}>
-                        {content.create > 24
-                          ? `${Math.ceil(content.create / 24)}일전`
-                          : `${content.create}시간전`}
+                        {getCreateTime(content.create)}
                       </Body3>
                     </Style.PostItem.Container>
                   </React.Fragment>

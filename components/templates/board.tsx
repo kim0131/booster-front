@@ -12,11 +12,14 @@ import {
   IconView,
 } from "@components/icons";
 import theme from "@components/styles/theme";
+import { getCreateTime } from "@core/config/setCreateTime";
 import useDesktop from "@core/hook/use-desktop";
 import styled from "@emotion/styled";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useSWRConfig } from "swr";
 
 const Style = {
   Container: styled.div`
@@ -134,21 +137,16 @@ interface IPropsBoard {
     likeCnt: number;
     rn: number;
   }[];
-  isLoading?: Boolean;
+
   onClickRouter?: any;
-  onClickScrap?: any;
 }
 
-const Board = ({
-  category,
-  Datas,
-  isLoading,
-  onClickRouter,
-  onClickScrap,
-}: IPropsBoard) => {
+const Board = ({ category, Datas, onClickRouter }: IPropsBoard) => {
   const { isDesktop } = useDesktop();
+  const { mutate } = useSWRConfig();
+  const { data: session }: any = useSession();
   const [datas, setData] = useState(Datas);
-  const [isLoading2, setLoading] = useState<any>(isLoading);
+
   const [totalCount, setTotalCount] = useState(Datas.length);
   const [line, setLine] = useState(10);
   const [currentPage, setcurrentPage] = useState(1);
@@ -178,133 +176,135 @@ const Board = ({
   const onClickMoveEnd = () => {
     setcurrentPage(Math.ceil(totalCount / line));
   };
-
-  const onClickBookmark = (idx: any, result: boolean) => {
-    datas[idx].bookmark = result;
-    setData(datas);
+  const onClickScrap = async (id: any, bookmark: any) => {
+    if (bookmark) {
+      await axios.post(`/api2/topic/scrap/cancel/${id}`, {
+        member_idx: session?.user?.idx,
+        sector: "topic",
+      });
+    } else {
+      await axios.post(`/api2/topic/scrap/insert/${id}`, {
+        member_idx: session?.user?.idx,
+        sector: "topic",
+      });
+    }
+    const result = await datas.map((item: any, idx: any) => {
+      if (datas[idx].id == id) {
+        item.bookmark = Boolean(!bookmark);
+      }
+      return item;
+    });
+    setData(result);
   };
 
   return (
     <>
-      {isLoading2 ? (
-        <Loader color="gray" />
-      ) : (
-        <Style.Container>
-          {isDesktop && <Header4> {category ? category : "전체"}</Header4>}
+      <Style.Container>
+        {isDesktop && <Header4> {category ? category : "전체"}</Header4>}
 
-          <Style.BoardList.Container>
-            {!datas.length ? (
-              //카테고리 게시글이 없을 경우
-              <Style.BoardList.Item.Container>
+        <Style.BoardList.Container>
+          {!datas.length ? (
+            //카테고리 게시글이 없을 경우
+            <Style.BoardList.Item.Container>
+              <Style.BoardList.Item.Top.Container>
+                <Style.BoardList.Item.Top.Content.Container>
+                  <Style.BoardList.Item.Top.Content.Title>
+                    작성된 게시글이 없습니다.
+                  </Style.BoardList.Item.Top.Content.Title>
+                  <Style.BoardList.Item.Top.Content.Content>
+                    작성된 게시글이 없습니다.
+                  </Style.BoardList.Item.Top.Content.Content>
+                </Style.BoardList.Item.Top.Content.Container>
+                <Style.BoardList.Item.Top.Button></Style.BoardList.Item.Top.Button>
+              </Style.BoardList.Item.Top.Container>
+              <Style.BoardList.Item.Bottom.Container>
+                <Body3 color={theme.color.gray[500]}></Body3>
+              </Style.BoardList.Item.Bottom.Container>
+            </Style.BoardList.Item.Container>
+          ) : (
+            datas.map((data, idx) => (
+              <Style.BoardList.Item.Container key={data.id}>
                 <Style.BoardList.Item.Top.Container>
-                  <Style.BoardList.Item.Top.Content.Container>
-                    <Style.BoardList.Item.Top.Content.Title>
-                      작성된 게시글이 없습니다.
-                    </Style.BoardList.Item.Top.Content.Title>
-                    <Style.BoardList.Item.Top.Content.Content>
-                      작성된 게시글이 없습니다.
-                    </Style.BoardList.Item.Top.Content.Content>
-                  </Style.BoardList.Item.Top.Content.Container>
-                  <Style.BoardList.Item.Top.Button></Style.BoardList.Item.Top.Button>
-                </Style.BoardList.Item.Top.Container>
-                <Style.BoardList.Item.Bottom.Container>
-                  <Body3 color={theme.color.gray[500]}></Body3>
-                </Style.BoardList.Item.Bottom.Container>
-              </Style.BoardList.Item.Container>
-            ) : (
-              datas.map((data, idx) => (
-                <Style.BoardList.Item.Container key={data.id}>
-                  <Style.BoardList.Item.Top.Container>
-                    <Style.BoardList.Item.Top.Content.Container
-                      onClick={() => onClickRouter(data.id)}
-                    >
-                      {data.category && (
-                        <Style.BoardList.Item.Top.Content.Badge>
-                          <Badge>{data.category}</Badge>
-                        </Style.BoardList.Item.Top.Content.Badge>
-                      )}
-                      <Style.BoardList.Item.Top.Content.Title>
-                        {data.title}
-                      </Style.BoardList.Item.Top.Content.Title>
-                      <Style.BoardList.Item.Top.Content.Content>
-                        {data.content}
-                      </Style.BoardList.Item.Top.Content.Content>
-                    </Style.BoardList.Item.Top.Content.Container>
-                    <Style.BoardList.Item.Top.Button>
-                      {data.bookmark ? (
-                        <div
-                          onClick={() => {
-                            onClickScrap(data.id, data.bookmark, data.rn);
-                            onClickBookmark(idx, false);
-                          }}
-                        >
-                          <IconBookmarkFill
-                            size={20}
-                            color={theme.color.blue[600]}
-                          />
-                        </div>
-                      ) : (
-                        <div
-                          onClick={() => {
-                            onClickScrap(data.id, data.bookmark, data.rn);
-                            onClickBookmark(idx, true);
-                          }}
-                        >
-                          <IconBookmark
-                            size={20}
-                            color={theme.color.gray[500]}
-                          />
-                        </div>
-                      )}
-                    </Style.BoardList.Item.Top.Button>
-                  </Style.BoardList.Item.Top.Container>
-                  <Style.BoardList.Item.Bottom.Container
+                  <Style.BoardList.Item.Top.Content.Container
                     onClick={() => onClickRouter(data.id)}
                   >
-                    <Style.BoardList.Item.Bottom.Info>
-                      <Style.BoardList.Item.Bottom.Badge>
-                        <IconProfile size={16} color={theme.color.gray[500]} />
-                        <Body3 color={theme.color.gray[500]}>
-                          {data.writer}
-                        </Body3>
-                      </Style.BoardList.Item.Bottom.Badge>
-                      <Style.BoardList.Item.Bottom.Badge>
-                        <IconLike size={16} color={theme.color.gray[500]} />
-                        <Body3 color={theme.color.gray[500]}>
-                          {data.likeCnt}
-                        </Body3>
-                      </Style.BoardList.Item.Bottom.Badge>
-                      <Style.BoardList.Item.Bottom.Badge>
-                        <IconView size={16} color={theme.color.gray[500]} />
-                        <Body3 color={theme.color.gray[500]}>{data.view}</Body3>
-                      </Style.BoardList.Item.Bottom.Badge>
-                      <Style.BoardList.Item.Bottom.Badge>
-                        <IconComment size={16} color={theme.color.gray[500]} />
-                        <Body3 color={theme.color.gray[500]}>
-                          {data.comments}
-                        </Body3>
-                      </Style.BoardList.Item.Bottom.Badge>
-                    </Style.BoardList.Item.Bottom.Info>
-                    <Body3 color={theme.color.gray[500]}>
-                      {data.create > 24
-                        ? `${Math.ceil(data.create / 24)}일전`
-                        : `${data.create}시간전`}
-                    </Body3>
-                  </Style.BoardList.Item.Bottom.Container>
-                </Style.BoardList.Item.Container>
-              ))
-            )}
-          </Style.BoardList.Container>
-          <Pagination
-            totalContent={totalCount}
-            line={line}
-            currentPage={currentPage}
-            onClick={onClickPagenation}
-            MoveFront={onClickMoveFront}
-            MoveEnd={onClickMoveEnd}
-          />
-        </Style.Container>
-      )}
+                    {data.category && (
+                      <Style.BoardList.Item.Top.Content.Badge>
+                        <Badge>{data.category}</Badge>
+                      </Style.BoardList.Item.Top.Content.Badge>
+                    )}
+                    <Style.BoardList.Item.Top.Content.Title>
+                      {data.title}
+                    </Style.BoardList.Item.Top.Content.Title>
+                    <Style.BoardList.Item.Top.Content.Content>
+                      {data.content}
+                    </Style.BoardList.Item.Top.Content.Content>
+                  </Style.BoardList.Item.Top.Content.Container>
+                  <Style.BoardList.Item.Top.Button>
+                    {data.bookmark ? (
+                      <div
+                        onClick={() => {
+                          onClickScrap(data.id, data.bookmark);
+                        }}
+                      >
+                        <IconBookmarkFill
+                          size={20}
+                          color={theme.color.blue[600]}
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        onClick={() => {
+                          onClickScrap(data.id, data.bookmark);
+                        }}
+                      >
+                        <IconBookmark size={20} color={theme.color.gray[500]} />
+                      </div>
+                    )}
+                  </Style.BoardList.Item.Top.Button>
+                </Style.BoardList.Item.Top.Container>
+                <Style.BoardList.Item.Bottom.Container
+                  onClick={() => onClickRouter(data.id)}
+                >
+                  <Style.BoardList.Item.Bottom.Info>
+                    <Style.BoardList.Item.Bottom.Badge>
+                      <IconProfile size={16} color={theme.color.gray[500]} />
+                      <Body3 color={theme.color.gray[500]}>{data.writer}</Body3>
+                    </Style.BoardList.Item.Bottom.Badge>
+                    <Style.BoardList.Item.Bottom.Badge>
+                      <IconLike size={16} color={theme.color.gray[500]} />
+                      <Body3 color={theme.color.gray[500]}>
+                        {data.likeCnt}
+                      </Body3>
+                    </Style.BoardList.Item.Bottom.Badge>
+                    <Style.BoardList.Item.Bottom.Badge>
+                      <IconView size={16} color={theme.color.gray[500]} />
+                      <Body3 color={theme.color.gray[500]}>{data.view}</Body3>
+                    </Style.BoardList.Item.Bottom.Badge>
+                    <Style.BoardList.Item.Bottom.Badge>
+                      <IconComment size={16} color={theme.color.gray[500]} />
+                      <Body3 color={theme.color.gray[500]}>
+                        {data.comments}
+                      </Body3>
+                    </Style.BoardList.Item.Bottom.Badge>
+                  </Style.BoardList.Item.Bottom.Info>
+                  <Body3 color={theme.color.gray[500]}>
+                    {getCreateTime(data.create)}
+                  </Body3>
+                </Style.BoardList.Item.Bottom.Container>
+              </Style.BoardList.Item.Container>
+            ))
+          )}
+        </Style.BoardList.Container>
+        <Pagination
+          totalContent={totalCount}
+          line={line}
+          currentPage={currentPage}
+          onClick={onClickPagenation}
+          MoveFront={onClickMoveFront}
+          MoveEnd={onClickMoveEnd}
+        />
+      </Style.Container>
     </>
   );
 };

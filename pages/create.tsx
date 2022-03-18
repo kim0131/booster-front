@@ -29,8 +29,6 @@ const CreateTopic: NextPage = () => {
     mb_id: "",
     mb_name: "",
     board: "",
-    wr_datetime: new Date(),
-    wr_update: new Date(),
   });
 
   useEffect(() => {
@@ -100,8 +98,6 @@ const CreateTopic: NextPage = () => {
         mb_id: data.mb_id,
         mb_name: data.mb_name,
         board: data.board,
-        wr_datetime: data.wr_datetime,
-        wr_update: data.wr_update,
       })
       .then(async res => {
         const id = res.data.result.idx;

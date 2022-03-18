@@ -10,6 +10,7 @@ import {
   IconView,
 } from "@components/icons";
 import theme from "@components/styles/theme";
+import { getCreateTime } from "@core/config/setCreateTime";
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -200,7 +201,7 @@ const InsightsContentLayout = ({
               <Style.Header.Bottom.Badge>
                 <IconProfile size={16} color={theme.color.gray[500]} />
                 <Body3 color={theme.color.gray[500]}>
-                  {insightDetail.mb_name}
+                  {insightDetail.mb_nick}
                 </Body3>
               </Style.Header.Bottom.Badge>
               <Style.Header.Bottom.Badge>
@@ -221,9 +222,7 @@ const InsightsContentLayout = ({
               </Style.Header.Bottom.Badge>
             </Style.Header.Bottom.Info>
             <Body3 color={theme.color.gray[500]}>
-              {insightDetail.create > 24
-                ? `${Math.ceil(insightDetail.create / 24)}일전`
-                : `${insightDetail.create}시간전`}
+              {getCreateTime(insightDetail.create)}
             </Body3>
           </Style.Header.Bottom.Container>
         </Style.Header.Container>

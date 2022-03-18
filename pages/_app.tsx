@@ -4,11 +4,10 @@ import { SessionProvider, useSession } from "next-auth/react";
 import { Global, ThemeProvider } from "@emotion/react";
 import theme from "@components/styles/theme";
 import global from "@components/styles/global";
-import { MordalPortal, ToastPortal } from "@components/templates/portal";
 import useToast from "@core/hook/use-toast";
 import Header from "@components/templates/header";
 import Footer from "@components/templates/footer";
-import { SWRConfig } from "swr";
+
 import * as gtag from "../lib/gtag";
 import { useRouter } from "next/router";
 const isProduction = process.env.NODE_ENV === "production";
@@ -27,21 +26,15 @@ function MyApp({ Component, pageProps }: AppProps) {
     };
   }, [router.events]);
   return (
-    <SWRConfig
-      value={{
-        refreshInterval: 60000,
-      }}
-    >
-      <ThemeProvider theme={theme}>
-        <SessionProvider>
-          <Global styles={global} />
-          <Header />
-          <Component {...pageProps} />
-          <Footer />
-          <div>{message}</div>
-        </SessionProvider>
-      </ThemeProvider>
-    </SWRConfig>
+    <ThemeProvider theme={theme}>
+      <SessionProvider>
+        <Global styles={global} />
+        <Header />
+        <Component {...pageProps} />
+        <Footer />
+        <div>{message}</div>
+      </SessionProvider>
+    </ThemeProvider>
   );
 }
 

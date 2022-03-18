@@ -9,7 +9,6 @@ import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import useGetUser from "@core/hook/use-user";
-import { businessImageUrl } from "@core/config/imgurl";
 
 interface IPhoto {
   photo?: string;

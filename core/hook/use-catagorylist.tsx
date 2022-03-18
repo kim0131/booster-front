@@ -33,9 +33,7 @@ const useCategoryList = () => {
   const { data: categoryList } = useSWR(
     `/api2/category/list`,
     categoryFetcher,
-    {
-      refreshInterval: 1000,
-    },
+    {},
   );
 
   return { categoryList };

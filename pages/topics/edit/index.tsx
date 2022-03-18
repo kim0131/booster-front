@@ -28,7 +28,6 @@ const EditTopic: NextPage = () => {
     mb_id: "",
     mb_name: "",
     board: topicDetail ? topicDetail.board : 0,
-    wr_datetime: new Date(),
     wr_update: new Date(),
   });
   const { categorySelect } = useCategorySelect("topic");

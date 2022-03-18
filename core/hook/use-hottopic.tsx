@@ -1,32 +1,10 @@
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
-import useTopicList from "./use-topicList";
-
-let category: any = [];
-
-const onClickCategoryList = async () => {
-  await axios.get("/api2/category").then((res: any) => {
-    let list = res.data.result;
-    list.map((item: any, idx: any) => {
-      category.push({
-        value: list[idx].idx,
-        label: list[idx].bo_subject,
-      });
-    });
-  });
-};
-const getCategoryName = (idx: any) => {
-  for (let i = 0; i < category.length; i++) {
-    if (category[i].value == idx) {
-      return category[i].label;
-    }
-  }
-};
 
 const hotTopicFetcher = async (param: any) => {
   const member_idx = param.idx;
-  await onClickCategoryList();
+
   let result: any = [];
   const CurrentTime = new Date();
   await axios
@@ -36,7 +14,8 @@ const hotTopicFetcher = async (param: any) => {
     })
     .then(async res => {
       const topic = res.data.result;
-      topic.map(async (content: any, idx: any) => {
+
+      await topic.map(async (content: any, idx: any) => {
         let ContentTime = new Date(content.wr_datetime);
         ContentTime.setHours(ContentTime.getHours());
         const elapsedTime = Math.ceil(
@@ -54,7 +33,7 @@ const hotTopicFetcher = async (param: any) => {
         }
         result.push({
           id: content.idx,
-          category: await getCategoryName(content.board),
+          category: content.board_name,
           title: content.wr_subject,
           content: content.wr_content,
           writer: content.mb_name,

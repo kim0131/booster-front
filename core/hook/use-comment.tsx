@@ -1,4 +1,3 @@
-import { topicImageUrl } from "@core/config/imgurl";
 import axios from "axios";
 import useSWR from "swr";
 
@@ -6,7 +5,13 @@ const getCommentIsReplyTopic = async (idx: string | number) => {
   const reply = await axios.get(`/api2/topic/reply/${idx}`);
   if (reply.data.result.length) {
     const result: any = [];
+    const CurrentTime = new Date();
     reply.data.result.map((item: any, idx: any) => {
+      let ContentTime = new Date(item.wr_datetime);
+      ContentTime.setHours(ContentTime.getHours());
+      const elapsedTime = Math.ceil(
+        (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 60),
+      );
       result.push({
         idx: item.idx,
         wr_is_comment: item.wr_is_comment,
@@ -15,6 +20,7 @@ const getCommentIsReplyTopic = async (idx: string | number) => {
         mb_name: item.mb_name,
         wr_view: item.wr_view,
         wr_good: item.wr_good,
+        wr_create: elapsedTime,
       });
     });
     return result;
@@ -25,9 +31,15 @@ const getCommentIsReplyTopic = async (idx: string | number) => {
 
 const getCommentIsReplyInsight = async (idx: string | number) => {
   const reply = await axios.get(`/api2/insight/reply/${idx}`);
+  const CurrentTime = new Date();
   if (reply.data.result.length) {
     const result: any = [];
     reply.data.result.map((item: any, idx: any) => {
+      let ContentTime = new Date(item.wr_datetime);
+      ContentTime.setHours(ContentTime.getHours());
+      const elapsedTime = Math.ceil(
+        (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 60),
+      );
       result.push({
         idx: item.idx,
         wr_is_comment: item.wr_is_comment,
@@ -36,8 +48,10 @@ const getCommentIsReplyInsight = async (idx: string | number) => {
         mb_name: item.mb_name,
         wr_view: item.wr_view,
         wr_good: item.wr_good,
+        wr_create: elapsedTime,
       });
     });
+
     return result;
   } else {
     return [];
@@ -52,9 +66,9 @@ const topicComment = async (url: string) => {
     const comment = res.data.result;
     for (const item of comment) {
       let ContentTime = new Date(item.wr_datetime);
-      ContentTime.setHours(ContentTime.getHours() - 9);
+      ContentTime.setHours(ContentTime.getHours());
       const elapsedTime = Math.ceil(
-        (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
+        (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 60),
       );
       const replyCount = await axios.get(`/api2/topic/replycount/${item.idx}`);
 
@@ -82,6 +96,7 @@ const topicComment = async (url: string) => {
       }
     }
   }
+
   return result2;
 };
 
@@ -93,9 +108,9 @@ const insightComment = async (url: string) => {
     const comment = res.data.result;
     for (const item of comment) {
       let ContentTime = new Date(item.wr_datetime);
-      ContentTime.setHours(ContentTime.getHours() - 9);
+      ContentTime.setHours(ContentTime.getHours());
       const elapsedTime = Math.ceil(
-        (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600),
+        (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 60),
       );
       const replyCount = await axios.get(
         `/api2/insight/replycount/${item.idx}`,
@@ -132,7 +147,6 @@ export const useTopicComment = (id: any) => {
   const { data: commentsList, mutate } = useSWR(
     `/api2/topic/comment/${id}`,
     topicComment,
-    { refreshInterval: 1000 },
   );
   return { commentsList, mutate };
 };
@@ -141,7 +155,6 @@ export const useInsightComment = (id: any) => {
   const { data: commentsList, mutate } = useSWR(
     `/api2/insight/comment/${id}`,
     insightComment,
-    { refreshInterval: 1000 },
   );
   return { commentsList, mutate };
 };

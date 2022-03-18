@@ -1,6 +1,5 @@
 import InsightsContentLayout from "@components/layouts/insights-content-layout";
 import LnbLayout from "@components/layouts/lnb-layout";
-import Comment from "@components/templates/topic-comment";
 import Lnb from "@components/templates/lnb";
 import Post from "@components/templates/post";
 import { useInsightDetail } from "@core/hook/use-insightDetail";

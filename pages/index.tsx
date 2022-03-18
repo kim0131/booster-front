@@ -34,7 +34,6 @@ const Home: NextPage = () => {
         variants="ghost"
         color="primary"
         size="small"
-        isLoading={true}
         onClick={() => console.log("ddd")}
       >
         <IconAdd />
