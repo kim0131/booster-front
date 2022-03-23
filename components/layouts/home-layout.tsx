@@ -1,3 +1,4 @@
+import useAdsList from "@core/hook/use-Ads";
 import styled from "@emotion/styled";
 
 const Style = {
@@ -24,7 +25,7 @@ const Style = {
       order: -9999;
     }
   `,
-  Banner: styled.div`
+  Banner: styled.div<any>`
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -37,13 +38,14 @@ const Style = {
       padding: 0;
     }
   `,
-  Dummy: styled.div`
+  Dummy: styled.div<any>`
     width: 100%;
     height: 6rem;
     ${props => props.theme.screen.md} {
       width: 20rem;
     }
     background-color: #444;
+    background-image: ${props => (props.photo ? `url(${props.photo})` : "")};
   `,
 };
 
@@ -53,13 +55,18 @@ interface IPropsHomeLayout {
 }
 
 const HomeLayout = ({ children, banners }: IPropsHomeLayout) => {
+  const { adsList } = useAdsList();
+  console.log(adsList);
   return (
     <Style.Container>
       <Style.Content>{children}</Style.Content>
       <Style.Banner>
-        <Style.Dummy />
-        <Style.Dummy />
-        {banners}
+        {adsList &&
+          adsList.map((item: any) => {
+            return (
+              <Style.Dummy key={item.id} photo={item.image_url}></Style.Dummy>
+            );
+          })}
       </Style.Banner>
     </Style.Container>
   );

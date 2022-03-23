@@ -10,6 +10,7 @@ import BestWidget from "@components/templates/best-widget";
 import useHotTopic from "@core/hook/use-hottopic";
 import React from "react";
 import { useCategoryListHome } from "@core/hook/use-catagorylist";
+import useAdsList from "@core/hook/use-Ads";
 
 const Home: NextPage = () => {
   const { hotTopic } = useHotTopic();
