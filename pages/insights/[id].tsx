@@ -2,7 +2,7 @@ import InsightsContentLayout from "@components/layouts/insights-content-layout";
 import LnbLayout from "@components/layouts/lnb-layout";
 import Lnb from "@components/templates/lnb";
 import Post from "@components/templates/post";
-import { useInsightDetail } from "@core/hook/use-insightDetail";
+import { useInsightDetail } from "@core/hook/use-insight-detail";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";

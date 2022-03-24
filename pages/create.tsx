@@ -4,7 +4,7 @@ import Selectbox from "@components/elements/selectbox";
 import TextAreaTopicContent from "@components/elements/text-area-topic-content";
 import TextField from "@components/elements/text-field";
 import TopicCreateLayout from "@components/layouts/topic-create-layout";
-import useCategorySelect from "@core/hook/use-categorySeclect";
+import useCategorySelect from "@core/hook/use-category-seclect";
 import axios from "axios";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";

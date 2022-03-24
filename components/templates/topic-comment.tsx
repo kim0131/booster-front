@@ -12,7 +12,7 @@ import {
   IconView,
 } from "@components/icons";
 import theme from "@components/styles/theme";
-import { getCreateTime } from "@core/config/setCreateTime";
+import { getCreateTime } from "@core/util/get-create-time";
 import { useTopicComment } from "@core/hook/use-comment";
 import styled from "@emotion/styled";
 import axios from "axios";

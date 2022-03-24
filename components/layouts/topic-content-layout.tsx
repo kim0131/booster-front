@@ -15,7 +15,7 @@ import {
 } from "@components/icons";
 import theme from "@components/styles/theme";
 import { topicImageUrl } from "@core/config/imgurl";
-import { getCreateTime } from "@core/config/setCreateTime";
+import { getCreateTime } from "@core/util/get-create-time";
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";

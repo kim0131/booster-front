@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Body2 } from "@components/elements/types";
 import { IconChevronDown } from "@components/icons";
-import useCategorySubSide from "@core/hook/use-categorySubSIde";
+import useCategorySubSide from "@core/hook/use-category-subSIde";
 import useDesktop from "@core/hook/use-desktop";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";

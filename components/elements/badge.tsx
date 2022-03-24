@@ -43,7 +43,6 @@ const Style = styled.div<IPropsStyle>`
 `;
 
 // Component
-
 interface IPropsBadge {
   children?: React.ReactNode;
   variants?: string;
