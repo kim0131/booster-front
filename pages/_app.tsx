@@ -33,6 +33,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
         <Footer />
         <div>{message}</div>
+        <div id="modal" />
+        <div id="toast" />
       </SessionProvider>
     </ThemeProvider>
   );
