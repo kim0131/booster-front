@@ -1,20 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
+import styled from "@emotion/styled";
+import useDesktop from "@core/hook/use-desktop";
+import { useRouter } from "next/router";
+import { signOut, useSession } from "next-auth/react";
 import Button from "@components/elements/button";
 import Logo from "@components/elements/logo";
 import TextField from "@components/elements/text-field";
-import { IconMenu, IconProfile, IconSearch } from "@components/icons";
+import {
+  IconClose,
+  IconMenu,
+  IconProfile,
+  IconSearch,
+} from "@components/icons";
 import {
   globalNavigation,
   globalNavigationMore,
   globalNavigationMy,
 } from "@core/config/navigation";
-import useDesktop from "@core/hook/use-desktop";
-import styled from "@emotion/styled";
-import { useRouter } from "next/router";
-import React, { useEffect } from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
 import Dropdown from "@components/elements/dropdown";
 import { accountsNavigation } from "@core/config/navigation";
+import Portal from "./portal";
 
 interface IPropsStyle {
   isRoute?: boolean;
@@ -127,12 +133,47 @@ const Style = {
     align-items: center;
     gap: 0.5rem;
   `,
+  MobileMenu: {
+    Container: styled.div`
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      padding: 1.25rem;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      background-color: ${props => props.theme.color.white};
+    `,
+    Header: styled.div`
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    `,
+    Button: styled.button``,
+    Menu: styled.button`
+      text-align: left;
+      padding: 1.25rem 0;
+      font-size: ${props => props.theme.fontSize.sub3};
+      line-height: ${props => props.theme.lineHeight.sub3};
+    `,
+    Divider: styled.div`
+      height: 1px;
+      box-shadow: ${props => props.theme.shadow.inset.bottom};
+    `,
+  },
 };
 
 const Header = () => {
+  const { isDesktop } = useDesktop();
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { isDesktop } = useDesktop();
+  const [state, setState] = useState({
+    mobileMenu: false,
+    mobileSearch: false,
+  });
 
   useEffect(() => {
     // if (status == "unauthenticated" && router.route != "/accounts") {
@@ -241,8 +282,52 @@ const Header = () => {
               </Style.NavItem>
             ))}
           </Style.Nav>
-          <IconMenu />
+          <Style.MobileMenu.Button
+            onClick={() => setState({ ...state, mobileMenu: true })}
+          >
+            <IconMenu />
+          </Style.MobileMenu.Button>
         </Style.MobileWrapper>
+      )}
+      {state.mobileMenu && !isDesktop && (
+        <Portal type="modal">
+          <Style.MobileMenu.Container>
+            <Style.MobileMenu.Header>
+              Booster
+              <Style.MobileMenu.Button></Style.MobileMenu.Button>
+              <Button
+                color="transparent"
+                size="large"
+                onClick={() => setState({ ...state, mobileMenu: false })}
+              >
+                <IconClose />
+              </Button>
+            </Style.MobileMenu.Header>
+            <Style.MobileMenu.Menu>공지사항</Style.MobileMenu.Menu>
+            <Style.MobileMenu.Menu>고객센터</Style.MobileMenu.Menu>
+            <Style.MobileMenu.Divider />
+          </Style.MobileMenu.Container>
+        </Portal>
+      )}
+      {state.mobileSearch && !isDesktop && (
+        <Portal type="modal">
+          <Style.MobileMenu.Container>
+            <Style.MobileMenu.Header>
+              Booster
+              <Style.MobileMenu.Button></Style.MobileMenu.Button>
+              <Button
+                color="transparent"
+                size="large"
+                onClick={() => setState({ ...state, mobileMenu: false })}
+              >
+                <IconClose />
+              </Button>
+            </Style.MobileMenu.Header>
+            <Style.MobileMenu.Menu>공지사항</Style.MobileMenu.Menu>
+            <Style.MobileMenu.Menu>고객센터</Style.MobileMenu.Menu>
+            <Style.MobileMenu.Divider />
+          </Style.MobileMenu.Container>
+        </Portal>
       )}
     </Style.Container>
   );

@@ -278,6 +278,7 @@ interface IPropsTextField {
   type?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 const TextField = ({
@@ -297,6 +298,7 @@ const TextField = ({
   type = "text",
   onChange,
   onFocus,
+  onBlur,
 }: IPropsTextField) => (
   <Style.Container size={size}>
     {label && <Style.Label size={size}>{label}</Style.Label>}
@@ -311,6 +313,7 @@ const TextField = ({
         maxLength={maxLength}
         onChange={onChange}
         onFocus={onFocus}
+        onBlur={onBlur}
       />
       {prefix && <Style.Prefix size={size}>{prefix}</Style.Prefix>}
       {suffix && <Style.Suffix size={size}>{suffix}</Style.Suffix>}
