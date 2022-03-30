@@ -75,6 +75,8 @@ const Style = {
       }
     }};
     position: relative;
+    transition-property: width;
+    transition-duration: 200ms;
     cursor: ${props => (props.isDisabled ? "not-allowed" : "text")};
     padding-left: ${props => {
       switch (props.size) {
@@ -276,6 +278,7 @@ interface IPropsTextField {
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
   type?: string;
+  ref?: React.RefObject<HTMLInputElement>;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
@@ -289,6 +292,7 @@ const TextField = ({
   value,
   caption,
   error,
+  ref,
   maxLength,
   isDisabled = false,
   isRounded = false,
@@ -311,6 +315,7 @@ const TextField = ({
         disabled={isDisabled}
         placeholder={placeholder}
         maxLength={maxLength}
+        ref={ref}
         onChange={onChange}
         onFocus={onFocus}
         onBlur={onBlur}

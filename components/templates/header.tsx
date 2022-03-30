@@ -164,6 +164,27 @@ const Style = {
       box-shadow: ${props => props.theme.shadow.inset.bottom};
     `,
   },
+  MobileSearch: {
+    Container: styled.div`
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 10;
+    `,
+    Wrapper: styled.div`
+      flex: none;
+      padding: 1.5rem;
+      background-color: ${props => props.theme.color.white};
+      box-shadow: ${props => props.theme.shadow.inset.bottom};
+    `,
+    CloseBlock: styled.div`
+      flex: 1 1 0%;
+    `,
+  },
 };
 
 const Header = () => {
@@ -173,6 +194,7 @@ const Header = () => {
   const [state, setState] = useState({
     mobileMenu: false,
     mobileSearch: false,
+    desktopSearch: false,
   });
 
   useEffect(() => {
@@ -201,7 +223,7 @@ const Header = () => {
   };
 
   const oncClickPUshWrite = () => {
-    router.push("/create");
+    router.push("/topics/create");
   };
 
   return (
@@ -232,6 +254,9 @@ const Header = () => {
               isRounded
               size="small"
               placeholder="검색"
+              width={state.desktopSearch ? "16rem" : "10rem"}
+              onFocus={() => setState({ ...state, desktopSearch: true })}
+              onBlur={() => setState({ ...state, desktopSearch: false })}
               prefix={<IconSearch />}
             />
           )}
@@ -262,7 +287,11 @@ const Header = () => {
             </Button>
           )}
           {!isDesktop && (
-            <Button variants="ghost" size="small">
+            <Button
+              variants="ghost"
+              size="small"
+              onClick={() => setState({ ...state, mobileSearch: true })}
+            >
               <IconSearch />
             </Button>
           )}
@@ -305,28 +334,39 @@ const Header = () => {
             </Style.MobileMenu.Header>
             <Style.MobileMenu.Menu>공지사항</Style.MobileMenu.Menu>
             <Style.MobileMenu.Menu>고객센터</Style.MobileMenu.Menu>
-            <Style.MobileMenu.Divider />
+            {/* <Style.MobileMenu.Divider /> */}
           </Style.MobileMenu.Container>
         </Portal>
       )}
       {state.mobileSearch && !isDesktop && (
         <Portal type="modal">
-          <Style.MobileMenu.Container>
-            <Style.MobileMenu.Header>
-              Booster
-              <Style.MobileMenu.Button></Style.MobileMenu.Button>
-              <Button
-                color="transparent"
+          <Style.MobileSearch.Container>
+            <Style.MobileSearch.Wrapper>
+              <TextField
+                isRounded
                 size="large"
-                onClick={() => setState({ ...state, mobileMenu: false })}
-              >
-                <IconClose />
-              </Button>
-            </Style.MobileMenu.Header>
-            <Style.MobileMenu.Menu>공지사항</Style.MobileMenu.Menu>
-            <Style.MobileMenu.Menu>고객센터</Style.MobileMenu.Menu>
-            <Style.MobileMenu.Divider />
-          </Style.MobileMenu.Container>
+                placeholder="검색"
+                width="100%"
+                prefix={<IconSearch />}
+                suffix={
+                  <Button
+                    isRounded
+                    size="small"
+                    color="transparent"
+                    onClick={e => {
+                      e.stopPropagation();
+                      setState({ ...state, mobileSearch: false });
+                    }}
+                  >
+                    <IconClose />
+                  </Button>
+                }
+              />
+            </Style.MobileSearch.Wrapper>
+            <Style.MobileSearch.CloseBlock
+              onClick={() => setState({ ...state, mobileSearch: false })}
+            />
+          </Style.MobileSearch.Container>
         </Portal>
       )}
     </Style.Container>
