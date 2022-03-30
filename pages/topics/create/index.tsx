@@ -10,6 +10,7 @@ import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
+
 const CreateTopic: NextPage = () => {
   const router = useRouter();
   const [state, setState] = useState("");
