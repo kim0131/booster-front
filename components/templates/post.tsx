@@ -4,7 +4,7 @@ import Pagination from "@components/elements/pagination";
 import { Body3 } from "@components/elements/types";
 import theme from "@components/styles/theme";
 import { getCreateTime } from "@core/util/get-create-time";
-import useDesktop from "@core/hook/use-desktop";
+import { useDesktop } from "@core/hook/use-desktop";
 import useInsightList from "@core/hook/use-insight-list";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";

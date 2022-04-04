@@ -13,7 +13,7 @@ import {
 } from "@components/icons";
 import theme from "@components/styles/theme";
 import { getCreateTime } from "@core/util/get-create-time";
-import useDesktop from "@core/hook/use-desktop";
+import { useDesktop } from "@core/hook/use-desktop";
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -123,7 +123,7 @@ const Style = {
 
 interface IPropsBoard {
   category: string | string[] | undefined;
-  Datas: {
+  Datas?: {
     id: number;
     category: string;
     title: string;

@@ -134,7 +134,7 @@ const topicfilterfetcher = async (param: any) => {
   return result;
 };
 
-const useTopicList = () => {
+export const useTopicList = () => {
   const { data: session }: any = useSession();
   const { data: topicList, mutate: topickListMutate } = useSWR(
     { url: "/api2/topic/list", idx: session?.user?.idx },
@@ -160,5 +160,3 @@ export const useTopicListFilter = (category: any) => {
 
   return { topicListFilter, isValidating };
 };
-
-export default useTopicList;

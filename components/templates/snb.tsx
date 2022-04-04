@@ -1,10 +1,11 @@
-import { Body2 } from "@components/elements/types";
-import { IconChevronDown } from "@components/icons";
-import useCategorySubSide from "@core/hook/use-category-subSIde";
-import useDesktop from "@core/hook/use-desktop";
-import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { ISnbData } from "@core/interfaces/snb";
+import styled from "@emotion/styled";
+import { Body2 } from "@components/elements/types";
+import { IconChevronDown } from "@components/icons";
+import { useCategorySubSide } from "@core/hook/use-category-subSIde";
+import { useDesktop } from "@core/hook/use-desktop";
 
 interface IPropsStyle {
   isRoute?: boolean;
@@ -89,81 +90,59 @@ const Style = {
 };
 
 interface IPropsSnb {
-  snbDatas?: {
-    id: number;
-    category: string;
-    menus: { id: number; content: string; param: string }[];
-  }[];
+  snbDatas: ISnbData[];
   category?: string | string[] | undefined;
 }
 
-const Snb = ({ category }: IPropsSnb) => {
+const Snb = ({ snbDatas, category }: IPropsSnb) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
-  const { categorySubSide } = useCategorySubSide("topic");
-  const [lnbData, setLnbData] = useState<any>();
-
-  useEffect(() => {
-    if (categorySubSide) {
-      setLnbData(categorySubSide);
-    }
-  }, [categorySubSide, category, router]);
   const onClickRouter = (param: string) => {
     router.push(`/topics/?category=${param}`);
   };
 
-  return (
-    <>
-      {lnbData && isDesktop ? (
-        <>
-          <Style.Desktop.Container>
-            {lnbData &&
-              lnbData.map((snbData: any) => (
-                <Style.Desktop.Category.Container key={snbData.id}>
-                  <Body2 isBold>{snbData.category}</Body2>
-                  <Style.Desktop.Category.Block>
-                    {snbData.menus &&
-                      snbData.menus.map((menu: any) => (
-                        <Style.Desktop.Category.Button
-                          key={menu.id}
-                          isRoute={menu.content === category}
-                          onClick={() => onClickRouter(menu.content)}
-                        >
-                          {menu.content}
-                        </Style.Desktop.Category.Button>
-                      ))}
-                  </Style.Desktop.Category.Block>
-                </Style.Desktop.Category.Container>
+  return isDesktop ? (
+    <Style.Desktop.Container>
+      {snbDatas.map((snbData: ISnbData) => (
+        <Style.Desktop.Category.Container key={snbData.id}>
+          <Body2 isBold>{snbData.category}</Body2>
+          <Style.Desktop.Category.Block>
+            {snbData.menus &&
+              snbData.menus.map((menu: any) => (
+                <Style.Desktop.Category.Button
+                  key={menu.id}
+                  isRoute={menu.content === category}
+                  onClick={() => onClickRouter(menu.content)}
+                >
+                  {menu.content}
+                </Style.Desktop.Category.Button>
               ))}
-          </Style.Desktop.Container>
-        </>
-      ) : (
-        <>
-          <Style.Mobile.Wrapper>
-            <Style.Mobile.Selectbox defaultValue={category}>
-              {lnbData &&
-                lnbData.map((snbData: any) => (
-                  <optgroup key={snbData.id} label={snbData.category}>
-                    {snbData.menus &&
-                      snbData.menus.map((menu: any) => (
-                        <option
-                          key={menu.id}
-                          value={menu.param}
-                          onClick={() => onClickRouter(menu.content)}
-                        >
-                          {menu.content}
-                        </option>
-                      ))}
-                  </optgroup>
-                ))}
-            </Style.Mobile.Selectbox>
-            <Style.Mobile.Icon>
-              <IconChevronDown />
-            </Style.Mobile.Icon>
-          </Style.Mobile.Wrapper>
-        </>
-      )}
-    </>
+          </Style.Desktop.Category.Block>
+        </Style.Desktop.Category.Container>
+      ))}
+    </Style.Desktop.Container>
+  ) : (
+    <Style.Mobile.Wrapper>
+      <Style.Mobile.Selectbox defaultValue={category}>
+        {snbDatas.map((snbData: any) => (
+          <optgroup key={snbData.id} label={snbData.category}>
+            {snbData.menus &&
+              snbData.menus.map((menu: any) => (
+                <option
+                  key={menu.id}
+                  value={menu.param}
+                  onClick={() => onClickRouter(menu.content)}
+                >
+                  {menu.content}
+                </option>
+              ))}
+          </optgroup>
+        ))}
+      </Style.Mobile.Selectbox>
+      <Style.Mobile.Icon>
+        <IconChevronDown />
+      </Style.Mobile.Icon>
+    </Style.Mobile.Wrapper>
   );
 };
 

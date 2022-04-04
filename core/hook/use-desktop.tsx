@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import useSWR from "swr";
 
-const useDesktop = () => {
+export const useDesktop = () => {
   const { data: isDesktop, mutate } = useSWR("desktop");
 
   const updateDesktop = useCallback(e => {
@@ -31,5 +31,3 @@ const useDesktop = () => {
     isDesktop,
   };
 };
-
-export default useDesktop;
