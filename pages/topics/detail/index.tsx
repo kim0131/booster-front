@@ -17,6 +17,7 @@ const TopicDetail: NextPage = () => {
   const { topicDetail } = useTopicDetail(router.query.id);
   const { topicListFilter } = useTopicListFilter(topicDetail?.category);
   const { categorySubSide } = useCategorySubSide("topic");
+
   // let { id } = router.query;
   // const [topicId, setTopicId] = useState(id);
 

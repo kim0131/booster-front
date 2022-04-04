@@ -9,7 +9,7 @@ import Loader from "@components/elements/loader";
 import SnbLayout from "@components/layouts/snb-layout";
 import Board from "@components/templates/board";
 import Snb from "@components/templates/snb";
-import useHotTopic from "@core/hook/use-hottopic";
+import { useHotTopic } from "@core/hook/use-hottopic";
 
 const Topics: NextPage = () => {
   const router = useRouter();
