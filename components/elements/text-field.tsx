@@ -279,6 +279,7 @@ interface IPropsTextField {
   suffix?: React.ReactNode;
   type?: string;
   ref?: React.RefObject<HTMLInputElement>;
+  readonly?: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
@@ -300,6 +301,7 @@ const TextField = ({
   suffix,
   placeholder,
   type = "text",
+  readonly,
   onChange,
   onFocus,
   onBlur,
@@ -319,6 +321,7 @@ const TextField = ({
         onChange={onChange}
         onFocus={onFocus}
         onBlur={onBlur}
+        readOnly={readonly ? true : false}
       />
       {prefix && <Style.Prefix size={size}>{prefix}</Style.Prefix>}
       {suffix && <Style.Suffix size={size}>{suffix}</Style.Suffix>}

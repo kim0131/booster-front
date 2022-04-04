@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { useState } from "react";
 import axios from "axios";
-import router from "next/router";
+import router, { useRouter } from "next/router";
 import Button from "@components/elements/button";
 import TextField from "@components/elements/text-field";
 import { IAccountsData } from "@core/interfaces/accounts";
@@ -17,6 +17,7 @@ import {
   mb_pw_vaildate,
 } from "@core/validate/signupvalidate";
 import { signIn } from "next-auth/react";
+import useGetsEncData from "@core/hook/use-certification";
 
 interface IStateSignup {
   data: IAccountsData;
@@ -25,6 +26,9 @@ interface IStateSignup {
 }
 
 const Signup: NextPage = () => {
+  const router = useRouter();
+  const { ph: mb_ph, name: mb_name } = router.query;
+  const { sEnData } = useGetsEncData();
   const [state, setState] = useState<IStateSignup>({
     data: {
       mb_id: "",
@@ -65,6 +69,8 @@ const Signup: NextPage = () => {
       data: {
         ...state.data,
         [name]: value,
+        mb_ph: mb_ph,
+        mb_name: mb_name,
       },
       invalid: {
         ...state.invalid,
@@ -188,6 +194,16 @@ const Signup: NextPage = () => {
       : setState({ ...state, page: 1 });
   };
 
+  const onClickCertification = () => {
+    const form: HTMLFormElement | null | any =
+      document.querySelector("#form_chk");
+    form.action =
+      "https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb";
+    form.EncodeData.value = sEnData;
+    //submit! (본인인증 화면으로 전환)
+    form.submit();
+  };
+
   return (
     <AccountsLayout
       title={
@@ -198,42 +214,61 @@ const Signup: NextPage = () => {
       }
       section1={
         state.page === 1 ? (
-          <>
-            <Body2>아이디 및 비밀번호 정보</Body2>
-            <TextField
-              name="mb_id"
-              placeholder="아이디을 입력하세요."
-              size="large"
-              value={state.data.mb_id}
-              maxLength={50}
-              onChange={onChangeSignup}
-              onFocus={onFocusSignup}
-              error={state.invalid.mb_id}
-            />
-            <TextField
-              name="mb_pw"
-              placeholder="비밀번호를 입력하세요"
-              size="large"
-              value={state.data.mb_pw}
-              maxLength={50}
-              onChange={onChangeSignup}
-              onFocus={onFocusSignup}
-              error={state.invalid.mb_pw}
-              type="password"
-            />
-            <TextField
-              name="mb_pw2"
-              placeholder="비밀번호 확인"
-              size="large"
-              value={state.data.mb_pw2}
-              maxLength={50}
-              onChange={onChangeSignup}
-              onFocus={onFocusSignup}
-              error={state.invalid.mb_pw2}
-              type="password"
-            />
-          </>
+          !mb_ph ? (
+            <>
+              {" "}
+              <Button
+                variants="solid"
+                color="primary"
+                size="large"
+                onClick={onClickCertification}
+              >
+                휴대폰 인증
+              </Button>
+            </>
+          ) : (
+            <>
+              <Body2>아이디 및 비밀번호 정보</Body2>
+              <TextField
+                name="mb_id"
+                placeholder="아이디을 입력하세요."
+                size="large"
+                value={state.data.mb_id}
+                maxLength={50}
+                onChange={onChangeSignup}
+                onFocus={onFocusSignup}
+                error={state.invalid.mb_id}
+              />
+              <TextField
+                name="mb_pw"
+                placeholder="비밀번호를 입력하세요"
+                size="large"
+                value={state.data.mb_pw}
+                maxLength={50}
+                onChange={onChangeSignup}
+                onFocus={onFocusSignup}
+                error={state.invalid.mb_pw}
+                type="password"
+              />
+              <TextField
+                name="mb_pw2"
+                placeholder="비밀번호 확인"
+                size="large"
+                value={state.data.mb_pw2}
+                maxLength={50}
+                onChange={onChangeSignup}
+                onFocus={onFocusSignup}
+                error={state.invalid.mb_pw2}
+                type="password"
+              />
+            </>
+          )
         ) : (
+          ""
+        )
+      }
+      section2={
+        state.page === 2 && (
           <>
             <Body2>회원 정보</Body2>
             <TextField
@@ -256,12 +291,6 @@ const Signup: NextPage = () => {
               onChange={onChangeSignup}
               onFocus={onFocusSignup}
             />
-          </>
-        )
-      }
-      section2={
-        state.page === 2 && (
-          <>
             <Body2>연락처</Body2>
             <TextField
               name="mb_name"
@@ -272,6 +301,7 @@ const Signup: NextPage = () => {
               maxLength={50}
               onChange={onChangeSignup}
               onFocus={onFocusSignup}
+              readonly={true}
             />
             <TextField
               name="mb_ph"
@@ -282,6 +312,7 @@ const Signup: NextPage = () => {
               maxLength={50}
               onChange={onChangeSignup}
               onFocus={onFocusSignup}
+              readonly={true}
             />
           </>
         )
@@ -289,14 +320,18 @@ const Signup: NextPage = () => {
       section3={
         <>
           {state.page == 1 ? (
-            <Button
-              variants="solid"
-              color="primary"
-              size="large"
-              onClick={onClickNext}
-            >
-              다음
-            </Button>
+            !mb_ph ? (
+              <></>
+            ) : (
+              <Button
+                variants="solid"
+                color="primary"
+                size="large"
+                onClick={onClickNext}
+              >
+                다음
+              </Button>
+            )
           ) : (
             <Button
               variants="solid"
@@ -311,6 +346,11 @@ const Signup: NextPage = () => {
           <Button variants="light" size="large" onClick={onClickCancel}>
             {state.page == 1 ? "취소" : "이전"}
           </Button>
+          <form name="form" method="post" id="form_chk">
+            <input type="hidden" name="m" value="checkplusService" />
+
+            <input type="hidden" name="EncodeData" value="<%=sEncData%>" />
+          </form>
         </>
       }
     />
