@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import useDesktop from "@core/hook/use-desktop";
+import {useDesktop} from "@core/hook/use-desktop";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
 import Button from "@components/elements/button";
