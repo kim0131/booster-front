@@ -9,6 +9,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import TopicComment from "@components/templates/topic-comment";
+import { useCategorySubSide } from "@core/hook/use-category-subSIde";
 
 const TopicDetail: NextPage = () => {
   const router = useRouter();
@@ -17,6 +18,7 @@ const TopicDetail: NextPage = () => {
   const [category, setCategory] = useState();
   const { topicDetail } = useTopicDetail(topicId);
   const { topicListFilter } = useTopicListFilter(category);
+  const { categorySubSide } = useCategorySubSide("topic");
 
   useEffect(() => {
     setTopicId(id);
@@ -34,7 +36,7 @@ const TopicDetail: NextPage = () => {
       <SnbLayout>
         {topicDetail && (
           <>
-            <Snb category={category} />
+            <Snb category={category} snbDatas={categorySubSide} />
             <TopicContentLayout id={topicId} data={topicDetail}>
               <TopicComment id={topicId} />
               {topicListFilter && (
