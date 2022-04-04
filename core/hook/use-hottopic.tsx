@@ -53,7 +53,7 @@ const hotTopicFetcher = async (param: any) => {
   return result.slice(0, 10);
 };
 
-export const useHotTopic = () => {
+const useHotTopic = () => {
   const { data: session }: any = useSession();
   const { data: hotTopic } = useSWR(
     { url: "/api2/topic/hot", idx: session?.user?.idx },
@@ -62,3 +62,5 @@ export const useHotTopic = () => {
 
   return { hotTopic };
 };
+
+export default useHotTopic;
