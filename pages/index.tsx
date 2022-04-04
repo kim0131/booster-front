@@ -2,8 +2,9 @@ import type { NextPage } from "next";
 import Carousel from "@components/templates/carousel";
 import HomeLayout from "@components/layouts/home-layout";
 import BestWidget from "@components/templates/best-widget";
-import useHotTopic from "@core/hook/use-hottopic";
+import { useHotTopic } from "@core/hook/use-hottopic";
 import { useCategoryListHome } from "@core/hook/use-catagorylist";
+import Skeleton from "@components/elements/skeleton";
 
 const Home: NextPage = () => {
   const { hotTopic } = useHotTopic();
