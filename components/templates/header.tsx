@@ -5,7 +5,7 @@ import useDesktop from "@core/hook/use-desktop";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
 import Button from "@components/elements/button";
-import Logo from "@components/elements/logo";
+import { Logotype, Symbol } from "@components/elements/logo";
 import TextField from "@components/elements/text-field";
 import {
   IconClose,
@@ -229,7 +229,7 @@ const Header = () => {
   return (
     <Style.Container>
       <Style.Wrapper>
-        <Logo onClick={onClickLink} />
+        <Logotype onClick={onClickLink} width="108px" height="24px" />
         {isDesktop && (
           <Style.Nav>
             {globalNavigation.map(nav => (
@@ -322,7 +322,7 @@ const Header = () => {
         <Portal type="modal">
           <Style.MobileMenu.Container>
             <Style.MobileMenu.Header>
-              Booster
+              <Symbol width="30px" height="36px" />
               <Style.MobileMenu.Button></Style.MobileMenu.Button>
               <Button
                 color="transparent"
