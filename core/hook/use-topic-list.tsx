@@ -41,8 +41,8 @@ const topicfetcher = async (param: any) => {
   return result;
 };
 
-const topicfilterfetcher = async (param: any) => {
-  const categoey = param.url.slice(17);
+export const topicfilterfetcher = async (param: any) => {
+  const category = param.url.slice(17);
   const member_idx = param.idx;
   let result: any = [];
   const CurrentTime = new Date();
@@ -60,7 +60,7 @@ const topicfilterfetcher = async (param: any) => {
           (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 60),
         );
 
-        if (categoey == "" || categoey == "전체") {
+        if (category == "" || category == "전체") {
           result.push({
             rn: content.rn,
             id: content.idx,
@@ -76,7 +76,7 @@ const topicfilterfetcher = async (param: any) => {
             create: elapsedTime,
             likeCnt: content.likeCnt,
           });
-        } else if (categoey == "스크랩") {
+        } else if (category == "스크랩") {
           if (content.scrap) {
             result.push({
               rn: content.rn,
@@ -94,7 +94,7 @@ const topicfilterfetcher = async (param: any) => {
               likeCnt: content.likeCnt,
             });
           }
-        } else if (categoey == "내가 작성한 글") {
+        } else if (category == "내가 작성한 글") {
           if (content.mb_id == param.mb_id) {
             result.push({
               rn: content.rn,
@@ -112,7 +112,7 @@ const topicfilterfetcher = async (param: any) => {
               likeCnt: content.likeCnt,
             });
           }
-        } else if (content.board_name == categoey) {
+        } else if (content.board_name == category) {
           result.push({
             rn: content.rn,
             id: content.idx,
