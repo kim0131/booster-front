@@ -1,5 +1,6 @@
 import theme from "@components/styles/theme";
 import useGetContrast from "@core/hook/use-get-contrast";
+import useMainBanner from "@core/hook/use-main-baaner";
 import { ICarouselData } from "@core/interfaces/carousel";
 import styled from "@emotion/styled";
 import { LayoutGroup, motion } from "framer-motion";
@@ -129,20 +130,23 @@ const Item = ({ id, thumbnailColor, title, content, url }: ICarouselData) => {
 
 const Carousel = () => {
   const [state, setState] = useState([0]);
+  const { MainBannerList } = useMainBanner();
+  console.log(MainBannerList);
   useEffect(() => {});
   return (
     <Style.Container>
       <LayoutGroup>
-        {sampleDatas.map(data => (
-          <Item
-            id={data.id}
-            key={data.id}
-            thumbnailColor={data.thumbnailColor}
-            title={data.title}
-            content={data.content}
-            url={data.url}
-          />
-        ))}
+        {MainBannerList &&
+          MainBannerList.map((data: any) => (
+            <Item
+              id={data.id}
+              key={data.id}
+              thumbnailColor={data.thumbnailColor}
+              title={data.title}
+              content={data.content}
+              url={data.url}
+            />
+          ))}
       </LayoutGroup>
     </Style.Container>
   );

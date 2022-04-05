@@ -103,41 +103,43 @@ const Snb = ({ snbDatas, category }: IPropsSnb) => {
 
   return isDesktop ? (
     <Style.Desktop.Container>
-      {snbDatas.map((snbData: ISnbData) => (
-        <Style.Desktop.Category.Container key={snbData.id}>
-          <Body2 isBold>{snbData.category}</Body2>
-          <Style.Desktop.Category.Block>
-            {snbData.menus &&
-              snbData.menus.map((menu: any) => (
-                <Style.Desktop.Category.Button
-                  key={menu.id}
-                  isRoute={menu.content === category}
-                  onClick={() => onClickRouter(menu.content)}
-                >
-                  {menu.content}
-                </Style.Desktop.Category.Button>
-              ))}
-          </Style.Desktop.Category.Block>
-        </Style.Desktop.Category.Container>
-      ))}
+      {snbDatas &&
+        snbDatas.map((snbData: ISnbData) => (
+          <Style.Desktop.Category.Container key={snbData.id}>
+            <Body2 isBold>{snbData.category}</Body2>
+            <Style.Desktop.Category.Block>
+              {snbData.menus &&
+                snbData.menus.map((menu: any) => (
+                  <Style.Desktop.Category.Button
+                    key={menu.id}
+                    isRoute={menu.content === category}
+                    onClick={() => onClickRouter(menu.content)}
+                  >
+                    {menu.content}
+                  </Style.Desktop.Category.Button>
+                ))}
+            </Style.Desktop.Category.Block>
+          </Style.Desktop.Category.Container>
+        ))}
     </Style.Desktop.Container>
   ) : (
     <Style.Mobile.Wrapper>
       <Style.Mobile.Selectbox defaultValue={category}>
-        {snbDatas.map((snbData: any) => (
-          <optgroup key={snbData.id} label={snbData.category}>
-            {snbData.menus &&
-              snbData.menus.map((menu: any) => (
-                <option
-                  key={menu.id}
-                  value={menu.param}
-                  onClick={() => onClickRouter(menu.content)}
-                >
-                  {menu.content}
-                </option>
-              ))}
-          </optgroup>
-        ))}
+        {snbDatas &&
+          snbDatas.map((snbData: any) => (
+            <optgroup key={snbData.id} label={snbData.category}>
+              {snbData.menus &&
+                snbData.menus.map((menu: any) => (
+                  <option
+                    key={menu.id}
+                    value={menu.param}
+                    onClick={() => onClickRouter(menu.content)}
+                  >
+                    {menu.content}
+                  </option>
+                ))}
+            </optgroup>
+          ))}
       </Style.Mobile.Selectbox>
       <Style.Mobile.Icon>
         <IconChevronDown />
