@@ -17,7 +17,6 @@ import {
   mb_pw_vaildate,
 } from "@core/validate/signupvalidate";
 import { signIn } from "next-auth/react";
-import useGetsEncData from "@core/hook/use-certification";
 
 interface IStateSignup {
   data: IAccountsData;
@@ -28,7 +27,6 @@ interface IStateSignup {
 const Signup: NextPage = () => {
   const router = useRouter();
   const { ph: mb_ph, name: mb_name } = router.query;
-  const { sEnData } = useGetsEncData();
   const [state, setState] = useState<IStateSignup>({
     data: {
       mb_id: "",
@@ -195,11 +193,13 @@ const Signup: NextPage = () => {
   };
 
   const onClickCertification = () => {
+    console.log(process.env.CERTIFICATION_TOKEN);
     const form: HTMLFormElement | null | any =
       document.querySelector("#form_chk");
     form.action =
       "https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb";
-    form.EncodeData.value = sEnData;
+    form.EncodeData.value = process.env.CERTIFICATION_TOKEN;
+
     //submit! (본인인증 화면으로 전환)
     form.submit();
   };
