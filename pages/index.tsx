@@ -4,8 +4,6 @@ import HomeLayout from "@components/layouts/home-layout";
 import BestWidget from "@components/templates/best-widget";
 import { useHotTopic } from "@core/hook/use-hot-topic";
 import { useCategoryListHome } from "@core/hook/use-catagory-list";
-import Skeleton from "@components/elements/skeleton";
-import { HomeSkeletonCarouselLayout } from "@components/layouts/skeleton/home-skeleton";
 
 const Home: NextPage = () => {
   const { hotTopic } = useHotTopic();
