@@ -6,6 +6,7 @@ module.exports = {
   env: {
     BASE_URL: process.env.BASE_URL,
     SECRET: process.env.SECRET,
+    CERTIFICATION_TOKEN: process.env.CERTIFICATION_TOKEN,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   },
   async rewrites() {
