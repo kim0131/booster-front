@@ -9,8 +9,8 @@ pipeline {
         }
         stage("Deploy") {
             steps {
-                sh "sudo rm -rf /var/www/jenkins-react-app"
-                sh "sudo cp -r ${WORKSPACE}/build/ /var/www/jenkins-react-app/"
+                sh "sudo npm run start"
+                sh "sudo cp -r ${WORKSPACE}/.next/ /var/www/jenkins-react-app/"
             }
         }
     }
