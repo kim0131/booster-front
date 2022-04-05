@@ -1,16 +1,9 @@
 import type { NextPage } from "next";
-import Button from "@components/elements/button";
-import TextField from "@components/elements/text-field";
-import { IconAdd } from "@components/icons";
-import useToast from "@core/hook/use-toast";
-import TextAreaTopicContent from "@components/elements/text-area-topic-content";
 import Carousel from "@components/templates/carousel";
 import HomeLayout from "@components/layouts/home-layout";
 import BestWidget from "@components/templates/best-widget";
-import useHotTopic from "@core/hook/use-hottopic";
-import React from "react";
-import { useCategoryListHome } from "@core/hook/use-catagorylist";
-import useAdsList from "@core/hook/use-Ads";
+import { useHotTopic } from "@core/hook/use-hot-topic";
+import { useCategoryListHome } from "@core/hook/use-catagory-list";
 
 const Home: NextPage = () => {
   const { hotTopic } = useHotTopic();
@@ -26,14 +19,13 @@ const Home: NextPage = () => {
         {categoryListHome &&
           categoryListHome.map((data: any) => {
             return (
-              <React.Fragment key={data.idx}>
-                <BestWidget
-                  title={data.bo_subject}
-                  col={1}
-                  url={data.bo_subject}
-                  datas={data.contents}
-                />
-              </React.Fragment>
+              <BestWidget
+                title={data.bo_subject}
+                col={1}
+                url={data.bo_subject}
+                datas={data.contents}
+                key={data.idx}
+              />
             );
           })}
       </HomeLayout>

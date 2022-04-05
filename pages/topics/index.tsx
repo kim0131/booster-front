@@ -1,52 +1,41 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import type { NextPage } from "next";
+import { useCategorySubSide } from "@core/hook/use-category-subSIde";
+import { useTopicListFilter } from "@core/hook/use-topic-list";
+import { useRouter } from "next/router";
 import Loader from "@components/elements/loader";
 import SnbLayout from "@components/layouts/snb-layout";
 import Board from "@components/templates/board";
 import Snb from "@components/templates/snb";
-import useCategorySubSide from "@core/hook/use-category-subSIde";
-import useHotTopic from "@core/hook/use-hottopic";
-import useTopicList, { useTopicListFilter } from "@core/hook/use-topic-list";
-import axios from "axios";
-import type { NextPage } from "next";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { useSWRConfig } from "swr";
+import { useHotTopic } from "@core/hook/use-hot-topic";
 
 const Topics: NextPage = () => {
   const router = useRouter();
-  const { category } = router.query;
-  const [selectCategory, setCategory] = useState<any>("");
-  const { categorySubSide } = useCategorySubSide("topic");
   const { hotTopic } = useHotTopic();
-  const { topicListFilter, isValidating } = useTopicListFilter(selectCategory);
-
-  useEffect(() => {
-    setCategory(category);
-  }, [category, router, topicListFilter, hotTopic]);
+  const { categorySubSide } = useCategorySubSide("topic");
+  const { category } = router.query || "";
+  const { topicListFilter, isValidating } = useTopicListFilter(category);
 
   const onClickRouter = (param: any) => {
     router.push(`/topics/detail?id=${param}`);
   };
 
+  console.log(categorySubSide, category);
+
   return (
-    <>
-      <SnbLayout>
-        {categorySubSide && <Snb category={selectCategory} />}
-        {topicListFilter && (
-          <>
-            {!isValidating && (
-              <Board
-                category={selectCategory}
-                Datas={category == "인기글" ? hotTopic : topicListFilter}
-                onClickRouter={onClickRouter}
-              />
-            )}
-          </>
-        )}
-        {isValidating && <Loader color="gray"></Loader>}
-      </SnbLayout>
-    </>
+    <SnbLayout>
+      {categorySubSide && (
+        <Snb category={category} snbDatas={categorySubSide} />
+      )}
+      {topicListFilter && !isValidating && (
+        <Board
+          category={category}
+          Datas={category == "인기글" ? hotTopic : topicListFilter}
+          onClickRouter={onClickRouter}
+        />
+      )}
+      {isValidating && <Loader color="gray"></Loader>}
+    </SnbLayout>
   );
 };
 

@@ -75,6 +75,8 @@ const Style = {
       }
     }};
     position: relative;
+    transition-property: width;
+    transition-duration: 200ms;
     cursor: ${props => (props.isDisabled ? "not-allowed" : "text")};
     padding-left: ${props => {
       switch (props.size) {
@@ -276,8 +278,11 @@ interface IPropsTextField {
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
   type?: string;
+  ref?: React.RefObject<HTMLInputElement>;
+  readonly?: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 const TextField = ({
@@ -288,6 +293,7 @@ const TextField = ({
   value,
   caption,
   error,
+  ref,
   maxLength,
   isDisabled = false,
   isRounded = false,
@@ -295,8 +301,10 @@ const TextField = ({
   suffix,
   placeholder,
   type = "text",
+  readonly,
   onChange,
   onFocus,
+  onBlur,
 }: IPropsTextField) => (
   <Style.Container size={size}>
     {label && <Style.Label size={size}>{label}</Style.Label>}
@@ -309,8 +317,11 @@ const TextField = ({
         disabled={isDisabled}
         placeholder={placeholder}
         maxLength={maxLength}
+        ref={ref}
         onChange={onChange}
         onFocus={onFocus}
+        onBlur={onBlur}
+        readOnly={readonly ? true : false}
       />
       {prefix && <Style.Prefix size={size}>{prefix}</Style.Prefix>}
       {suffix && <Style.Suffix size={size}>{suffix}</Style.Suffix>}

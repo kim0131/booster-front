@@ -13,7 +13,7 @@ import {
 } from "@components/icons";
 import theme from "@components/styles/theme";
 import { getCreateTime } from "@core/util/get-create-time";
-import useDesktop from "@core/hook/use-desktop";
+import { useDesktop } from "@core/hook/use-desktop";
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -222,7 +222,7 @@ const Board = ({ category, Datas, onClickRouter }: IPropsBoard) => {
               </Style.BoardList.Item.Bottom.Container>
             </Style.BoardList.Item.Container>
           ) : (
-            datas.map((data, idx) => (
+            datas.map(data => (
               <Style.BoardList.Item.Container key={data.id}>
                 <Style.BoardList.Item.Top.Container>
                   <Style.BoardList.Item.Top.Content.Container

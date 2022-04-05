@@ -65,6 +65,9 @@ const Footer = () => {
             사업자 등록번호 : {companyInfo.company_number} | 대표 :{" "}
             {companyInfo.company_ceo}
             <br />
+            대표번호 : {companyInfo.company_phone} | 이메일 :{" "}
+            {companyInfo.company_email}
+            <br />
             {companyInfo.company_address}
           </Style.Info>
         </Style.Wrapper>

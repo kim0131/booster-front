@@ -1,4 +1,4 @@
-import useAdsList from "@core/hook/use-Ads";
+import useAdsList from "@core/hook/use-ads";
 import styled from "@emotion/styled";
 
 const Style = {

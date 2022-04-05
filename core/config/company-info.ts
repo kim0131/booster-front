@@ -4,4 +4,6 @@ export const companyInfo = {
   company_ceo: "임수민",
   company_address:
     "08511 서울특별시 금천구 디지털로9길 47, 205-비21호(가산동, 한신IT 타워2차)",
+  company_phone: "010-9998-0967",
+  company_email: "help@kreta.co.kr",
 };

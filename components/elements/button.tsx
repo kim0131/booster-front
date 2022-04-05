@@ -378,6 +378,7 @@ interface IPropsButton {
   dataValue?: string;
   subMenus?: any;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLButtonElement>) => void;
 }
 
 const Button = ({
@@ -391,6 +392,7 @@ const Button = ({
   dataValue = undefined,
   subMenus,
   onClick,
+  onBlur,
 }: IPropsButton) => (
   <Style
     size={size}
@@ -401,6 +403,7 @@ const Button = ({
     isRounded={isRounded}
     data-value={dataValue}
     onClick={isLoading ? undefined : onClick}
+    onBlur={onBlur}
   >
     {isLoading ? (
       <Loader size={size} color={variants === "solid" ? "white" : color} />

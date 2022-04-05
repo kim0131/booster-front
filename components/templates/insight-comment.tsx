@@ -214,9 +214,9 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
   const [line, setLine] = useState(5);
   const [currentPage, setcurrentPage] = useState(1);
   const [commentdata, setCommentData] = useState({
-    wr_content: "",
     mb_id: session?.user?.email,
     mb_name: session?.user?.name,
+    wr_content: "",
     wr_ip: "",
     wr_parent: parseInt(id),
     wr_is_comment: 1,
@@ -224,10 +224,10 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
     replycount: 0,
   });
   const [replydata, setReply] = useState({
-    wr_content: "",
     mb_id: session?.user?.email,
-    wr_ip: "",
     mb_name: session?.user?.name,
+    wr_content: "",
+    wr_ip: "",
     wr_parent: parseInt(id),
     wr_parent2: 0,
     wr_is_comment2: 1,

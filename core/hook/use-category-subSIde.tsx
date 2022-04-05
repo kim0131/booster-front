@@ -2,7 +2,7 @@
 import axios from "axios";
 import useSWR from "swr";
 
-const CategorySnbMenufetcher = async (url: string) => {
+const categorySnbMenuFetcher = async (url: string) => {
   let result: any;
   const sector = url.slice(19);
   if (sector == "topic") {
@@ -65,13 +65,11 @@ const CategorySnbMenufetcher = async (url: string) => {
   return result;
 };
 
-const useCategorySubSide = (sector: string) => {
+export const useCategorySubSide = (sector: string) => {
   const { data: categorySubSide } = useSWR(
     `/api2/category/sub/${sector}`,
-    CategorySnbMenufetcher,
+    categorySnbMenuFetcher,
   );
 
   return { categorySubSide };
 };
-
-export default useCategorySubSide;
