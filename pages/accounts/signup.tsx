@@ -193,11 +193,13 @@ const Signup: NextPage = () => {
   };
 
   const onClickCertification = () => {
-    console.log(process.env.CERTIFICATION_TOKEN);
+    window.name = "Parent_window";
     const form: HTMLFormElement | null | any =
       document.querySelector("#form_chk");
+
     form.action =
       "https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb";
+
     form.EncodeData.value = process.env.CERTIFICATION_TOKEN;
 
     //submit! (본인인증 화면으로 전환)
