@@ -7,50 +7,60 @@ import { useTopicDetail } from "@core/hook/use-topic-detail";
 import { useTopicListFilter } from "@core/hook/use-topic-list";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TopicComment from "@components/templates/topic-comment";
 import { useCategorySubSide } from "@core/hook/use-category-subSIde";
 
 const TopicDetail: NextPage = () => {
   const router = useRouter();
-  let { id } = router.query;
-  const [topicId, setTopicId] = useState(id);
   const [category, setCategory] = useState();
-  const { topicDetail } = useTopicDetail(topicId);
-  const { topicListFilter } = useTopicListFilter(category);
+  const { topicDetail } = useTopicDetail(router.query.id);
+  const { topicListFilter } = useTopicListFilter(topicDetail?.category);
   const { categorySubSide } = useCategorySubSide("topic");
 
-  useEffect(() => {
-    setTopicId(id);
-    if (topicDetail) {
-      setCategory(topicDetail.category);
-    }
-  }, [category, router, topicDetail]);
+  // let { id } = router.query;
+  // const [topicId, setTopicId] = useState(id);
+
+  // useEffect(() => {
+  //   setTopicId(id);
+  //   if (topicDetail) {
+  //     setCategory(topicDetail.category);
+  //   }
+  // }, [category, router, topicDetail]);
+
+  // const [category, setCategory] = useState();
+  // const { topicDetail } = useTopicDetail(router.query.id);
+  // const { topicListFilter } = useTopicListFilter(category);
+
+  // useEffect(() => {
+  // setTopicId(id);
+  // if (topicDetail) {
+  //   setCategory(topicDetail.category);
+  // }
+  // }, [category, router, topicDetail]);
 
   const onClickRouter = (param: any) => {
     router.push(`/topics/detail?id=${param}`);
   };
 
   return (
-    <>
-      <SnbLayout>
-        {topicDetail && (
-          <>
-            <Snb category={category} snbDatas={categorySubSide} />
-            <TopicContentLayout id={topicId} data={topicDetail}>
-              <TopicComment id={topicId} />
-              {topicListFilter && (
-                <Board
-                  category={category}
-                  Datas={topicListFilter}
-                  onClickRouter={onClickRouter}
-                />
-              )}
-            </TopicContentLayout>
-          </>
-        )}
-      </SnbLayout>
-    </>
+    <SnbLayout>
+      {topicDetail && (
+        <>
+          <Snb category={category} snbDatas={categorySubSide} />
+          <TopicContentLayout id={router.query.id} data={topicDetail}>
+            <TopicComment id={router.query.id} />
+            {topicListFilter && (
+              <Board
+                category={category}
+                Datas={topicListFilter}
+                onClickRouter={onClickRouter}
+              />
+            )}
+          </TopicContentLayout>
+        </>
+      )}
+    </SnbLayout>
   );
 };
 

@@ -9,19 +9,14 @@ import Loader from "@components/elements/loader";
 import SnbLayout from "@components/layouts/snb-layout";
 import Board from "@components/templates/board";
 import Snb from "@components/templates/snb";
-import useHotTopic from "@core/hook/use-hottopic";
+import { useHotTopic } from "@core/hook/use-hottopic";
 
 const Topics: NextPage = () => {
   const router = useRouter();
   const { hotTopic } = useHotTopic();
   const { categorySubSide } = useCategorySubSide("topic");
-  const { category } = router.query;
-  const [selectCategory, setCategory] = useState<any>("");
-  const { topicListFilter, isValidating } = useTopicListFilter(selectCategory);
-
-  useEffect(() => {
-    setCategory(category);
-  }, [category, router, topicListFilter, hotTopic]);
+  const { category } = router.query || "";
+  const { topicListFilter, isValidating } = useTopicListFilter(category);
 
   const onClickRouter = (param: any) => {
     router.push(`/topics/detail?id=${param}`);
@@ -30,18 +25,14 @@ const Topics: NextPage = () => {
   return (
     <SnbLayout>
       {categorySubSide && (
-        <Snb category={selectCategory} snbDatas={categorySubSide} />
+        <Snb category={category} snbDatas={categorySubSide} />
       )}
-      {topicListFilter && (
-        <>
-          {!isValidating && (
-            <Board
-              category={selectCategory}
-              Datas={category == "인기글" ? hotTopic : topicListFilter}
-              onClickRouter={onClickRouter}
-            />
-          )}
-        </>
+      {topicListFilter && !isValidating && (
+        <Board
+          category={category}
+          Datas={category == "인기글" ? hotTopic : topicListFilter}
+          onClickRouter={onClickRouter}
+        />
       )}
       {isValidating && <Loader color="gray"></Loader>}
     </SnbLayout>
