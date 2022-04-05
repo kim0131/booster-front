@@ -196,7 +196,7 @@ const Signup: NextPage = () => {
     axios.get("/api3/checkplus_main").then(res => {
       const form: HTMLFormElement | null | any =
         document.querySelector("#form_chk");
-
+      console.log(res.data.result.sEncData);
       window.open(
         "",
         "popupChk",
