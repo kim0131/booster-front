@@ -70,6 +70,22 @@ const Accounts: NextPage = () => {
       });
     });
   };
+  const onClickCertification = () => {
+    const form: HTMLFormElement | null | any =
+      document.querySelector("#form_chk");
+
+    window.open(
+      "",
+      "popupChk",
+      "width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no",
+    );
+    form.action = "/accounts/signup";
+    form.target = "popupChk";
+    // form.target = "test";
+
+    //submit! (본인인증 화면으로 전환)
+    form.submit();
+  };
 
   return (
     <AccountsLayout
@@ -115,7 +131,7 @@ const Accounts: NextPage = () => {
           <Button
             variants="light"
             size="large"
-            onClick={onClickLink}
+            onClick={onClickCertification}
             dataValue={accountsNavigation[1].url}
           >
             {accountsNavigation[1].content}
@@ -140,6 +156,7 @@ const Accounts: NextPage = () => {
           >
             {accountsNavigation[3].content}
           </Body2>
+          <form name="form" method="post" id="form_chk"></form>
         </>
       }
     />

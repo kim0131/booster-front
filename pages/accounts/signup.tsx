@@ -193,17 +193,24 @@ const Signup: NextPage = () => {
   };
 
   const onClickCertification = () => {
-    window.name = "Parent_window";
-    const form: HTMLFormElement | null | any =
-      document.querySelector("#form_chk");
+    axios.get("/api2/checkplus_main").then(res => {
+      const form: HTMLFormElement | null | any =
+        document.querySelector("#form_chk");
 
-    form.action =
-      "https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb";
+      window.open(
+        "",
+        "popupChk",
+        "width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no",
+      );
+      form.action =
+        "https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb";
+      form.target = "popupChk";
+      // form.target = "test";
+      form.EncodeData.value = res.data.result.sEncData;
 
-    form.EncodeData.value = process.env.CERTIFICATION_TOKEN;
-
-    //submit! (본인인증 화면으로 전환)
-    form.submit();
+      //submit! (본인인증 화면으로 전환)
+      form.submit();
+    });
   };
 
   return (
