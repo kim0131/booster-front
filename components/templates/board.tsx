@@ -222,7 +222,7 @@ const Board = ({ category, Datas, onClickRouter }: IPropsBoard) => {
               </Style.BoardList.Item.Bottom.Container>
             </Style.BoardList.Item.Container>
           ) : (
-            datas.map((data, idx) => (
+            datas.map(data => (
               <Style.BoardList.Item.Container key={data.id}>
                 <Style.BoardList.Item.Top.Container>
                   <Style.BoardList.Item.Top.Content.Container
