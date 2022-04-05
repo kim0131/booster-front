@@ -8,7 +8,7 @@ const Search: NextPage = () => {
   const router = useRouter();
   return (
     <SnbLayout>
-      <Snb />
+      {/* <Snb /> */}
       {/* <Board
         category="test"
         // Datas={category == "인기글" ? hotTopic : topicListFilter}
