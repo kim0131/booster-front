@@ -18,7 +18,7 @@ const adsListFetcher = async () => {
     homeList.map((item: any, idx: number) => {
       result.push({
         id: item.idx,
-        image_url: adsImageUrl + item.image_url.slice(2, -2),
+        image_url: adsImageUrl + item.image_url,
         posting_date: item.posting_date,
         posting_exitdate: item.posting_exitdate,
         title: item.title,

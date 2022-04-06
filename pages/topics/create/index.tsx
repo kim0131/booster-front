@@ -87,9 +87,8 @@ const CreateTopic: NextPage = () => {
 
   const onClickSubmitTopic = async () => {
     const formData = new FormData();
-    if (image.image_file) {
-      formData.append("file", image.image_file);
-    }
+
+    formData.append("file", image.image_file);
 
     await axios
       .post("/api2/topic/write", {
@@ -102,7 +101,11 @@ const CreateTopic: NextPage = () => {
       })
       .then(async res => {
         const id = res.data.result.idx;
-        await axios.post(`/api2/topic/upload/${id}`, formData);
+        if (image.image_file) {
+          formData.append("idx", id);
+          await axios.post(`/api2/upload/topic`, formData);
+        }
+
         alert("토픽이 등록되었습니다");
         router.push("/topics");
       });

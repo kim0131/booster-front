@@ -113,7 +113,6 @@ const sampleDatas = [
 
 const Item = ({ id, thumbnailColor, title, content, url }: ICarouselData) => {
   const isWhite = useGetContrast(thumbnailColor);
-
   return (
     <Style.Item key={id} thumbnailColor={thumbnailColor} url={url}>
       <Style.Title color={isWhite ? theme.color.gray[900] : theme.color.white}>
@@ -132,7 +131,6 @@ const Carousel = () => {
   const [state, setState] = useState([0]);
   const { MainBannerList } = useMainBanner();
   console.log(MainBannerList);
-  useEffect(() => {});
   return (
     <Style.Container>
       <LayoutGroup>
@@ -144,7 +142,7 @@ const Carousel = () => {
               thumbnailColor={data.thumbnailColor}
               title={data.title}
               content={data.content}
-              url={data.url}
+              url={data.image_url}
             />
           ))}
       </LayoutGroup>
