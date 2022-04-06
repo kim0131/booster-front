@@ -71,20 +71,21 @@ const Accounts: NextPage = () => {
     });
   };
   const onClickCertification = () => {
-    const form: HTMLFormElement | null | any =
-      document.querySelector("#form_chk");
+    router.push("/accounts/signup");
+    // const form: HTMLFormElement | null | any =
+    //   document.querySelector("#form_chk");
+    // window.name = "parent";
+    // window.open(
+    //   "",
+    //   "child",
+    //   "width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no",
+    // );
+    // form.action = "/accounts/signup";
+    // form.target = "child";
+    // // form.target = "test";
 
-    window.open(
-      "",
-      "popupChk",
-      "width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no",
-    );
-    form.action = "/accounts/signup";
-    form.target = "popupChk";
-    // form.target = "test";
-
-    //submit! (본인인증 화면으로 전환)
-    form.submit();
+    // //submit! (본인인증 화면으로 전환)
+    // form.submit();
   };
 
   return (
