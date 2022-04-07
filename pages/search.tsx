@@ -30,11 +30,11 @@ const Search: NextPage = () => {
   return (
     <SnbLayout>
       <Snb category="menu1" snbDatas={sampleSearchSnbDatas} />
-      <Board
+      {/* <Board
         category="test"
-        Datas={category == "인기글" ? hotTopic : topicListFilter}
-        // onClickRouter={onClickRouter}
-      />
+        datas={category == "인기글" ? hotTopic : topicListFilter}
+        onClickRouter={onClickRouter}
+      /> */}
     </SnbLayout>
   );
 };
