@@ -80,7 +80,7 @@ const useCategoryList = () => {
 
 export const useCategoryListHome = () => {
   const { data: categoryListHome } = useSWR(
-    `/api2/category/list/Home`,
+    `/api2/category/list/home`,
     categoryHomeFetcher,
     {},
   );
