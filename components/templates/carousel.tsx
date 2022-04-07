@@ -1,10 +1,9 @@
 import theme from "@components/styles/theme";
-import useGetContrast from "@core/hook/use-get-contrast";
-import useMainBanner from "@core/hook/use-main-baaner";
+import useMainBanner from "@core/hook/use-main-banner";
 import { ICarouselData } from "@core/interfaces/carousel";
 import styled from "@emotion/styled";
 import { LayoutGroup, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface IStyle {
   item: {
@@ -111,8 +110,16 @@ const sampleDatas = [
   },
 ];
 
+const getContrast = (hexColor: string) => {
+  var r = parseInt(hexColor.slice(1, 3), 16);
+  var g = parseInt(hexColor.slice(3, 5), 16);
+  var b = parseInt(hexColor.slice(5, 7), 16);
+  var calcContrast = (r * 299 + g * 587 + b * 114) / 1000;
+  return calcContrast >= 128 ? true : false;
+};
+
 const Item = ({ id, thumbnailColor, title, content, url }: ICarouselData) => {
-  const isWhite = useGetContrast(thumbnailColor);
+  const isWhite = getContrast(thumbnailColor);
   return (
     <Style.Item key={id} thumbnailColor={thumbnailColor} url={url}>
       <Style.Title color={isWhite ? theme.color.gray[900] : theme.color.white}>

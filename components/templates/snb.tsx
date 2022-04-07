@@ -101,7 +101,6 @@ const Snb = ({ snbDatas, category }: IPropsSnb) => {
       | React.ChangeEvent<HTMLSelectElement>,
   ) => {
     e.preventDefault();
-    console.log(e.currentTarget.value);
     router.push(`/topics/?category=${e.currentTarget.value}`);
   };
 
