@@ -60,7 +60,7 @@ const Accounts: NextPage = () => {
 
     await axios.post("/api2/login", state.data).then((res: any) => {
       const user = res.data.result;
-      console.log(user);
+
       signIn("username-password", {
         mb_id: user.mb_id,
         mb_pw: user.mb_pw,

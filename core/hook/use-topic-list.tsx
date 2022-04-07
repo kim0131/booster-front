@@ -183,7 +183,7 @@ export const topicfilterfetcher = async (param: any) => {
         }
       }
     });
-  console.log(result);
+
   return result;
 };
 

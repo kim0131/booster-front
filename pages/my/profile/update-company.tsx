@@ -86,7 +86,7 @@ const UpdateCompany: NextPage = () => {
     alert("업데이트 신청이 접수되었습니다");
     router.push("/my/profile");
   };
-  console.log(userInfo);
+
   return (
     <>
       {userInfo && (

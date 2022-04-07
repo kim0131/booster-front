@@ -217,7 +217,6 @@ const TopicContentLayout = ({
   };
 
   const onClickScrap = async (id: any, bookmark: any) => {
-    console.log(bookmark);
     if (bookmark) {
       await axios.post(`/api2/topic/scrap/cancel/${id}`, {
         member_idx: session?.user?.idx,
