@@ -193,10 +193,10 @@ const Signup: NextPage = () => {
   };
 
   const onClickCertification = () => {
-    axios.get("/api2/checkplus_main").then(res => {
+    axios.get("/api3/checkplus_main").then(res => {
       const form: HTMLFormElement | null | any =
         document.querySelector("#form_chk");
-
+      window.name = "parent";
       window.open(
         "",
         "popupChk",

@@ -13,8 +13,7 @@ const insightDetailfetcher = async (url: any) => {
       (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 60),
     );
     if (insightContent.file_url) {
-      insightContent.file_full_url =
-        insightImageUrl + insightContent.file_url.slice(2, -2);
+      insightContent.file_full_url = insightImageUrl + insightContent.file_url;
     }
     insightContent.category = insightContent.board_name;
     insightContent.bookmark = await false; //추후필요

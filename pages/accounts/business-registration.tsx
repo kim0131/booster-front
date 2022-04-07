@@ -73,14 +73,16 @@ const BusinessRegistration: NextPage = () => {
 
   const onClickSubmitBusinessUrl = async () => {
     const formData = new FormData();
-    if (image.image_file) {
-      formData.append("file", image.image_file);
-    }
+
+    formData.append("file", image.image_file);
+
+    formData.append("idx", `${userIdx.mb_business_num}`);
+
     await axios.post(`/api2/user/update/${userIdx.idx}`, {
       mb_business_certify: 1,
     });
     await axios.post(
-      `/api2/business/upload/${userIdx.mb_business_num}`,
+      `/api2/upload/business/upload/${userIdx.mb_business_num}`,
       formData,
     );
     alert("사업자 등록증이 접수되었습니다");

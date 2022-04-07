@@ -14,7 +14,7 @@ const insightfetcher = async (url: string) => {
       );
       let file_full_url = "";
       if (item.file_url) {
-        file_full_url = insightImageUrl + item.file_url.slice(2, -2);
+        file_full_url = insightImageUrl + item.file_url;
       }
       result.push({
         idx: item.idx,

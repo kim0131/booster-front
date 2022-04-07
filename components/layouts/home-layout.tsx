@@ -56,7 +56,7 @@ interface IPropsHomeLayout {
 
 const HomeLayout = ({ children, banners }: IPropsHomeLayout) => {
   const { adsList } = useAdsList();
-  console.log(adsList);
+
   return (
     <Style.Container>
       <Style.Content>{children}</Style.Content>
