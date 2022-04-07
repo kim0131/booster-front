@@ -576,6 +576,11 @@
   "resolved" "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
   "version" "0.0.29"
 
+"@types/lodash@^4.14.181":
+  "integrity" "sha512-n3tyKthHJbkiWhDZs3DkhkCzt2MexYHXlX0td5iMplyfwketaOeKboEVBqzceH7juqvEg3q5oUoBFxSLu7zFag=="
+  "resolved" "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.181.tgz"
+  "version" "4.14.181"
+
 "@types/next-auth@^3.15.0":
   "integrity" "sha512-ZVfejlu81YiIRX1m0iKAfvZ3nK7K9EyZWhNARNKsFop8kNAgEvMnlKpTpwN59xkK2OhyWLagPuiDAVBYSO9jSA=="
   "resolved" "https://registry.npmjs.org/@types/next-auth/-/next-auth-3.15.0.tgz"
@@ -2389,7 +2394,7 @@
   "resolved" "https://registry.npmjs.org/lodash.sortby/-/lodash.sortby-4.7.0.tgz"
   "version" "4.7.0"
 
-"lodash@^4.17.13", "lodash@^4.17.19":
+"lodash@^4.17.13", "lodash@^4.17.19", "lodash@^4.17.21":
   "integrity" "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="
   "resolved" "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
   "version" "4.17.21"

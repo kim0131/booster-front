@@ -126,7 +126,7 @@ const BestWidget = ({ col = 1, url, datas, title }: IPropsBestWidget) => {
   const onClickRouterDetail = (id: any) => {
     router.push(`/topics/detail?id=${id}`);
   };
-
+  console.log(datas);
   return (
     <Style.Container col={col}>
       <Style.Header.Container>

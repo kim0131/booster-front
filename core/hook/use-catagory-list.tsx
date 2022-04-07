@@ -44,7 +44,7 @@ const categoryHomeFetcher = async (url: string) => {
       }
       if (item.sector == "topic") {
         await topicfilterfetcher({
-          url: `/api2/topic/list/${item.bo_subject}`,
+          url: `/api2/topic/list/${item.bo_table}`,
         }).then(res => {
           filterresult.push({
             idx: item.idx,

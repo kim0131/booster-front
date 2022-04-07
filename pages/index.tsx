@@ -8,6 +8,7 @@ import { useCategoryListHome } from "@core/hook/use-catagory-list";
 const Home: NextPage = () => {
   const { hotTopic } = useHotTopic();
   const { categoryListHome } = useCategoryListHome();
+  console.log(categoryListHome);
 
   return (
     <>

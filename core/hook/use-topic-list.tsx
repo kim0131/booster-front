@@ -94,6 +94,7 @@ const hotTopicFetcher = async (param: any) => {
 
 export const topicfilterfetcher = async (param: any) => {
   const category = param.url.slice(17);
+
   const member_idx = param.idx;
   let result: any = [];
   const CurrentTime = new Date();
@@ -163,7 +164,7 @@ export const topicfilterfetcher = async (param: any) => {
               likeCnt: content.likeCnt,
             });
           }
-        } else if (content.board_name == category) {
+        } else if (content.board_table == category) {
           result.push({
             rn: content.rn,
             id: content.idx,
@@ -182,6 +183,7 @@ export const topicfilterfetcher = async (param: any) => {
         }
       }
     });
+  console.log(result);
   return result;
 };
 
