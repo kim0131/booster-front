@@ -43,11 +43,11 @@ export const useMainBannerDetail = (id: any) => {
 };
 
 const useMainBanner = () => {
-  const { data: MainBannerList } = useSWR(
+  const { data: mainBannerList } = useSWR(
     `/api2/home/main/list`,
     mainBannerListFetcher,
   );
-  return { MainBannerList };
+  return { mainBannerList };
 };
 
 export default useMainBanner;

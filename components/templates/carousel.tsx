@@ -136,13 +136,13 @@ const Item = ({ id, thumbnailColor, title, content, url }: ICarouselData) => {
 
 const Carousel = () => {
   const [state, setState] = useState([0]);
-  const { MainBannerList } = useMainBanner();
-  console.log("banner", MainBannerList);
+  const { mainBannerList } = useMainBanner();
+  console.log("banner", mainBannerList);
   return (
     <Style.Container>
       <LayoutGroup>
-        {sampleDatas &&
-          sampleDatas.map((data: any) => (
+        {mainBannerList &&
+          mainBannerList.map((data: any) => (
             <Item
               id={data.id}
               key={data.id}
