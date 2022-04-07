@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import {useDesktop} from "@core/hook/use-desktop";
+import { useDesktop } from "@core/hook/use-desktop";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
 import Button from "@components/elements/button";
@@ -195,6 +195,9 @@ const Header = () => {
     mobileMenu: false,
     mobileSearch: false,
     desktopSearch: false,
+    data: {
+      searchTerm: "",
+    },
   });
 
   useEffect(() => {
@@ -226,6 +229,17 @@ const Header = () => {
     router.push("/topics/create");
   };
 
+  const onKeyPressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == "Enter") {
+      router.push(`/search?searchTerm=${state.data.searchTerm}`);
+    }
+  };
+
+  const onChangeSearchTerm = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.currentTarget;
+    setState({ ...state, data: { ...state.data, searchTerm: value } });
+  };
+
   return (
     <Style.Container>
       <Style.Wrapper>
@@ -254,10 +268,13 @@ const Header = () => {
               isRounded
               size="small"
               placeholder="검색"
+              value={state.data.searchTerm}
+              onChange={onChangeSearchTerm}
               width={state.desktopSearch ? "16rem" : "10rem"}
               onFocus={() => setState({ ...state, desktopSearch: true })}
               onBlur={() => setState({ ...state, desktopSearch: false })}
               prefix={<IconSearch />}
+              onKeyPress={onKeyPressEnter}
             />
           )}
           <Button variants="solid" size="small" onClick={oncClickPUshWrite}>
