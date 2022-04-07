@@ -9,7 +9,8 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import TopicComment from "@components/templates/topic-comment";
-import { useCategorySubSide } from "@core/hook/use-category-subSIde";
+import { useCategorySubSide } from "@core/hook/use-category-sub-side";
+import _ from "lodash";
 
 const TopicDetail: NextPage = () => {
   const router = useRouter();
@@ -53,7 +54,11 @@ const TopicDetail: NextPage = () => {
             {topicListFilter && (
               <Board
                 category={category}
-                Datas={topicListFilter}
+                title={
+                  _.find(categorySubSide[0].menus, { param: category })
+                    ?.content || ""
+                }
+                datas={topicListFilter}
                 onClickRouter={onClickRouter}
               />
             )}

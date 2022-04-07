@@ -122,8 +122,9 @@ const Style = {
 };
 
 interface IPropsBoard {
-  category: string | string[] | undefined;
-  Datas: {
+  category?: string;
+  title: string;
+  datas: {
     id: number;
     category: string;
     title: string;
@@ -141,27 +142,27 @@ interface IPropsBoard {
   onClickRouter?: any;
 }
 
-const Board = ({ category, Datas, onClickRouter }: IPropsBoard) => {
+const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
   const { isDesktop } = useDesktop();
-  const { mutate } = useSWRConfig();
+  // const { mutate } = useSWRConfig();
   const { data: session }: any = useSession();
-  const [datas, setData] = useState(Datas);
+  const [data, setData] = useState(datas);
 
-  const [totalCount, setTotalCount] = useState(Datas.length);
+  const [totalCount, setTotalCount] = useState(datas.length);
   const [line, setLine] = useState(10);
   const [currentPage, setcurrentPage] = useState(1);
 
   useEffect(() => {
     sliceTopicList();
-  }, [currentPage, Datas]);
+  }, [currentPage, datas]);
 
   useEffect(() => {
-    setTotalCount(Datas.length);
+    setTotalCount(datas.length);
     setcurrentPage(1);
-  }, [Datas]);
+  }, [datas]);
 
   const sliceTopicList = () => {
-    const result = Datas.slice((currentPage - 1) * line, currentPage * line);
+    const result = datas.slice((currentPage - 1) * line, currentPage * line);
     setData(result);
   };
 
@@ -200,7 +201,7 @@ const Board = ({ category, Datas, onClickRouter }: IPropsBoard) => {
   return (
     <>
       <Style.Container>
-        {isDesktop && <Header4> {category ? category : "전체"}</Header4>}
+        {isDesktop && <Header4>{title}</Header4>}
 
         <Style.BoardList.Container>
           {!datas.length ? (

@@ -1,10 +1,8 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { ISnbData } from "@core/interfaces/snb";
 import styled from "@emotion/styled";
+import { ISnbData } from "@core/interfaces/snb";
 import { Body2 } from "@components/elements/types";
 import { IconChevronDown } from "@components/icons";
-import { useCategorySubSide } from "@core/hook/use-category-subSIde";
 import { useDesktop } from "@core/hook/use-desktop";
 
 interface IPropsStyle {
@@ -97,8 +95,14 @@ interface IPropsSnb {
 const Snb = ({ snbDatas, category }: IPropsSnb) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
-  const onClickRouter = (param: string) => {
-    router.push(`/topics/?category=${param}`);
+  const onClickRouter = (
+    e:
+      | React.MouseEvent<HTMLButtonElement>
+      | React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    e.preventDefault();
+    console.log(e.currentTarget.value);
+    router.push(`/topics/?category=${e.currentTarget.value}`);
   };
 
   return isDesktop ? (
@@ -108,34 +112,35 @@ const Snb = ({ snbDatas, category }: IPropsSnb) => {
           <Body2 isBold>{snbData.category}</Body2>
           <Style.Desktop.Category.Block>
             {snbData.menus &&
-              snbData.menus.map((menu: any) => (
-                <Style.Desktop.Category.Button
-                  key={menu.id}
-                  isRoute={menu.content === category}
-                  onClick={() => onClickRouter(menu.content)}
-                >
-                  {menu.content}
-                </Style.Desktop.Category.Button>
-              ))}
+              snbData.menus.map(
+                (menu: { id: number; content: string; param: string }) => (
+                  <Style.Desktop.Category.Button
+                    key={menu.id}
+                    isRoute={menu.param === category}
+                    value={menu.param}
+                    onClick={onClickRouter}
+                  >
+                    {menu.content}
+                  </Style.Desktop.Category.Button>
+                ),
+              )}
           </Style.Desktop.Category.Block>
         </Style.Desktop.Category.Container>
       ))}
     </Style.Desktop.Container>
   ) : (
     <Style.Mobile.Wrapper>
-      <Style.Mobile.Selectbox defaultValue={category}>
-        {snbDatas.map((snbData: any) => (
+      <Style.Mobile.Selectbox defaultValue={category} onChange={onClickRouter}>
+        {snbDatas.map((snbData: ISnbData) => (
           <optgroup key={snbData.id} label={snbData.category}>
             {snbData.menus &&
-              snbData.menus.map((menu: any) => (
-                <option
-                  key={menu.id}
-                  value={menu.param}
-                  onClick={() => onClickRouter(menu.content)}
-                >
-                  {menu.content}
-                </option>
-              ))}
+              snbData.menus.map(
+                (menu: { id: number; content: string; param: string }) => (
+                  <option key={menu.id} value={menu.param}>
+                    {menu.content}
+                  </option>
+                ),
+              )}
           </optgroup>
         ))}
       </Style.Mobile.Selectbox>

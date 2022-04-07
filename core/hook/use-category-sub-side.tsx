@@ -14,7 +14,7 @@ const categorySnbMenuFetcher = async (url: string) => {
           {
             id: 900,
             content: "전체",
-            param: "",
+            param: "all",
           },
           {
             id: 901,
@@ -66,10 +66,7 @@ const categorySnbMenuFetcher = async (url: string) => {
 };
 
 export const useCategorySubSide = (sector: string) => {
-  const { data: categorySubSide } = useSWR(
-    `/api2/category/sub/${sector}`,
-    categorySnbMenuFetcher,
-  );
-
-  return { categorySubSide };
+  const { data: categorySubSide, isValidating: isCategorySubSideValidating } =
+    useSWR(`/api2/category/sub/${sector}`, categorySnbMenuFetcher);
+  return { categorySubSide, isCategorySubSideValidating };
 };
