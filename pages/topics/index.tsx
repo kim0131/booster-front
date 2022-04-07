@@ -24,16 +24,20 @@ const Topics: NextPage = () => {
 
   return (
     <SnbLayout>
-      {categorySubSide && (
-        <Snb category={category} snbDatas={categorySubSide} />
+      {topicListFilter && (
+        <>
+          {categorySubSide && (
+            <Snb category={category} snbDatas={categorySubSide} />
+          )}
+
+          <Board
+            category={category}
+            Datas={category == "인기글" ? hotTopic : topicListFilter}
+            onClickRouter={onClickRouter}
+          />
+        </>
       )}
-      {topicListFilter && !isValidating && (
-        <Board
-          category={category}
-          Datas={category == "인기글" ? hotTopic : topicListFilter}
-          onClickRouter={onClickRouter}
-        />
-      )}
+
       {isValidating && <Loader color="gray"></Loader>}
     </SnbLayout>
   );
