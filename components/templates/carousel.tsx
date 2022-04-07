@@ -141,8 +141,8 @@ const Carousel = () => {
   return (
     <Style.Container>
       <LayoutGroup>
-        {MainBannerList &&
-          MainBannerList.map((data: any) => (
+        {sampleDatas &&
+          sampleDatas.map((data: any) => (
             <Item
               id={data.id}
               key={data.id}
