@@ -30,6 +30,8 @@ const Topics: NextPage<IPropsTopics> = ({ initCategory }) => {
     router.push(`/topics/detail?id=${param}`);
   };
 
+  console.log(topicListFilter);
+
   return (
     <SnbLayout>
       {!isCategorySubSideValidating && categorySubSide ? (

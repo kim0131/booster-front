@@ -129,7 +129,7 @@ interface IPropsBoard {
     category: string;
     title: string;
     content: string;
-    writer: string;
+    writer: string | null;
     like: number;
     view: number;
     comments: number;
