@@ -1,46 +1,63 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import type { NextPage } from "next";
-import { useCategorySubSide } from "@core/hook/use-category-subSIde";
+import type { GetServerSideProps, NextPage } from "next";
 import { useTopicListFilter } from "@core/hook/use-topic-list";
 import { useRouter } from "next/router";
 import Loader from "@components/elements/loader";
 import SnbLayout from "@components/layouts/snb-layout";
 import Board from "@components/templates/board";
 import Snb from "@components/templates/snb";
-import { useHotTopic } from "@core/hook/use-hot-topic";
+import _ from "lodash";
+import { globalNavigation } from "@core/config/navigation";
+import useCategoryList from "@core/hook/use-catagory-list";
+import { useCategorySubSide } from "@core/hook/use-category-sub-side";
+import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
 
-const Topics: NextPage = () => {
+interface IPropsTopics {
+  initCategory: string;
+}
+
+const Topics: NextPage<IPropsTopics> = ({ initCategory }) => {
   const router = useRouter();
-  const { hotTopic } = useHotTopic();
-  const { categorySubSide } = useCategorySubSide("topic");
-  const { category } = router.query || "";
-  const { topicListFilter, isValidating } = useTopicListFilter(category);
+  const category = initCategory === "" ? "all" : initCategory;
+
+  const { categorySubSide, isCategorySubSideValidating } =
+    useCategorySubSide("topic");
+
+  const { topicListFilter, isTopicListValidating } =
+    useTopicListFilter(category);
 
   const onClickRouter = (param: any) => {
     router.push(`/topics/detail?id=${param}`);
   };
 
-  console.log(categorySubSide, category);
-
   return (
     <SnbLayout>
-      {topicListFilter && (
-        <>
-          {categorySubSide && (
-            <Snb category={category} snbDatas={categorySubSide} />
-          )}
-
-          <Board
-            category={category}
-            Datas={category == "인기글" ? hotTopic : topicListFilter}
-            onClickRouter={onClickRouter}
-          />
-        </>
+      {!isCategorySubSideValidating && categorySubSide ? (
+        <Snb category={category} snbDatas={categorySubSide} />
+      ) : (
+        <TopicSnbSkeleton />
       )}
-
-      {isValidating && <Loader color="gray"></Loader>}
+      {!isCategorySubSideValidating &&
+      !isTopicListValidating &&
+      topicListFilter ? (
+        <Board
+          category={category}
+          title={
+            _.find(categorySubSide[0].menus, { param: category })?.content || ""
+          }
+          datas={topicListFilter}
+          onClickRouter={onClickRouter}
+        />
+      ) : (
+        <Loader color="gray" />
+      )}
     </SnbLayout>
   );
 };
 
 export default Topics;
+
+export const getServerSideProps: GetServerSideProps = async context => {
+  const initCategory = context.query.category || "";
+  return { props: { initCategory } };
+};
