@@ -3,7 +3,7 @@ import Carousel from "@components/templates/carousel";
 import HomeLayout from "@components/layouts/home-layout";
 import BestWidget from "@components/templates/best-widget";
 import { useHotTopic } from "@core/hook/use-hot-topic";
-import { useCategoryListHome } from "@core/hook/use-catagory-list";
+import { useCategoryListHome } from "@core/hook/use-category-list";
 
 const Home: NextPage = () => {
   const { hotTopic } = useHotTopic();

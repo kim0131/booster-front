@@ -8,7 +8,7 @@ import Board from "@components/templates/board";
 import Snb from "@components/templates/snb";
 import _ from "lodash";
 import { globalNavigation } from "@core/config/navigation";
-import useCategoryList from "@core/hook/use-catagory-list";
+import useCategoryList from "@core/hook/use-category-list";
 import { useCategorySubSide } from "@core/hook/use-category-sub-side";
 import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
 

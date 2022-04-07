@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { businessImageUrl } from "@core/config/imgurl";
 import axios from "axios";
 import useSWR from "swr";
 import { topicfilterfetcher } from "./use-topic-list";
