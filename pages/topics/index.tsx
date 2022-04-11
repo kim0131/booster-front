@@ -27,10 +27,12 @@ const Topics: NextPage<IPropsTopics> = ({ initCategory }) => {
     useTopicListFilter(category);
 
   const onClickRouter = (param: any) => {
-    router.push(`/topics/detail?id=${param}`);
+    if (param.sector == "topics") {
+      router.push(`/${param.sector}/detail?id=${param.idx}`);
+    } else {
+      router.push(`/${param.sector}/${param.idx}`);
+    }
   };
-
-  console.log(topicListFilter);
 
   return (
     <SnbLayout>

@@ -1,22 +1,26 @@
-import Board from "@components/templates/board";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import useSWR from "swr";
 
 const searchFetcher = async (param: any) => {
   let result: any = [];
+
   await axios
-    .post("/api2/home/search", { search_value: param.seachValue })
+    .post("/api2/home/search", {
+      search_value: param.seachValue,
+      member_idx: param.idx,
+    })
     .then(async res => {
       const topicResult = res.data.result;
       const insightResult = res.data.insightResult;
       const SearchSnbDatas = [
         {
           id: 0,
-          category: "토픽",
+          category: "전체",
           menus: [
             {
               id: 0,
-              content: `전체 (${topicResult.length})`,
+              content: `전체 (${topicResult.length + insightResult.length})`,
               param: "all",
               count: topicResult.length,
               name: "전체",
@@ -25,54 +29,24 @@ const searchFetcher = async (param: any) => {
         },
         {
           id: 1,
+          category: "토픽",
+          menus: [],
+        },
+        {
+          id: 2,
           category: "인사이트",
-          menus: [
-            {
-              id: 0,
-              content: `전체 (${insightResult.length})`,
-              param: "all",
-              count: insightResult.length,
-              name: "전체",
-            },
-          ],
+          menus: [],
         },
       ];
 
       await topicResult.map((data: any, idx: any) => {
         topicResult[idx].sector = "topics";
         let categoeryList: any = [];
-        SearchSnbDatas[0].menus.map((menu: any) => {
-          if (categoeryList.indexOf(menu.param) == -1) {
-            categoeryList.push(menu.param);
-          }
-        });
-        const index = categoeryList.indexOf(data.bo_table);
-        if (categoeryList.indexOf(data.bo_table) == -1) {
-          SearchSnbDatas[0].menus.push({
-            id: categoeryList.length,
-            content: data.bo_subject + " (" + 1 + ")",
-            param: data.bo_table,
-            name: data.bo_subject,
-            count: 1,
-          });
-        } else {
-          SearchSnbDatas[0].menus[index].count =
-            SearchSnbDatas[0].menus[index].count + 1;
-          SearchSnbDatas[0].menus[
-            index
-          ].content = `${SearchSnbDatas[0].menus[index].name} (${SearchSnbDatas[0].menus[index].count})`;
-        }
-      });
-
-      await insightResult.map((data: any, idx: any) => {
-        insightResult[idx].sector = "insights";
-        let categoeryList: any = [];
         SearchSnbDatas[1].menus.map((menu: any) => {
           if (categoeryList.indexOf(menu.param) == -1) {
             categoeryList.push(menu.param);
           }
         });
-
         const index = categoeryList.indexOf(data.bo_table);
         if (categoeryList.indexOf(data.bo_table) == -1) {
           SearchSnbDatas[1].menus.push({
@@ -85,10 +59,37 @@ const searchFetcher = async (param: any) => {
         } else {
           SearchSnbDatas[1].menus[index].count =
             SearchSnbDatas[1].menus[index].count + 1;
-
           SearchSnbDatas[1].menus[
             index
           ].content = `${SearchSnbDatas[1].menus[index].name} (${SearchSnbDatas[1].menus[index].count})`;
+        }
+      });
+
+      await insightResult.map((data: any, idx: any) => {
+        insightResult[idx].sector = "insights";
+        let categoeryList: any = [];
+        SearchSnbDatas[2].menus.map((menu: any) => {
+          if (categoeryList.indexOf(menu.param) == -1) {
+            categoeryList.push(menu.param);
+          }
+        });
+
+        const index = categoeryList.indexOf(data.bo_table);
+        if (categoeryList.indexOf(data.bo_table) == -1) {
+          SearchSnbDatas[2].menus.push({
+            id: categoeryList.length,
+            content: data.bo_subject + " (" + 1 + ")",
+            param: data.bo_table,
+            name: data.bo_subject,
+            count: 1,
+          });
+        } else {
+          SearchSnbDatas[2].menus[index].count =
+            SearchSnbDatas[2].menus[index].count + 1;
+
+          SearchSnbDatas[2].menus[
+            index
+          ].content = `${SearchSnbDatas[2].menus[index].name} (${SearchSnbDatas[2].menus[index].count})`;
         }
       });
       let BoardList = topicResult
@@ -134,10 +135,12 @@ const searchFetcher = async (param: any) => {
 };
 
 export const useSearch = (seachValue: string | string[] | undefined) => {
+  const { data: session }: any = useSession();
   const { data: searchResult } = useSWR(
     {
       url: `/api2/home/search`,
       seachValue: seachValue,
+      idx: session?.user?.idx,
     },
     searchFetcher,
   );

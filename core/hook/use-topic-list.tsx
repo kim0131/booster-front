@@ -116,6 +116,8 @@ export const topicfilterfetcher = async (param: any) => {
           result.push({
             rn: content.rn,
             id: content.idx,
+            sector: "topics",
+            idx: content.idx,
             category: content.board_name,
             title: content.wr_subject,
             content: content.wr_content,
@@ -133,6 +135,8 @@ export const topicfilterfetcher = async (param: any) => {
             result.push({
               rn: content.rn,
               id: content.idx,
+              sector: "topics",
+              idx: content.idx,
               category: content.board_name,
               title: content.wr_subject,
               content: content.wr_content,
@@ -151,6 +155,8 @@ export const topicfilterfetcher = async (param: any) => {
             result.push({
               rn: content.rn,
               id: content.idx,
+              sector: "topics",
+              idx: content.idx,
               category: content.board_name,
               title: content.wr_subject,
               content: content.wr_content,
@@ -168,6 +174,8 @@ export const topicfilterfetcher = async (param: any) => {
           result.push({
             rn: content.rn,
             id: content.idx,
+            sector: "topics",
+            idx: content.idx,
             category: content.board_name,
             title: content.wr_subject,
             content: content.wr_content,

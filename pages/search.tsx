@@ -10,9 +10,7 @@ const Search: NextPage = () => {
   const router = useRouter();
   const { searchTerm, category } = router.query;
   const { searchResult } = useSearch(searchTerm);
-  useEffect(() => {
-    filterList();
-  }, [searchResult]);
+
   const onClickRouter = (param: any) => {
     if (param.sector == "topics") {
       router.push(`/${param.sector}/detail?id=${param.idx}`);
@@ -30,6 +28,8 @@ const Search: NextPage = () => {
         }
       });
       return result;
+    } else {
+      return searchResult.result;
     }
   };
 
@@ -44,7 +44,7 @@ const Search: NextPage = () => {
           />
           <Board
             category="test"
-            title={`전체 (${searchResult.result.length})`}
+            title={"검색결과"}
             datas={filterList()}
             onClickRouter={onClickRouter}
           />
