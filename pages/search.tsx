@@ -4,13 +4,16 @@ import SnbLayout from "@components/layouts/snb-layout";
 import Snb from "@components/templates/snb";
 import Board from "@components/templates/board";
 import { useSearch } from "@core/hook/use-search";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Search: NextPage = () => {
   const router = useRouter();
   const { searchTerm, category } = router.query;
   const { searchResult } = useSearch(searchTerm);
-
+  const [filterDatas, setFilterDatas] = useState("");
+  useEffect(() => {
+    filterList();
+  }, [category]);
   const onClickRouter = (param: any) => {
     if (param.sector == "topics") {
       router.push(`/${param.sector}/detail?id=${param.idx}`);
@@ -27,9 +30,9 @@ const Search: NextPage = () => {
           return data.bo_table == category;
         }
       });
-      return result;
+      setFilterDatas(result);
     } else {
-      return searchResult.result;
+      setFilterDatas("");
     }
   };
 
@@ -45,7 +48,7 @@ const Search: NextPage = () => {
           <Board
             category="test"
             title={"검색결과"}
-            datas={filterList()}
+            datas={filterDatas ? filterDatas : searchResult.result}
             onClickRouter={onClickRouter}
           />
         </>

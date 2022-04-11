@@ -126,6 +126,7 @@ interface IPropsBoard {
   title: string;
   datas: {
     id: number;
+    idx: number;
     category: string;
     title: string;
     content: string;
@@ -190,7 +191,7 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
       });
     }
     const result = await datas.map((item: any, idx: any) => {
-      if (datas[idx].id == id) {
+      if (datas[idx].idx == id) {
         item.bookmark = Boolean(!bookmark);
       }
       return item;
@@ -245,7 +246,7 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
                     {data.bookmark ? (
                       <div
                         onClick={() => {
-                          onClickScrap(data.id, data.bookmark);
+                          onClickScrap(data.idx, data.bookmark);
                         }}
                       >
                         <IconBookmarkFill
@@ -256,7 +257,7 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
                     ) : (
                       <div
                         onClick={() => {
-                          onClickScrap(data.id, data.bookmark);
+                          onClickScrap(data.idx, data.bookmark);
                         }}
                       >
                         <IconBookmark size={20} color={theme.color.gray[500]} />
