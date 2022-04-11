@@ -23,22 +23,6 @@ const categorySnbMenuFetcher = async (url: string) => {
           },
         ],
       },
-      {
-        id: 2,
-        category: "활동",
-        menus: [
-          {
-            id: 1001,
-            content: "스크랩",
-            param: "scrap",
-          },
-          {
-            id: 1002,
-            content: "내가 작성한 글",
-            param: "mywrite",
-          },
-        ],
-      },
     ];
   } else if (sector == "insight") {
     result = [

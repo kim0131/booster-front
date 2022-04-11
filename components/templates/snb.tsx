@@ -90,9 +90,10 @@ const Style = {
 interface IPropsSnb {
   snbDatas: ISnbData[];
   category?: string | string[] | undefined;
+  searchTerm?: string | string[] | undefined;
 }
 
-const Snb = ({ snbDatas, category }: IPropsSnb) => {
+const Snb = ({ snbDatas, category, searchTerm }: IPropsSnb) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
   const onClickRouter = (
@@ -101,7 +102,12 @@ const Snb = ({ snbDatas, category }: IPropsSnb) => {
       | React.ChangeEvent<HTMLSelectElement>,
   ) => {
     e.preventDefault();
-    router.push(`/topics/?category=${e.currentTarget.value}`);
+
+    let endUrl = "";
+    if (searchTerm) endUrl += `searchTerm=${searchTerm}&`;
+
+    endUrl += `category=${e.currentTarget.value}&`;
+    router.push(`${router.pathname}?${endUrl}`);
   };
 
   return isDesktop ? (

@@ -227,7 +227,7 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
               <Style.BoardList.Item.Container key={data.id}>
                 <Style.BoardList.Item.Top.Container>
                   <Style.BoardList.Item.Top.Content.Container
-                    onClick={() => onClickRouter(data.id)}
+                    onClick={() => onClickRouter(data)}
                   >
                     {data.category && (
                       <Style.BoardList.Item.Top.Content.Badge>
@@ -265,7 +265,7 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
                   </Style.BoardList.Item.Top.Button>
                 </Style.BoardList.Item.Top.Container>
                 <Style.BoardList.Item.Bottom.Container
-                  onClick={() => onClickRouter(data.id)}
+                  onClick={() => onClickRouter(data)}
                 >
                   <Style.BoardList.Item.Bottom.Info>
                     <Style.BoardList.Item.Bottom.Badge>
