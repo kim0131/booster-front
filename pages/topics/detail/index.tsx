@@ -14,31 +14,10 @@ import _ from "lodash";
 
 const TopicDetail: NextPage = () => {
   const router = useRouter();
-  const [category, setCategory] = useState();
+  const { category } = router.query;
   const { topicDetail } = useTopicDetail(router.query.id);
-  const { topicListFilter } = useTopicListFilter(topicDetail?.category);
+  const { topicListFilter } = useTopicListFilter(category);
   const { categorySubSide } = useCategorySubSide("topic");
-
-  // let { id } = router.query;
-  // const [topicId, setTopicId] = useState(id);
-
-  // useEffect(() => {
-  //   setTopicId(id);
-  //   if (topicDetail) {
-  //     setCategory(topicDetail.category);
-  //   }
-  // }, [category, router, topicDetail]);
-
-  // const [category, setCategory] = useState();
-  // const { topicDetail } = useTopicDetail(router.query.id);
-  // const { topicListFilter } = useTopicListFilter(category);
-
-  // useEffect(() => {
-  // setTopicId(id);
-  // if (topicDetail) {
-  //   setCategory(topicDetail.category);
-  // }
-  // }, [category, router, topicDetail]);
 
   const onClickRouter = (param: any) => {
     router.push(`/topics/detail?id=${param}`);

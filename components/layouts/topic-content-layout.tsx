@@ -212,22 +212,24 @@ const TopicContentLayout = ({
         }
       });
   };
-  const onClickBookmark = (result: boolean) => {
-    topicContent.bookmark = result;
-  };
 
   const onClickScrap = async (id: any, bookmark: any) => {
+    console.log(1, bookmark);
+
     if (bookmark) {
       await axios.post(`/api2/topic/scrap/cancel/${id}`, {
         member_idx: session?.user?.idx,
         sector: "topic",
       });
+      topicContent.bookmark = false;
     } else {
       await axios.post(`/api2/topic/scrap/insert/${id}`, {
         member_idx: session?.user?.idx,
         sector: "topic",
       });
+      topicContent.bookmark = true;
     }
+    console.log(2);
   };
   return (
     <>
@@ -235,7 +237,7 @@ const TopicContentLayout = ({
         <Style.Container>
           <Style.Header.Container>
             <Style.Header.Badge>
-              <Badge size="large">{topicContent.category}</Badge>
+              <Badge size="large">{topicContent.board_name}</Badge>
             </Style.Header.Badge>
             <Style.Header.Title>{topicContent.wr_subject}</Style.Header.Title>
             <Style.Header.Bottom.Container>
@@ -297,7 +299,6 @@ const TopicContentLayout = ({
                     <div
                       onClick={() => {
                         onClickScrap(topicContent.idx, topicContent.bookmark);
-                        onClickBookmark(false);
                       }}
                     >
                       <IconBookmarkFill
@@ -309,7 +310,6 @@ const TopicContentLayout = ({
                     <div
                       onClick={() => {
                         onClickScrap(topicContent.idx, topicContent.bookmark);
-                        onClickBookmark(true);
                       }}
                     >
                       <IconBookmark size={20} color={theme.color.gray[500]} />

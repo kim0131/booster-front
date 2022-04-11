@@ -90,6 +90,10 @@ const CreateTopic: NextPage = () => {
 
     formData.append("file", image.image_file);
 
+    if (!data.board) return alert("카테고리를 선택해주세요");
+    if (!data.wr_subject) return alert("제목을 작성해주세요");
+    if (!data.wr_content) return alert("내용을 작성해주세요");
+
     await axios
       .post("/api2/topic/write", {
         wr_subject: data.wr_subject,
@@ -120,6 +124,7 @@ const CreateTopic: NextPage = () => {
       category={
         categorySelect && (
           <Selectbox
+            key="create"
             options={categorySelect}
             placeholder={"카테고리"}
             onChange={onChangeSelcet}

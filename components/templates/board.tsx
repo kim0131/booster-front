@@ -122,11 +122,11 @@ const Style = {
 };
 
 interface IPropsBoard {
-  category?: string;
+  category?: string | string[] | undefined;
   title: string;
   datas: {
     id: number;
-    idx: number;
+    idx?: number;
     category: string;
     title: string;
     content: string;

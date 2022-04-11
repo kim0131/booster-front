@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import SnbLayout from "@components/layouts/snb-layout";
 import Snb from "@components/templates/snb";
 import Board from "@components/templates/board";
+import { useSearch } from "@core/hook/use-search";
+import { useTopicListFilter } from "@core/hook/use-topic-list";
 
 const sampleSearchSnbDatas = [
   {
@@ -232,20 +234,26 @@ const sampleSearchResult = [
 
 const Search: NextPage = () => {
   const router = useRouter();
+  const { searchTerm, category } = router.query;
+  const { topicListFilter } = useTopicListFilter("scrap");
 
   const onClickRouter = (param: any) => {
-    router.push(`/topics/detail?id=${param}`);
+    if (param.sector == "topics") {
+      router.push(`/${param.sector}/detail?id=${param.idx}`);
+    } else {
+      router.push(`/${param.sector}/${param.idx}`);
+    }
   };
 
   return (
     <SnbLayout>
-      <Snb category="menu1" snbDatas={sampleSearchSnbDatas} />
+      {/* <Snb category={category} snbDatas={sampleSearchSnbDatas} />
       <Board
-        category="test"
-        title={sampleSearchSnbDatas[0].menus[0].content}
-        datas={sampleSearchResult}
+        category={category}
+        title={"검색결과"}
+        datas={topicListFilter}
         onClickRouter={onClickRouter}
-      />
+      /> */}
     </SnbLayout>
   );
 };

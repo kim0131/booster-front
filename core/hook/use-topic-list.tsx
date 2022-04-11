@@ -72,6 +72,8 @@ const hotTopicFetcher = async (param: any) => {
         }
         result.push({
           id: content.idx,
+          sector: "topics",
+          idx: content.idx,
           category: content.board_name,
           title: content.wr_subject,
           content: content.wr_content,
@@ -204,7 +206,7 @@ export const useTopicList = () => {
   return { topicList, topickListMutate };
 };
 
-export const useTopicListFilter = (category: string) => {
+export const useTopicListFilter = (category: string | string[] | undefined) => {
   const { data: session }: any = useSession();
   const { data: topicListFilter, isValidating: isTopicListValidating } = useSWR(
     category === "hot"

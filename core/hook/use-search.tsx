@@ -4,6 +4,7 @@ import useSWR from "swr";
 
 const searchFetcher = async (param: any) => {
   let result: any = [];
+  const category = param.category ? param.category : "all";
   if (param) {
     await axios
       .post("/api2/home/search", {
@@ -128,22 +129,35 @@ const searchFetcher = async (param: any) => {
           };
         });
 
+        const result2 = BoardList.filter((data: any) => {
+          if (category == "all") {
+            return true;
+          } else {
+            console.log(category, data.bo_table);
+            return category == data.bo_table;
+          }
+        });
+
         result.push({
           SearchSnbDatas: SearchSnbDatas,
-          result: BoardList,
+          result: result2,
         });
       });
   }
   return result[0];
 };
 
-export const useSearch = (seachValue: string | string[] | undefined) => {
+export const useSearch = (
+  seachValue: string | string[] | undefined,
+  category?: string | string[] | undefined,
+) => {
   const { data: session }: any = useSession();
   const { data: searchResult } = useSWR(
     {
       url: `/api2/home/search`,
       seachValue: seachValue,
       idx: session?.user?.idx,
+      category: category,
     },
     searchFetcher,
   );

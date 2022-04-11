@@ -14,7 +14,7 @@ const Home: NextPage = () => {
       <Carousel />
       <HomeLayout>
         {hotTopic && (
-          <BestWidget title="인기 토픽" url="인기글" col={2} datas={hotTopic} />
+          <BestWidget title="인기 토픽" url="hot" col={2} datas={hotTopic} />
         )}
         {categoryListHome &&
           categoryListHome.map((data: any) => {
@@ -22,7 +22,7 @@ const Home: NextPage = () => {
               <BestWidget
                 title={data.bo_subject}
                 col={1}
-                url={data.bo_subject}
+                url={data.bo_table}
                 datas={data.contents}
                 key={data.idx}
               />

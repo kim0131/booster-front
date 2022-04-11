@@ -11,6 +11,7 @@ export const CategorySelectfetcher = async (url: string) => {
     list.map((item: any, idx: any) => {
       if (item.sector == sector) {
         CategoryList.push({
+          id: idx,
           value: list[idx].idx,
           content: list[idx].bo_subject,
         });

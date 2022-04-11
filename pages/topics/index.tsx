@@ -28,7 +28,9 @@ const Topics: NextPage<IPropsTopics> = ({ initCategory }) => {
 
   const onClickRouter = (param: any) => {
     if (param.sector == "topics") {
-      router.push(`/${param.sector}/detail?id=${param.idx}`);
+      router.push(
+        `/${param.sector}/detail?id=${param.idx}&category=${category}`,
+      );
     } else {
       router.push(`/${param.sector}/${param.idx}`);
     }
@@ -36,14 +38,11 @@ const Topics: NextPage<IPropsTopics> = ({ initCategory }) => {
 
   return (
     <SnbLayout>
-      {!isCategorySubSideValidating && categorySubSide ? (
+      {categorySubSide && (
         <Snb category={category} snbDatas={categorySubSide} />
-      ) : (
-        <TopicSnbSkeleton />
       )}
-      {!isCategorySubSideValidating &&
-      !isTopicListValidating &&
-      topicListFilter ? (
+      {!categorySubSide && <TopicSnbSkeleton />}
+      {topicListFilter && (
         <Board
           category={category}
           title={
@@ -52,9 +51,8 @@ const Topics: NextPage<IPropsTopics> = ({ initCategory }) => {
           datas={topicListFilter}
           onClickRouter={onClickRouter}
         />
-      ) : (
-        <Loader color="gray" />
       )}
+      {!topicListFilter && <Loader color="gray" />}
     </SnbLayout>
   );
 };

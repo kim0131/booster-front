@@ -315,7 +315,7 @@ const Selectbox = ({
         onFocus={onFocus}
       >
         {!value && (
-          <option key="default" value="" disabled hidden>
+          <option key="" value="" disabled hidden>
             카테고리를 선택해주세요.
           </option>
         )}
