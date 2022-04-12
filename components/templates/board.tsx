@@ -20,6 +20,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSWRConfig } from "swr";
+import { checkAuth } from "@core/util/check-auth";
 
 const Style = {
   Container: styled.div`
@@ -145,7 +146,7 @@ interface IPropsBoard {
 
 const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
   const { isDesktop } = useDesktop();
-  const { data: session }: any = useSession();
+  const { data: session, status }: any = useSession();
   const [data, setData] = useState(datas);
   const router = useRouter();
   const [totalCount, setTotalCount] = useState(datas.length);
@@ -186,24 +187,30 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
   };
 
   const onClickScrap = async (id: any, bookmark: any) => {
-    if (bookmark) {
-      await axios.post(`/api2/topic/scrap/cancel/${id}`, {
-        member_idx: session?.user?.idx,
-        sector: "topic",
-      });
-    } else {
-      await axios.post(`/api2/topic/scrap/insert/${id}`, {
-        member_idx: session?.user?.idx,
-        sector: "topic",
-      });
-    }
-    const result = await datas.map((item: any, idx: any) => {
-      if (datas[idx].idx == id) {
-        item.bookmark = Boolean(!bookmark);
+    if (status != "authenticated") {
+      if (checkAuth()) {
+        return router.push("/accounts");
       }
-      return item;
-    });
-    setData(result);
+    } else {
+      if (bookmark) {
+        await axios.post(`/api2/topic/scrap/cancel/${id}`, {
+          member_idx: session?.user?.idx,
+          sector: "topic",
+        });
+      } else {
+        await axios.post(`/api2/topic/scrap/insert/${id}`, {
+          member_idx: session?.user?.idx,
+          sector: "topic",
+        });
+      }
+      const result = await datas.map((item: any, idx: any) => {
+        if (datas[idx].idx == id) {
+          item.bookmark = Boolean(!bookmark);
+        }
+        return item;
+      });
+      setData(result);
+    }
   };
 
   return (

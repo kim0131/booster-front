@@ -21,6 +21,7 @@ import {
 import Dropdown from "@components/elements/dropdown";
 import { accountsNavigation } from "@core/config/navigation";
 import Portal from "./portal";
+import { checkAuth } from "@core/util/check-auth";
 
 interface IPropsStyle {
   isRoute?: boolean;
@@ -200,12 +201,6 @@ const Header = () => {
     },
   });
 
-  useEffect(() => {
-    // if (status == "unauthenticated" && router.route != "/accounts") {
-    //   router.push("/accounts");
-    // }
-  }, [router, status]);
-
   const onClickLink = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,
   ) => {
@@ -226,7 +221,13 @@ const Header = () => {
   };
 
   const oncClickPUshWrite = () => {
-    router.push("/topics/create");
+    if (status != "authenticated") {
+      if (checkAuth()) {
+        return router.push("/accounts");
+      }
+    } else {
+      router.push("/topics/create");
+    }
   };
 
   const onKeyPressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {

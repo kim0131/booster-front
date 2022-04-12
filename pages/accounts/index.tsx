@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import type { NextPage } from "next";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -7,7 +8,7 @@ import Button from "@components/elements/button";
 import AccountsLayout from "@components/layouts/accounts-layout";
 import { Body1, Body2, Header4 } from "@components/elements/types";
 import { accountsDescription } from "@core/config/description";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import theme from "@components/styles/theme";
 import { IAccountsData } from "@core/interfaces/accounts";
 import { accountsNavigation } from "@core/config/navigation";
@@ -31,9 +32,11 @@ const Accounts: NextPage = () => {
   });
   const { data: session, status } = useSession();
 
-  if (status == "authenticated") {
-    router.push("/");
-  }
+  useEffect(() => {
+    if (status == "authenticated") {
+      router.push("/");
+    }
+  }, [status]);
 
   const onClickLink = (
     e: React.MouseEvent<HTMLButtonElement | HTMLParagraphElement>,
@@ -72,20 +75,6 @@ const Accounts: NextPage = () => {
   };
   const onClickCertification = () => {
     router.push("/accounts/signup");
-    // const form: HTMLFormElement | null | any =
-    //   document.querySelector("#form_chk");
-    // window.name = "parent";
-    // window.open(
-    //   "",
-    //   "child",
-    //   "width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no",
-    // );
-    // form.action = "/accounts/signup";
-    // form.target = "child";
-    // // form.target = "test";
-
-    // //submit! (본인인증 화면으로 전환)
-    // form.submit();
   };
 
   return (

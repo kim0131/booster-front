@@ -6,17 +6,28 @@ import Snb from "@components/templates/snb";
 import Board from "@components/templates/board";
 import { useSearch } from "@core/hook/use-search";
 import { useEffect, useState } from "react";
+import { checkAuth } from "@core/util/check-auth";
+import { useSession } from "next-auth/react";
+import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
+import Loader from "@components/elements/loader";
 
 const Search: NextPage = () => {
   const router = useRouter();
   const { searchTerm, category } = router.query;
+  const { status } = useSession();
   const { searchResult } = useSearch(searchTerm, category);
 
   const onClickRouter = (param: any) => {
-    if (param.sector == "topics") {
-      router.push(`/${param.sector}/detail?id=${param.idx}`);
+    if (status != "authenticated") {
+      if (checkAuth()) {
+        return router.push("/accounts");
+      }
     } else {
-      router.push(`/${param.sector}/${param.idx}`);
+      if (param.sector == "topics") {
+        router.push(`/${param.sector}/detail?id=${param.idx}`);
+      } else {
+        router.push(`/${param.sector}/${param.idx}`);
+      }
     }
   };
 
@@ -35,6 +46,12 @@ const Search: NextPage = () => {
             datas={searchResult.result}
             onClickRouter={onClickRouter}
           />
+        </>
+      )}
+      {!searchResult && (
+        <>
+          <TopicSnbSkeleton />
+          <Loader />
         </>
       )}
     </SnbLayout>

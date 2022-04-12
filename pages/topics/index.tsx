@@ -11,6 +11,8 @@ import { globalNavigation } from "@core/config/navigation";
 import useCategoryList from "@core/hook/use-category-list";
 import { useCategorySubSide } from "@core/hook/use-category-sub-side";
 import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
+import { checkAuth } from "@core/util/check-auth";
+import { useSession } from "next-auth/react";
 
 interface IPropsTopics {
   initCategory: string;
@@ -19,6 +21,7 @@ interface IPropsTopics {
 const Topics: NextPage<IPropsTopics> = ({ initCategory }) => {
   const router = useRouter();
   const category = initCategory === "" ? "all" : initCategory;
+  const { data: session, status } = useSession();
 
   const { categorySubSide, isCategorySubSideValidating } =
     useCategorySubSide("topic");
@@ -27,10 +30,18 @@ const Topics: NextPage<IPropsTopics> = ({ initCategory }) => {
     useTopicListFilter(category);
 
   const onClickRouter = (param: any) => {
-    if (param.sector == "topics") {
-      router.push(`/${param.sector}/detail/${param.idx}?category=${category}`);
+    if (status != "authenticated") {
+      if (checkAuth()) {
+        return router.push("/accounts");
+      }
     } else {
-      router.push(`/${param.sector}/${param.idx}`);
+      if (param.sector == "topics") {
+        router.push(
+          `/${param.sector}/detail/${param.idx}?category=${category}`,
+        );
+      } else {
+        router.push(`/${param.sector}/${param.idx}`);
+      }
     }
   };
 

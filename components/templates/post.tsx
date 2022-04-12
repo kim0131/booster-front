@@ -9,6 +9,8 @@ import useInsightList from "@core/hook/use-insight-list";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 import React from "react";
+import { checkAuth } from "@core/util/check-auth";
+import { useSession } from "next-auth/react";
 
 interface IPropsStyle {
   thumbnail: {
@@ -97,8 +99,15 @@ const Post = ({ category }: IPropsPost) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
   const { insightList } = useInsightList();
+  const { status } = useSession();
   const onClickRouterMove = (id: any) => {
-    router.push(`/insights/${id}`);
+    if (status != "authenticated") {
+      if (checkAuth()) {
+        return router.push("/accounts");
+      }
+    } else {
+      router.push(`/insights/${id}`);
+    }
   };
   return (
     <>
