@@ -7,7 +7,7 @@ import { useState } from "react";
 
 interface IStyle {
   item: {
-    thumbnailColor: string;
+    thumbnailcolor: string;
     url: string;
   };
   content: {
@@ -34,7 +34,7 @@ const Style = {
     max-width: 20rem;
     height: 26.25rem;
     padding: 1.5rem;
-    background-color: ${props => props.thumbnailColor};
+    background-color: ${props => props.thumbnailcolor};
     background-image: ${props => `url(${props.url})`};
     background-size: contain;
     background-repeat: no-repeat;
@@ -72,44 +72,6 @@ interface IPropsCarousel {
   datas: ICarouselData[];
 }
 
-const sampleDatas = [
-  {
-    id: 0,
-    title: "1",
-    content: "테스트",
-    url: "https://source.unsplash.com/320x320/?work",
-    thumbnailColor: "#bc6321",
-  },
-  {
-    id: 1,
-    title: "2",
-    content: "테스트",
-    url: "https://source.unsplash.com/320x320/?korea",
-    thumbnailColor: "#dd5321",
-  },
-  {
-    id: 2,
-    title: "더 나은 리더가 되는 법",
-    content: "내가 같이 일한 그들보다 더 나아지자",
-    url: "https://source.unsplash.com/320x320/?japan",
-    thumbnailColor: "#4812bd",
-  },
-  {
-    id: 3,
-    title: "그것이 알고싶다",
-    content: "스타트업 스톡옵션의 모든 것",
-    url: "https://source.unsplash.com/320x320/?asia",
-    thumbnailColor: "#222123",
-  },
-  {
-    id: 4,
-    title: "5",
-    content: "테스트",
-    url: "https://source.unsplash.com/320x320/?man",
-    thumbnailColor: "#dddddd",
-  },
-];
-
 const getContrast = (hexColor: string) => {
   var r = parseInt(hexColor.slice(1, 3), 16);
   var g = parseInt(hexColor.slice(3, 5), 16);
@@ -118,10 +80,10 @@ const getContrast = (hexColor: string) => {
   return calcContrast >= 128 ? true : false;
 };
 
-const Item = ({ id, thumbnailColor, title, content, url }: ICarouselData) => {
-  const isWhite = getContrast(thumbnailColor);
+const Item = ({ id, thumbnailcolor, title, content, url }: ICarouselData) => {
+  const isWhite = getContrast(thumbnailcolor);
   return (
-    <Style.Item key={id} thumbnailColor={thumbnailColor} url={url}>
+    <Style.Item key={id} thumbnailcolor={thumbnailcolor} url={url}>
       <Style.Title color={isWhite ? theme.color.gray[900] : theme.color.white}>
         {title}
       </Style.Title>
@@ -146,7 +108,7 @@ const Carousel = () => {
             <Item
               id={data.id}
               key={data.id}
-              thumbnailColor={data.thumbnailColor}
+              thumbnailcolor={data.thumbnailcolor}
               title={data.title}
               content={data.content}
               url={data.image_url}

@@ -25,7 +25,7 @@ const mainBannerListFetcher = async () => {
         url: item.url,
         priority: item.priority,
         content: item.subtitle,
-        thumbnailColor: item.background_color,
+        thumbnailcolor: item.background_color,
       });
     });
   });

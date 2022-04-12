@@ -145,39 +145,46 @@ interface IPropsBoard {
 
 const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
   const { isDesktop } = useDesktop();
-  // const { mutate } = useSWRConfig();
   const { data: session }: any = useSession();
   const [data, setData] = useState(datas);
-
+  const router = useRouter();
   const [totalCount, setTotalCount] = useState(datas.length);
   const [line, setLine] = useState(10);
-  const [currentPage, setcurrentPage] = useState(1);
+  const page = router.query.page ? parseInt(router.query.page as string) : 1;
+  const { id, searchTerm } = router.query;
 
   useEffect(() => {
     sliceTopicList();
-  }, [currentPage, datas]);
-
-  useEffect(() => {
     setTotalCount(datas.length);
-    setcurrentPage(1);
-  }, [datas]);
+  }, [router, datas]);
 
   const sliceTopicList = () => {
-    const result = datas.slice((currentPage - 1) * line, currentPage * line);
+    const result = datas.slice((page - 1) * line, page * line);
     setData(result);
   };
 
   const onClickPagenation = (e: any) => {
     const value = parseInt(e.currentTarget.textContent);
-    setcurrentPage(value);
+    router.push(onClickPage(value) as string);
   };
 
   const onClickMoveFront = () => {
-    setcurrentPage(1);
+    router.push(onClickPage(1) as string);
   };
   const onClickMoveEnd = () => {
-    setcurrentPage(Math.ceil(totalCount / line));
+    router.push(onClickPage(Math.ceil(totalCount / line)) as string);
   };
+
+  const onClickPage = (page?: number) => {
+    if (router.pathname == "/topics/detail/[id]") {
+      return `/topics/detail/${id}?category=${category}&page=${page}`;
+    } else if (router.pathname == "/topics") {
+      return `/topics?category=${category}&page=${page}`;
+    } else if (router.pathname == "/search") {
+      return `/search?searchTerm=${searchTerm}&category=${category}&page=${page}`;
+    }
+  };
+
   const onClickScrap = async (id: any, bookmark: any) => {
     if (bookmark) {
       await axios.post(`/api2/topic/scrap/cancel/${id}`, {
@@ -224,7 +231,7 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
               </Style.BoardList.Item.Bottom.Container>
             </Style.BoardList.Item.Container>
           ) : (
-            datas.map(data => (
+            data.map(data => (
               <Style.BoardList.Item.Container key={data.id}>
                 <Style.BoardList.Item.Top.Container>
                   <Style.BoardList.Item.Top.Content.Container
@@ -301,7 +308,7 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
         <Pagination
           totalContent={totalCount}
           line={line}
-          currentPage={currentPage}
+          currentPage={page}
           onClick={onClickPagenation}
           MoveFront={onClickMoveFront}
           MoveEnd={onClickMoveEnd}

@@ -133,7 +133,6 @@ const searchFetcher = async (param: any) => {
           if (category == "all") {
             return true;
           } else {
-            console.log(category, data.bo_table);
             return category == data.bo_table;
           }
         });

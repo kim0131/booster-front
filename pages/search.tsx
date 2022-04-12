@@ -30,7 +30,7 @@ const Search: NextPage = () => {
             searchTerm={searchTerm}
           />
           <Board
-            category="test"
+            category={category ? category : "all"}
             title={"검색결과"}
             datas={searchResult.result}
             onClickRouter={onClickRouter}

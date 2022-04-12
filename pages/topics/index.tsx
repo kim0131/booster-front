@@ -28,9 +28,7 @@ const Topics: NextPage<IPropsTopics> = ({ initCategory }) => {
 
   const onClickRouter = (param: any) => {
     if (param.sector == "topics") {
-      router.push(
-        `/${param.sector}/detail?id=${param.idx}&category=${category}`,
-      );
+      router.push(`/${param.sector}/detail/${param.idx}?category=${category}`);
     } else {
       router.push(`/${param.sector}/${param.idx}`);
     }

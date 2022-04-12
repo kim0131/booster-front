@@ -3,5 +3,5 @@ export interface ICarouselData {
   title: string;
   content: string;
   url: string;
-  thumbnailColor: string;
+  thumbnailcolor: string;
 }

@@ -106,10 +106,11 @@ const Snb = ({ snbDatas, category, searchTerm }: IPropsSnb) => {
     let endUrl = "";
     if (searchTerm) endUrl += `searchTerm=${searchTerm}&`;
     endUrl += `category=${e.currentTarget.value}&`;
+
     if (router.pathname == "/search") {
       router.push(`${router.pathname}?${endUrl}`);
     } else {
-      router.push(`/topics?${endUrl}`);
+      router.push(`${router.pathname}?${endUrl}`);
     }
   };
 

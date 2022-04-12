@@ -20,7 +20,11 @@ const TopicDetail: NextPage = () => {
   const { categorySubSide } = useCategorySubSide("topic");
 
   const onClickRouter = (param: any) => {
-    router.push(`/topics/detail?id=${param}`);
+    if (param.sector == "topics") {
+      router.push(`/${param.sector}/detail/${param.idx}?category=${category}`);
+    } else {
+      router.push(`/${param.sector}/${param.idx}`);
+    }
   };
 
   return (
