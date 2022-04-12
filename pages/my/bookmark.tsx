@@ -7,39 +7,11 @@ import Board from "@components/templates/board";
 import { useTopicListFilter } from "@core/hook/use-topic-list";
 import { useEffect, useState } from "react";
 
-const sampleSearchSnbDatas = [
-  {
-    id: 0,
-    category: "스크랩",
-    menus: [
-      { id: 0, content: "전체 (100)", param: "menu1" },
-      { id: 1, content: "메뉴 2 (50)", param: "menu2" },
-      { id: 2, content: "메뉴 3 (50)", param: "menu3" },
-    ],
-  },
-];
-
 const Bookmark: NextPage = () => {
   const router = useRouter();
   const { category } = router.query;
   const { topicListFilter } = useTopicListFilter("scrap");
-  const [topiceList, setTopiceList] = useState([
-    {
-      id: 0,
-      idx: 0,
-      category: "",
-      title: "",
-      content: "",
-      writer: "",
-      like: 0,
-      view: 0,
-      comments: 0,
-      bookmark: false,
-      create: 0,
-      likeCnt: 0,
-      rn: 0,
-    },
-  ]);
+  const [topiceList, setTopiceList] = useState();
   const [snbDatas, setSnbDatas] = useState([
     {
       id: 0,
@@ -54,7 +26,7 @@ const Bookmark: NextPage = () => {
 
   useEffect(() => {
     filterTopiceList();
-  }, [category]);
+  }, [category, topicListFilter]);
 
   const onClickRouter = (param: any) => {
     if (param.sector == "topics") {
@@ -125,14 +97,14 @@ const Bookmark: NextPage = () => {
 
   return (
     <SnbLayout>
-      {topicListFilter && (
+      {topicListFilter && topiceList && (
         <>
           <Snb category={category ? category : "all"} snbDatas={snbDatas} />
 
           <Board
             category={category ? category : "all"}
             title={"스크랩"}
-            datas={topiceList.length > 0 ? topiceList : topicListFilter}
+            datas={topiceList ? topiceList : topicListFilter}
             onClickRouter={onClickRouter}
           />
         </>

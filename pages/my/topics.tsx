@@ -42,7 +42,7 @@ const MyTopics: NextPage = () => {
 
   useEffect(() => {
     filterTopiceList();
-  }, [category]);
+  }, [category, topicListFilter]);
 
   const onClickRouter = (param: any) => {
     if (param.sector == "topics") {
