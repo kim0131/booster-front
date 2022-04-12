@@ -208,7 +208,7 @@ const Header = () => {
     const link: string | undefined = e.currentTarget.dataset.value;
     const content: string | null = e.currentTarget.textContent;
     if (link) {
-      link === "logout" ? console.log("logout") : router.push(link);
+      link === "logout" ? "" : router.push(link);
     }
 
     if (content) {

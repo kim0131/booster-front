@@ -48,19 +48,24 @@ const Topics: NextPage<IPropsTopics> = ({ initCategory }) => {
   return (
     <SnbLayout>
       {categorySubSide && (
-        <Snb category={category} snbDatas={categorySubSide} />
+        <>
+          {topicListFilter && (
+            <>
+              <Snb category={category} snbDatas={categorySubSide} />
+              <Board
+                category={category}
+                title={
+                  _.find(categorySubSide[0].menus, { param: category })
+                    ?.content || ""
+                }
+                datas={topicListFilter}
+                onClickRouter={onClickRouter}
+              />
+            </>
+          )}
+        </>
       )}
       {!categorySubSide && <TopicSnbSkeleton />}
-      {topicListFilter && (
-        <Board
-          category={category}
-          title={
-            _.find(categorySubSide[0].menus, { param: category })?.content || ""
-          }
-          datas={topicListFilter}
-          onClickRouter={onClickRouter}
-        />
-      )}
       {!topicListFilter && <Loader color="gray" />}
     </SnbLayout>
   );
