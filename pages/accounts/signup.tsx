@@ -240,7 +240,7 @@ const Signup: NextPage = () => {
               <Body2>아이디 및 비밀번호 정보</Body2>
               <TextField
                 name="mb_id"
-                placeholder="아이디을 입력하세요."
+                placeholder="아이디를 입력하세요."
                 size="large"
                 value={state.data.mb_id}
                 maxLength={50}
