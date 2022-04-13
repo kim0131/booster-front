@@ -17,6 +17,7 @@ const insightfetcher = async (param: any) => {
       if (item.file_url) {
         file_full_url = insightImageUrl + item.file_url;
       }
+      console.log(param.category, item.board_table);
       if (param.category != "all") {
         if (param.category == item.board_table) {
           result.push({

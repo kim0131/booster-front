@@ -110,6 +110,7 @@ const Post = ({ category }: IPropsPost) => {
   const insightListoffset = useRef<any>();
 
   useEffect(() => {
+    console.log(insightList);
     if (insightList) {
       sliceTopicList();
       setTotalCount(insightList.length);
@@ -120,7 +121,7 @@ const Post = ({ category }: IPropsPost) => {
     if (insightList) {
       window.scrollTo(
         0,
-        insightListoffset.current.offsetTop
+        insightListoffset.current.offsetTop + 56
           ? insightListoffset.current.offsetTop
           : 0,
       );

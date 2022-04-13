@@ -159,7 +159,9 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
     if (datas) {
       window.scrollTo(
         0,
-        topicListref.current.offsetTop ? topicListref.current.offsetTop : 0,
+        topicListref.current.offsetTop
+          ? topicListref.current.offsetTop + 56
+          : 0,
       );
     }
   }, [page, category]);
