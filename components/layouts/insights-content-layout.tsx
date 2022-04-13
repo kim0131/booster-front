@@ -48,6 +48,7 @@ const Style = {
     flex-direction: column;
     ${props => props.theme.screen.md} {
       max-width: 72rem;
+      min-width: 50rem;
       margin: 0 auto;
     }
   `,

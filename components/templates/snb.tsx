@@ -109,6 +109,8 @@ const Snb = ({ snbDatas, category, searchTerm }: IPropsSnb) => {
 
     if (router.pathname == "/search") {
       router.push(`${router.pathname}?${endUrl}`);
+    } else if (router.pathname == "/topics/detail/[id]") {
+      router.push(`/topics?${endUrl}`);
     } else {
       router.push(`${router.pathname}?${endUrl}`);
     }

@@ -307,6 +307,7 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
   };
 
   const onClickWriteComment = async () => {
+    if (!commentdata.wr_content) return alert("댓글내용을 입력해주세요");
     await axios.post(`/api2/insight/write`, commentdata).then(res => {
       alert("댓글이 등록되었습니다");
       setCommentData({ ...commentdata, wr_content: "" });
@@ -314,6 +315,7 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
     });
   };
   const onClickWriteReply = async () => {
+    if (!replydata.wr_content) return alert("댓글내용을 입력해주세요");
     await axios.post(`/api2/insight/write`, replydata).then(res => {
       alert("댓글이 등록되었습니다");
       setReply({ ...replydata, wr_parent2: 0, wr_content: "" });
