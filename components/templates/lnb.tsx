@@ -117,9 +117,9 @@ const Lnb = ({ param, onClick }: IPropsLnb) => {
           <Style.Desktop.Button
             key={"all"}
             onClick={() => {
-              onClick("");
+              onClick("all");
             }}
-            isActive={!param}
+            isActive={param === "all"}
           >
             {"전체"}
           </Style.Desktop.Button>
@@ -128,9 +128,9 @@ const Lnb = ({ param, onClick }: IPropsLnb) => {
               <Style.Desktop.Button
                 key={lnbData.id}
                 onClick={() => {
-                  onClick(lnbData.content);
+                  onClick(lnbData.param);
                 }}
-                isActive={lnbData.content === param}
+                isActive={lnbData.param === param}
               >
                 {lnbData.content}
               </Style.Desktop.Button>

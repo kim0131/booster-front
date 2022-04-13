@@ -8,19 +8,21 @@ import { useEffect, useState } from "react";
 
 const Insights: NextPage = () => {
   const router = useRouter();
-  const [selectCategory, setCategory] = useState<any>();
-  const { category } = router.query;
-  useEffect(() => {
-    setCategory(category);
-  }, [category]);
+  const { category, page } = router.query;
 
   const onClickCategory = (content: any) => {
-    setCategory(content);
+    if (category == content) {
+      router.push(
+        `/insights?category=${content}${page ? `&page=${page}` : ""}`,
+      );
+    } else {
+      router.push(`/insights?category=${content}`);
+    }
   };
   return (
     <LnbLayout>
-      <Lnb param={selectCategory} onClick={onClickCategory} />
-      <Post category={selectCategory} />
+      <Lnb param={category ? category : "all"} onClick={onClickCategory} />
+      <Post category={category ? category : "all"} />
     </LnbLayout>
   );
 };

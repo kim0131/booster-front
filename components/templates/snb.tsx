@@ -4,6 +4,7 @@ import { ISnbData } from "@core/interfaces/snb";
 import { Body2 } from "@components/elements/types";
 import { IconChevronDown } from "@components/icons";
 import { useDesktop } from "@core/hook/use-desktop";
+import { useEffect } from "react";
 
 interface IPropsStyle {
   isRoute?: boolean;
@@ -96,6 +97,7 @@ interface IPropsSnb {
 const Snb = ({ snbDatas, category, searchTerm }: IPropsSnb) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
+
   const onClickRouter = (
     e:
       | React.MouseEvent<HTMLButtonElement>

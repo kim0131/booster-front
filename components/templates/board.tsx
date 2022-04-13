@@ -18,7 +18,7 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSWRConfig } from "swr";
 import { checkAuth } from "@core/util/check-auth";
 
@@ -153,6 +153,16 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
   const [line, setLine] = useState(10);
   const page = router.query.page ? parseInt(router.query.page as string) : 1;
   const { id, searchTerm } = router.query;
+  const topicListref = useRef<any>();
+
+  useEffect(() => {
+    if (datas) {
+      window.scrollTo(
+        0,
+        topicListref.current.offsetTop ? topicListref.current.offsetTop : 0,
+      );
+    }
+  }, [page, category]);
 
   useEffect(() => {
     sliceTopicList();
@@ -215,7 +225,7 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
 
   return (
     <>
-      <Style.Container>
+      <Style.Container ref={topicListref}>
         {isDesktop && <Header4>{title}</Header4>}
 
         <Style.BoardList.Container>
