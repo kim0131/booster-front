@@ -4,6 +4,11 @@ import { ICarouselData } from "@core/interfaces/carousel";
 import styled from "@emotion/styled";
 import { LayoutGroup, motion } from "framer-motion";
 import { useState } from "react";
+import "react-multi-carousel/lib/styles.css";
+import Carousel from "react-multi-carousel";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 interface IStyle {
   item: {
@@ -17,13 +22,15 @@ interface IStyle {
 
 const Style = {
   Container: styled.div`
-    width: 100%;
-    margin: 0 auto;
-    display: flex;
-    overflow-x: hidden;
-    align-items: center;
-    justify-content: center;
-    gap: 3rem;
+    /* max-width: 100%; */
+    /* margin: 0 auto; */
+    /* display: flex; */
+    /* overflow-x: hidden;
+    overflow-y: hidden; */
+    /* align-items: center;
+    justify-content: center; */
+    /* gap: 3rem; */
+    /* text-align: center; */
   `,
   Item: styled(motion.div)<IStyle["item"]>`
     flex: none;
@@ -96,13 +103,40 @@ const Item = ({ id, thumbnailcolor, title, content, url }: ICarouselData) => {
   );
 };
 
-const Carousel = () => {
+const StyledSlider = styled(Slider)`
+  .slick-slide div {
+    outline: none;
+  }
+  .slick-track {
+    display: flex;
+    /* gap: 3rem; */
+    justify-content: center;
+    margin: auto;
+  }
+  .slick-slide > div {
+    display: flex;
+    justify-content: center;
+  }
+`;
+
+const MainCarousel = () => {
   const [state, setState] = useState([0]);
   const { mainBannerList } = useMainBanner();
 
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 1000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+    centerMode: true,
+    autoplay: true,
+    autoplaySpeed: 3000,
+  };
   return (
     <Style.Container>
-      <LayoutGroup>
+      <StyledSlider {...settings}>
         {mainBannerList &&
           mainBannerList.map((data: any) => (
             <Item
@@ -114,9 +148,9 @@ const Carousel = () => {
               url={data.image_url}
             />
           ))}
-      </LayoutGroup>
+      </StyledSlider>
     </Style.Container>
   );
 };
 
-export default Carousel;
+export default MainCarousel;
