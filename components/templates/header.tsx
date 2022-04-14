@@ -215,6 +215,7 @@ const Header = () => {
       content === "로그아웃"
         ? signOut({
             redirect: false,
+            callbackUrl: "/",
           })
         : "";
     }

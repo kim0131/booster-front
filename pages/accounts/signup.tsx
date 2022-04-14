@@ -88,17 +88,17 @@ const Signup: NextPage = () => {
     });
   };
 
-  const onClickNext = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onClickNext = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     let pass_fail = true;
-    mb_id_vaildate(state.data.mb_id).then(res => {
+    await mb_id_vaildate(state.data.mb_id).then(async res => {
       if (res) {
         setState({
           ...state,
           invalid: { ...state.invalid, mb_id: res },
         });
       } else {
-        mb_pw_vaildate(state.data.mb_pw).then(res => {
+        await mb_pw_vaildate(state.data.mb_pw).then(async res => {
           if (res) {
             setState({
               ...state,

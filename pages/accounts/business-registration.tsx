@@ -77,7 +77,7 @@ const BusinessRegistration: NextPage = () => {
     formData.append("file", image.image_file);
 
     formData.append("idx", `${userIdx.mb_business_num}`);
-
+    if (!image.image_file) return alert("사업자등록증을 업로드해주세요");
     await axios.post(`/api2/user/update/${userIdx.idx}`, {
       mb_business_certify: 1,
     });
@@ -170,7 +170,11 @@ const BusinessRegistration: NextPage = () => {
         )
       }
       find={
-        <Body2 isLink color={theme.color.gray[500]}>
+        <Body2
+          isLink
+          color={theme.color.gray[500]}
+          onClick={() => router.push("/")}
+        >
           나중에 하기
         </Body2>
       }
