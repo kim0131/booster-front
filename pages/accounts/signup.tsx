@@ -125,23 +125,23 @@ const Signup: NextPage = () => {
   const onClickConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    mb_nick_vaildate(state.data.mb_nick).then(res => {
+    await mb_nick_vaildate(state.data.mb_nick).then(async res => {
       if (res) {
         setState({ ...state, invalid: { mb_nick: res } });
       } else {
-        mb_email_vaildate(state.data.mb_email).then(res => {
+        await mb_email_vaildate(state.data.mb_email).then(async res => {
           if (res) {
             setState({ ...state, invalid: { mb_email: res } });
           } else {
-            mb_name_vaildate(state.data.mb_name).then(res => {
+            await mb_name_vaildate(state.data.mb_name).then(async res => {
               if (res) {
                 setState({ ...state, invalid: { mb_name: res } });
               } else {
-                mb_ph_vaildate(state.data.mb_ph).then(res => {
+                await mb_ph_vaildate(state.data.mb_ph).then(async res => {
                   if (res) {
                     setState({ ...state, invalid: { mb_ph: res } });
                   } else {
-                    axios
+                    await axios
                       .post("/api2/signup", {
                         mb_id: state.data.mb_id,
                         mb_pw: state.data.mb_pw,
