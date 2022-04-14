@@ -2,33 +2,28 @@
 import type { GetServerSideProps, NextPage } from "next";
 import { useTopicListFilter } from "@core/hook/use-topic-list";
 import { useRouter } from "next/router";
-import Loader from "@components/elements/loader";
 import SnbLayout from "@components/layouts/snb-layout";
 import Board from "@components/templates/board";
 import Snb from "@components/templates/snb";
 import _ from "lodash";
-import { globalNavigation } from "@core/config/navigation";
-import useCategoryList from "@core/hook/use-category-list";
 import { useCategorySubSide } from "@core/hook/use-category-sub-side";
 import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
 import { checkAuth } from "@core/util/check-auth";
 import { useSession } from "next-auth/react";
+import useHistoryState from "@core/hook/use-history-state";
 
 interface IPropsTopics {
   initCategory: string;
 }
 
-const Topics: NextPage<IPropsTopics> = ({ initCategory }) => {
+const Topics: NextPage<IPropsTopics> = () => {
   const router = useRouter();
-  const category = initCategory === "" ? "all" : initCategory;
   const { data: session, status } = useSession();
-
+  const [category, setCategory] = useHistoryState("all", "category");
   const { categorySubSide, isCategorySubSideValidating } =
     useCategorySubSide("topic");
-
   const { topicListFilter, isTopicListValidating } =
     useTopicListFilter(category);
-
   const onClickRouter = (param: any) => {
     if (status != "authenticated") {
       if (checkAuth()) {
@@ -51,7 +46,11 @@ const Topics: NextPage<IPropsTopics> = ({ initCategory }) => {
         <>
           {topicListFilter && (
             <>
-              <Snb category={category} snbDatas={categorySubSide} />
+              <Snb
+                category={category}
+                snbDatas={categorySubSide}
+                setCategory={setCategory}
+              />
               <Board
                 category={category}
                 title={
@@ -66,7 +65,7 @@ const Topics: NextPage<IPropsTopics> = ({ initCategory }) => {
         </>
       )}
       {!categorySubSide && <TopicSnbSkeleton />}
-      {!topicListFilter && <Loader color="gray" />}
+      {!topicListFilter && <TopicSnbSkeleton />}
     </SnbLayout>
   );
 };

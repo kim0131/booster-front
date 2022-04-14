@@ -5,6 +5,7 @@ import { Body2 } from "@components/elements/types";
 import { IconChevronDown } from "@components/icons";
 import { useDesktop } from "@core/hook/use-desktop";
 import { useEffect } from "react";
+import useHistoryState from "@core/hook/use-history-state";
 
 interface IPropsStyle {
   isRoute?: boolean;
@@ -92,9 +93,10 @@ interface IPropsSnb {
   snbDatas: ISnbData[];
   category?: string | string[] | undefined;
   searchTerm?: string | string[] | undefined;
+  setCategory?: any;
 }
 
-const Snb = ({ snbDatas, category, searchTerm }: IPropsSnb) => {
+const Snb = ({ snbDatas, category, setCategory }: IPropsSnb) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
 
@@ -105,17 +107,17 @@ const Snb = ({ snbDatas, category, searchTerm }: IPropsSnb) => {
   ) => {
     e.preventDefault();
 
-    let endUrl = "";
-    if (searchTerm) endUrl += `searchTerm=${searchTerm}&`;
-    endUrl += `category=${e.currentTarget.value}&`;
-
-    if (router.pathname == "/search") {
-      router.push(`${router.pathname}?${endUrl}`);
-    } else if (router.pathname == "/topics/detail/[id]") {
-      router.push(`/topics?${endUrl}`);
-    } else {
-      router.push(`${router.pathname}?${endUrl}`);
-    }
+    // let endUrl = "";
+    // if (searchTerm) endUrl += `searchTerm=${searchTerm}&`;
+    // endUrl += `category=${e.currentTarget.value}&`;
+    setCategory(e.currentTarget.value);
+    // if (router.pathname == "/search") {
+    //   router.push(`${router.pathname}?${endUrl}`);
+    // } else if (router.pathname == "/topics/detail/[id]") {
+    //   router.push(`/topics?${endUrl}`);
+    // } else {
+    //   router.push(`${router.pathname}?${endUrl}`);
+    // }
   };
 
   return isDesktop ? (

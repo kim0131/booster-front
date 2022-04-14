@@ -12,6 +12,8 @@ import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { checkAuth } from "@core/util/check-auth";
 import { useSession } from "next-auth/react";
+import useHistoryState from "@core/hook/use-history-state";
+import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
 
 interface IPropsStyle {
   thumbnail: {
@@ -103,30 +105,20 @@ const Post = ({ category }: IPropsPost) => {
   const { insightList } = useInsightList(category);
   const [totalCount, setTotalCount] = useState(0);
   const [data, setData] = useState([]);
-  const [line, setLine] = useState(8);
+  const [line, setLine] = useState(3);
   const { id } = router.query;
-  const page = router.query.page ? parseInt(router.query.page as string) : 1;
+  const [page, setPage] = useHistoryState(1, "page");
   const { status } = useSession();
-  const insightListoffset = useRef<any>();
 
   useEffect(() => {
-    console.log(insightList);
     if (insightList) {
       sliceTopicList();
       setTotalCount(insightList.length);
     }
-  }, [router, insightList]);
-
+  }, [router, insightList, page]);
   useEffect(() => {
-    if (insightList) {
-      window.scrollTo(
-        0,
-        insightListoffset.current.offsetTop + 56
-          ? insightListoffset.current.offsetTop
-          : 0,
-      );
-    }
-  }, [page, category]);
+    setPage(1);
+  }, [category]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -139,21 +131,17 @@ const Post = ({ category }: IPropsPost) => {
 
   const onClickPagenation = (e: any) => {
     const value = parseInt(e.currentTarget.textContent);
-    router.push(onClickPage(value) as string);
+    onClickPage(value);
   };
 
   const onClickMoveFront = () => {
-    router.push(onClickPage(1) as string);
+    onClickPage(1);
   };
   const onClickMoveEnd = () => {
-    router.push(onClickPage(Math.ceil(totalCount / line)) as string);
+    onClickPage(Math.ceil(totalCount / line));
   };
   const onClickPage = (page?: number) => {
-    if (router.pathname == "/insights/[id]") {
-      return `/insights/${id}?category=${category}&page=${page}`;
-    } else if (router.pathname == "/insights") {
-      return `/insights?category=${category}&page=${page}`;
-    }
+    setPage(page);
   };
   const onClickRouterMove = (id: any) => {
     if (status != "authenticated") {
@@ -167,9 +155,9 @@ const Post = ({ category }: IPropsPost) => {
   return (
     <>
       {!insightList ? (
-        <Loader color="gray" />
+        <TopicSnbSkeleton />
       ) : (
-        <Style.Container setLine={setLine} ref={insightListoffset}>
+        <Style.Container setLine={setLine}>
           {insightList &&
             data.map((content: any) => {
               return (

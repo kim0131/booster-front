@@ -21,6 +21,7 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useSWRConfig } from "swr";
 import { checkAuth } from "@core/util/check-auth";
+import useHistoryState from "@core/hook/use-history-state";
 
 const Style = {
   Container: styled.div`
@@ -151,23 +152,13 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
   const router = useRouter();
   const [totalCount, setTotalCount] = useState(datas.length);
   const [line, setLine] = useState(10);
-  const page = router.query.page ? parseInt(router.query.page as string) : 1;
   const { id, searchTerm } = router.query;
-  const topicListref = useRef<any>();
-
-  useEffect(() => {
-    if (datas) {
-      window.scrollTo(
-        0,
-        topicListref.current.offsetTop ? topicListref.current.offsetTop : 0,
-      );
-    }
-  }, [page, category]);
+  const [page, setPage] = useHistoryState(1, "page");
 
   useEffect(() => {
     sliceTopicList();
     setTotalCount(datas.length);
-  }, [router, datas]);
+  }, [router, datas, page]);
 
   const sliceTopicList = () => {
     const result = datas.slice((page - 1) * line, page * line);
@@ -176,24 +167,18 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
 
   const onClickPagenation = (e: any) => {
     const value = parseInt(e.currentTarget.textContent);
-    router.push(onClickPage(value) as string);
+    onClickPage(value);
   };
 
   const onClickMoveFront = () => {
-    router.push(onClickPage(1) as string);
+    onClickPage(1);
   };
   const onClickMoveEnd = () => {
-    router.push(onClickPage(Math.ceil(totalCount / line)) as string);
+    onClickPage(Math.ceil(totalCount / line));
   };
 
   const onClickPage = (page?: number) => {
-    if (router.pathname == "/topics/detail/[id]") {
-      return `/topics/detail/${id}?category=${category}&page=${page}`;
-    } else if (router.pathname == "/topics") {
-      return `/topics?category=${category}&page=${page}`;
-    } else if (router.pathname == "/search") {
-      return `/search?searchTerm=${searchTerm}&category=${category}&page=${page}`;
-    }
+    setPage(page);
   };
 
   const onClickScrap = async (id: any, bookmark: any) => {
@@ -225,7 +210,7 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
 
   return (
     <>
-      <Style.Container ref={topicListref}>
+      <Style.Container>
         {isDesktop && <Header4>{title}</Header4>}
 
         <Style.BoardList.Container>

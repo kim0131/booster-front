@@ -12,6 +12,7 @@ import * as gtag from "../lib/gtag";
 import { useRouter } from "next/router";
 const isProduction = process.env.NODE_ENV === "production";
 import { useEffect } from "react";
+import { SWRConfig } from "swr";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { message } = useToast();
@@ -28,13 +29,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
       <SessionProvider>
-        <Global styles={global} />
-        <Header />
-        <Component {...pageProps} />
-        <Footer />
-        <div>{message}</div>
-        <div id="modal" />
-        <div id="toast" />
+        <SWRConfig value={{ refreshInterval: 1000 }}>
+          <Global styles={global} />
+          <Header />
+          <Component {...pageProps} />
+          <Footer />
+          <div>{message}</div>
+          <div id="modal" />
+          <div id="toast" />
+        </SWRConfig>
       </SessionProvider>
     </ThemeProvider>
   );

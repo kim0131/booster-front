@@ -11,10 +11,11 @@ import { useState } from "react";
 import TopicComment from "@components/templates/topic-comment";
 import { useCategorySubSide } from "@core/hook/use-category-sub-side";
 import _ from "lodash";
+import useHistoryState from "@core/hook/use-history-state";
 
 const TopicDetail: NextPage = () => {
   const router = useRouter();
-  const { category } = router.query;
+  const [category, setCategory] = useHistoryState("all", "category");
   const { topicDetail } = useTopicDetail(router.query.id);
   const { topicListFilter } = useTopicListFilter(category);
   const { categorySubSide } = useCategorySubSide("topic");
@@ -31,7 +32,11 @@ const TopicDetail: NextPage = () => {
     <SnbLayout>
       {topicDetail && (
         <>
-          <Snb category={category} snbDatas={categorySubSide} />
+          <Snb
+            category={category}
+            snbDatas={categorySubSide}
+            setCategory={setCategory}
+          />
           <TopicContentLayout id={router.query.id} data={topicDetail}>
             <TopicComment id={router.query.id} />
             {topicListFilter && (
