@@ -154,12 +154,14 @@ const Signup: NextPage = () => {
                         mb_nick: state.data.mb_nick,
                       })
                       .then(async (res: any) => {
+                        console.log(res.data);
                         const mb_idx = res.data.result.idx;
                         await axios
                           .post(`/api2/business/write`, {
                             mb_idx: mb_idx,
                           })
                           .then(async res => {
+                            console.log(res.data);
                             const business_idx = res.data.result.idx;
                             await axios.post(`/api2/user/update/${mb_idx}`, {
                               mb_business_num: business_idx,
