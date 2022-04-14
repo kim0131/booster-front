@@ -54,7 +54,7 @@ const searchFetcher = async (param: any) => {
           }
         });
 
-        await insightResult.map((data: any, idx: any) => {
+        await insightCnt.map((data: any, idx: any) => {
           if (data.inCnt) {
             SearchSnbDatas[2].menus.push({
               id: data.idx,
@@ -111,6 +111,9 @@ const searchFetcher = async (param: any) => {
           SearchSnbDatas: SearchSnbDatas,
           result: result2,
         });
+      })
+      .catch(error => {
+        console.log(error);
       });
   }
   return result[0];
