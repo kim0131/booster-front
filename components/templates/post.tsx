@@ -105,7 +105,7 @@ const Post = ({ category }: IPropsPost) => {
   const { insightList } = useInsightList(category);
   const [totalCount, setTotalCount] = useState(0);
   const [data, setData] = useState([]);
-  const [line, setLine] = useState(3);
+  const [line, setLine] = useState(8);
   const { id } = router.query;
   const [page, setPage] = useHistoryState(1, "page");
   const { status } = useSession();
