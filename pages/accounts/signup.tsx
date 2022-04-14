@@ -164,7 +164,8 @@ const Signup: NextPage = () => {
                               mb_business_num: business_idx,
                               mb_business_certify: 0,
                             });
-                          });
+                          })
+                          .catch(error => console.log(error));
                         signIn("username-password", {
                           mb_id: state.data.mb_id,
                           mb_pw: state.data.mb_pw,
@@ -174,7 +175,8 @@ const Signup: NextPage = () => {
                           mb_idx: mb_idx,
                         });
                         router.push("/accounts/business-registration");
-                      });
+                      })
+                      .catch(error => console.log(error));
                   }
                 });
               }
