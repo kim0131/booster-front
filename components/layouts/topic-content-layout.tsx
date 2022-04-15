@@ -159,10 +159,12 @@ const TopicContentLayout = ({
   const router = useRouter();
   const topicContent = data;
   const [likeCnt, setLikeCnt] = useState(0);
+  const [bookmark, setBookMark] = useState(false);
 
   useEffect(() => {
     if (topicContent) {
       setLikeCnt(topicContent.likeCnt);
+      setBookMark(topicContent.bookmark ? true : false);
     }
   }, [topicContent]);
   const onClickLink = async (
@@ -217,19 +219,33 @@ const TopicContentLayout = ({
       .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   };
 
-  const onClickScrap = async (id: any, bookmark: any) => {
+  const onClickScrap = async (
+    e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,
+    id: any,
+    bookmark: any,
+  ) => {
+    e.preventDefault;
+
     if (bookmark) {
-      await axios.post(`/api2/topic/scrap/cancel/${id}`, {
-        member_idx: session?.user?.idx,
-        sector: "topic",
-      });
-      topicContent.bookmark = false;
+      console.log(1);
+      await axios
+        .post(`/api2/topic/scrap/cancel/${id}`, {
+          member_idx: session?.user?.idx,
+          sector: "topic",
+        })
+        .then(() => {
+          setBookMark(false);
+        });
     } else {
-      await axios.post(`/api2/topic/scrap/insert/${id}`, {
-        member_idx: session?.user?.idx,
-        sector: "topic",
-      });
-      topicContent.bookmark = true;
+      console.log(2);
+      await axios
+        .post(`/api2/topic/scrap/insert/${id}`, {
+          member_idx: session?.user?.idx,
+          sector: "topic",
+        })
+        .then(() => {
+          setBookMark(true);
+        });
     }
   };
   return (
@@ -296,10 +312,10 @@ const TopicContentLayout = ({
               </Style.Body.Button.Wrapper>
               <Style.Body.Button.Wrapper>
                 <Button color="transparent">
-                  {topicContent.bookmark ? (
+                  {bookmark ? (
                     <div
-                      onClick={() => {
-                        onClickScrap(topicContent.idx, topicContent.bookmark);
+                      onClick={e => {
+                        onClickScrap(e, topicContent.idx, bookmark);
                       }}
                     >
                       <IconBookmarkFill
@@ -309,8 +325,8 @@ const TopicContentLayout = ({
                     </div>
                   ) : (
                     <div
-                      onClick={() => {
-                        onClickScrap(topicContent.idx, topicContent.bookmark);
+                      onClick={e => {
+                        onClickScrap(e, topicContent.idx, bookmark);
                       }}
                     >
                       <IconBookmark size={20} color={theme.color.gray[500]} />
