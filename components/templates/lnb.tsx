@@ -142,7 +142,7 @@ const Lnb = ({ param, onClick }: IPropsLnb) => {
             <option
               key={"all"}
               onClick={() => {
-                onClick("");
+                onClick("all");
               }}
             >
               {"전체"}

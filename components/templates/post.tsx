@@ -26,7 +26,6 @@ const Style = {
   Container: styled.div<IPropsStyle["setLine"]>`
     display: grid;
     gap: 1.5rem;
-    min-width: 50rem;
     column-gap: 1.5rem;
     row-gap: 3rem;
     padding: 1.5rem 1.25rem;

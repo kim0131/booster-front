@@ -10,11 +10,13 @@ import { checkAuth } from "@core/util/check-auth";
 import { useSession } from "next-auth/react";
 import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
 import Loader from "@components/elements/loader";
+import useHistoryState from "@core/hook/use-history-state";
 
 const Search: NextPage = () => {
   const router = useRouter();
-  const { searchTerm, category } = router.query;
+  const { searchTerm } = router.query;
   const { status } = useSession();
+  const [category, setCategory] = useHistoryState("all", "category");
   const { searchResult } = useSearch(searchTerm, category);
 
   const onClickRouter = (param: any) => {
@@ -39,6 +41,7 @@ const Search: NextPage = () => {
             category={category ? category : "all"}
             snbDatas={searchResult.SearchSnbDatas}
             searchTerm={searchTerm}
+            setCategory={setCategory}
           />
           <Board
             category={category ? category : "all"}

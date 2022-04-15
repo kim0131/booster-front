@@ -29,7 +29,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
       <SessionProvider>
-        <SWRConfig value={{ refreshInterval: 1000 }}>
+        <SWRConfig>
           <Global styles={global} />
           <Header />
           <Component {...pageProps} />

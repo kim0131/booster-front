@@ -19,14 +19,23 @@ const Style = {
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
+      position: relative;
     `,
     Category: {
+      Wapper: styled.div`
+        width: 12rem;
+        position: fixed;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      `,
       Container: styled.div`
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
       `,
       Block: styled.div`
+        width: 100%;
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
@@ -122,26 +131,28 @@ const Snb = ({ snbDatas, category, setCategory }: IPropsSnb) => {
 
   return isDesktop ? (
     <Style.Desktop.Container>
-      {snbDatas.map((snbData: ISnbData) => (
-        <Style.Desktop.Category.Container key={snbData.id}>
-          <Body2 isBold>{snbData.category}</Body2>
-          <Style.Desktop.Category.Block>
-            {snbData.menus &&
-              snbData.menus.map(
-                (menu: { id: number; content: string; param: string }) => (
-                  <Style.Desktop.Category.Button
-                    key={menu.id}
-                    isRoute={menu.param === category}
-                    value={menu.param}
-                    onClick={onClickRouter}
-                  >
-                    {menu.content}
-                  </Style.Desktop.Category.Button>
-                ),
-              )}
-          </Style.Desktop.Category.Block>
-        </Style.Desktop.Category.Container>
-      ))}
+      <Style.Desktop.Category.Wapper>
+        {snbDatas.map((snbData: ISnbData) => (
+          <Style.Desktop.Category.Container key={snbData.id}>
+            <Body2 isBold>{snbData.category}</Body2>
+            <Style.Desktop.Category.Block>
+              {snbData.menus &&
+                snbData.menus.map(
+                  (menu: { id: number; content: string; param: string }) => (
+                    <Style.Desktop.Category.Button
+                      key={menu.id}
+                      isRoute={menu.param === category}
+                      value={menu.param}
+                      onClick={onClickRouter}
+                    >
+                      {menu.content}
+                    </Style.Desktop.Category.Button>
+                  ),
+                )}
+            </Style.Desktop.Category.Block>
+          </Style.Desktop.Category.Container>
+        ))}
+      </Style.Desktop.Category.Wapper>
     </Style.Desktop.Container>
   ) : (
     <Style.Mobile.Wrapper>

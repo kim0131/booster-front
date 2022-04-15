@@ -126,11 +126,9 @@ const MainCarousel = () => {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 1000,
-    slidesToShow: 1,
+    speed: 500,
+    slidesToShow: 2,
     slidesToScroll: 1,
-    arrows: false,
-    centerMode: true,
     autoplay: true,
     autoplaySpeed: 3000,
   };

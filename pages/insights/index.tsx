@@ -11,7 +11,9 @@ const Insights: NextPage = () => {
   const router = useRouter();
 
   const [category, setCategory] = useHistoryState("all", "category");
-
+  useEffect(() => {
+    console.log(category);
+  }, [category]);
   return (
     <LnbLayout>
       <Lnb param={category ? category : "all"} onClick={setCategory} />
