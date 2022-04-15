@@ -28,6 +28,7 @@
     "react-multi-carousel": "^2.8.0",
     "react-select": "^5.2.2",
     "react-slick": "^0.28.1",
+    "sha256": "^0.2.0",
     "swr": "^1.2.2",
     "validator": "^13.7.0"
   },

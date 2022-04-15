@@ -19,7 +19,11 @@ interface IPropsTopics {
 const Topics: NextPage<IPropsTopics> = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const [category, setCategory] = useHistoryState("all", "category");
+  const urlCategory = router.query.category;
+  const [category, setCategory] = useHistoryState(
+    urlCategory ? urlCategory : "all",
+    "category",
+  );
   const { categorySubSide, isCategorySubSideValidating } =
     useCategorySubSide("topic");
   const { topicListFilter, isTopicListValidating } =

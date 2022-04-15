@@ -1144,6 +1144,11 @@
   "resolved" "https://registry.npmjs.org/constants-browserify/-/constants-browserify-1.0.0.tgz"
   "version" "1.0.0"
 
+"convert-hex@~0.1.0":
+  "integrity" "sha1-CMBFaJIsJ3drii6BqV05M2LqC2U="
+  "resolved" "https://registry.npmjs.org/convert-hex/-/convert-hex-0.1.0.tgz"
+  "version" "0.1.0"
+
 "convert-source-map@^1.5.0":
   "integrity" "sha512-+OQdjP49zViI/6i7nIJpA8rAl4sV/JdPfU9nZs3VqOwGIgizICvuN2ru6fMd+4llL0tar18UYJXfZ/TWtmhUjA=="
   "resolved" "https://registry.npmjs.org/convert-source-map/-/convert-source-map-1.8.0.tgz"
@@ -1164,6 +1169,11 @@
   "version" "1.7.0"
   dependencies:
     "safe-buffer" "~5.1.1"
+
+"convert-string@~0.1.0":
+  "integrity" "sha1-ec5BqbsNA7z3LNxqjzxW+7xkQQo="
+  "resolved" "https://registry.npmjs.org/convert-string/-/convert-string-0.1.0.tgz"
+  "version" "0.1.0"
 
 "cookie@^0.4.1":
   "integrity" "sha512-ZwrFkGJxUR3EIoXtO+yVE69Eb7KlixbaeAWfBQB9vVsNn/o+Yw69gBWSSDK825hQNdN+wF8zELf3dFNl/kxkUA=="
@@ -3316,6 +3326,14 @@
   dependencies:
     "inherits" "^2.0.1"
     "safe-buffer" "^5.0.1"
+
+"sha256@^0.2.0":
+  "integrity" "sha1-c6C0GNqrcDW/+G6EkeNjQS/CqwU="
+  "resolved" "https://registry.npmjs.org/sha256/-/sha256-0.2.0.tgz"
+  "version" "0.2.0"
+  dependencies:
+    "convert-hex" "~0.1.0"
+    "convert-string" "~0.1.0"
 
 "shebang-command@^2.0.0":
   "integrity" "sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA=="

@@ -124,9 +124,12 @@ const MainCarousel = () => {
   const { mainBannerList } = useMainBanner();
 
   const settings = {
-    dots: true,
+    centerMode: true,
     infinite: true,
-    speed: 500,
+    centerPadding: "60px",
+    dots: true,
+
+    speed: 3000,
     slidesToShow: 2,
     slidesToScroll: 1,
     autoplay: true,
