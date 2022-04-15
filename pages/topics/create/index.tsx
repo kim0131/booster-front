@@ -112,7 +112,8 @@ const CreateTopic: NextPage = () => {
 
         alert("토픽이 등록되었습니다");
         router.push("/topics");
-      });
+      })
+      .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   };
 
   const onClickInput = () => {

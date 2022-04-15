@@ -270,10 +270,13 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
     if (content == "삭제하기") {
       let result = confirm("정말 삭제하시겠습니까?");
       if (result) {
-        await axios.post(`/api2/insight/delete/${idx}`).then(res => {
-          alert("삭제되었습니다");
-          router.push(router.asPath);
-        });
+        await axios
+          .post(`/api2/insight/delete/${idx}`)
+          .then(res => {
+            alert("삭제되었습니다");
+            router.push(router.asPath);
+          })
+          .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
       }
     }
   };
@@ -309,19 +312,25 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
 
   const onClickWriteComment = async () => {
     if (!commentdata.wr_content) return alert("댓글내용을 입력해주세요");
-    await axios.post(`/api2/insight/write`, commentdata).then(res => {
-      alert("댓글이 등록되었습니다");
-      setCommentData({ ...commentdata, wr_content: "" });
-      router.push(router.asPath);
-    });
+    await axios
+      .post(`/api2/insight/write`, commentdata)
+      .then(res => {
+        alert("댓글이 등록되었습니다");
+        setCommentData({ ...commentdata, wr_content: "" });
+        router.push(router.asPath);
+      })
+      .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   };
   const onClickWriteReply = async () => {
     if (!replydata.wr_content) return alert("댓글내용을 입력해주세요");
-    await axios.post(`/api2/insight/write`, replydata).then(res => {
-      alert("댓글이 등록되었습니다");
-      setReply({ ...replydata, wr_parent2: 0, wr_content: "" });
-      router.push(router.asPath);
-    });
+    await axios
+      .post(`/api2/insight/write`, replydata)
+      .then(res => {
+        alert("댓글이 등록되었습니다");
+        setReply({ ...replydata, wr_parent2: 0, wr_content: "" });
+        router.push(router.asPath);
+      })
+      .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   };
   const onChangeTextareaComment = (e: any) => {
     const { name, value } = e.target;

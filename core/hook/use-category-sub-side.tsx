@@ -34,18 +34,21 @@ const categorySnbMenuFetcher = async (url: string) => {
     ];
   }
 
-  await axios.get("/api2/category").then(res => {
-    const Getcategory = res.data.result;
-    Getcategory.map((item: any, idx: number) => {
-      if (item.sector == sector) {
-        result[0].menus.push({
-          id: Getcategory[idx].idx,
-          content: Getcategory[idx].bo_subject,
-          param: Getcategory[idx].bo_table,
-        });
-      }
-    });
-  });
+  await axios
+    .get("/api2/category")
+    .then(res => {
+      const Getcategory = res.data.result;
+      Getcategory.map((item: any, idx: number) => {
+        if (item.sector == sector) {
+          result[0].menus.push({
+            id: Getcategory[idx].idx,
+            content: Getcategory[idx].bo_subject,
+            param: Getcategory[idx].bo_table,
+          });
+        }
+      });
+    })
+    .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   return result;
 };
 

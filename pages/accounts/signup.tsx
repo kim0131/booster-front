@@ -141,7 +141,6 @@ const Signup: NextPage = () => {
                   if (res) {
                     setState({ ...state, invalid: { mb_ph: res } });
                   } else {
-                    console.log(state.data);
                     await axios
                       .post("/api2/signup", {
                         mb_id: state.data.mb_id,
@@ -154,7 +153,6 @@ const Signup: NextPage = () => {
                         mb_nick: state.data.mb_nick,
                       })
                       .then(async (res: any) => {
-                        console.log(res.data);
                         const mb_idx = res.data.result.idx;
                         await axios
                           .post(`/api2/business/write`, {
@@ -168,7 +166,9 @@ const Signup: NextPage = () => {
                               mb_business_certify: 0,
                             });
                           })
-                          .catch(error => console.log(error));
+                          .catch(error =>
+                            alert(`관리자에게 문의하세요 error : ${error}`),
+                          );
                         signIn("username-password", {
                           mb_id: state.data.mb_id,
                           mb_pw: state.data.mb_pw,
@@ -179,7 +179,9 @@ const Signup: NextPage = () => {
                         });
                         router.push("/accounts/business-registration");
                       })
-                      .catch(error => console.log(error));
+                      .catch(error =>
+                        alert(`관리자에게 문의하세요 error : ${error}`),
+                      );
                   }
                 });
               }

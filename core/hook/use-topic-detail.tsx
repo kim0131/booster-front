@@ -26,7 +26,8 @@ const topicDetailfetcher = async (param: any) => {
       TopicContent.bookmark = TopicContent.scrap; //추후필요
       TopicContent.create = await elapsedTime;
       topicList = TopicContent;
-    });
+    })
+    .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   return topicList;
 };
 

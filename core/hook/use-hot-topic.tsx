@@ -46,7 +46,8 @@ const hotTopicFetcher = async (param: any) => {
           hotPoint: hotPoint,
         });
       });
-    });
+    })
+    .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   result = result.sort(function (a: any, b: any) {
     return b.hotPoint - a.hotPoint;
   });

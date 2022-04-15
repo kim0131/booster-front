@@ -58,20 +58,42 @@ const Accounts: NextPage = () => {
     });
   };
 
+  const onKeyPressEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == "Enter") {
+      await axios
+        .post("/api2/login", state.data)
+        .then((res: any) => {
+          const user = res.data.result;
+
+          signIn("username-password", {
+            mb_id: user.mb_id,
+            mb_pw: user.mb_pw,
+            mb_nick: user.mb_nick,
+            mb_idx: user.idx,
+            redirect: false,
+          });
+        })
+        .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
+    }
+  };
+
   const onClickLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    await axios.post("/api2/login", state.data).then((res: any) => {
-      const user = res.data.result;
+    await axios
+      .post("/api2/login", state.data)
+      .then((res: any) => {
+        const user = res.data.result;
 
-      signIn("username-password", {
-        mb_id: user.mb_id,
-        mb_pw: user.mb_pw,
-        mb_nick: user.mb_nick,
-        mb_idx: user.idx,
-        redirect: false,
-      });
-    });
+        signIn("username-password", {
+          mb_id: user.mb_id,
+          mb_pw: user.mb_pw,
+          mb_nick: user.mb_nick,
+          mb_idx: user.idx,
+          redirect: false,
+        });
+      })
+      .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   };
   const onClickCertification = () => {
     router.push("/accounts/signup");
@@ -93,14 +115,18 @@ const Accounts: NextPage = () => {
             type="text"
             size="large"
             width="100%"
+            value={state.data.mb_id}
             onChange={onChangeAccounts}
+            onKeyPress={onKeyPressEnter}
           />
           <TextField
             placeholder="비밀번호를 입력하세요"
             name="mb_pw"
             type="password"
             size="large"
+            value={state.data.mb_pw}
             onChange={onChangeAccounts}
+            onKeyPress={onKeyPressEnter}
           />
           {state.invalid && (
             <Body2 color={theme.color.red[600]}>{state.invalid}</Body2>

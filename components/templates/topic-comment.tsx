@@ -269,11 +269,14 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
     if (content == "삭제하기") {
       let result = confirm("정말 삭제하시겠습니까?");
       if (result) {
-        await axios.post(`/api2/topic/delete/${idx}`).then(res => {
-          alert("삭제되었습니다");
+        await axios
+          .post(`/api2/topic/delete/${idx}`)
+          .then(res => {
+            alert("삭제되었습니다");
 
-          router.reload();
-        });
+            router.reload();
+          })
+          .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
       }
     }
   };
@@ -310,21 +313,27 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
 
   const onClickWriteComment = async () => {
     if (commentdata.wr_content) {
-      await axios.post(`/api2/topic/write`, commentdata).then(res => {
-        alert("댓글이 등록되었습니다");
-        setCommentData({ ...commentdata, wr_content: "" });
-      });
+      await axios
+        .post(`/api2/topic/write`, commentdata)
+        .then(res => {
+          alert("댓글이 등록되었습니다");
+          setCommentData({ ...commentdata, wr_content: "" });
+        })
+        .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
     } else {
       alert("댓글을 입력해주세요");
     }
   };
   const onClickWriteReply = async () => {
     if (replydata.wr_content) {
-      await axios.post(`/api2/topic/write`, replydata).then(res => {
-        alert("댓글이 등록되었습니다");
-        setReply({ ...replydata, wr_parent2: 0, wr_content: "" });
-        router.push(router.asPath);
-      });
+      await axios
+        .post(`/api2/topic/write`, replydata)
+        .then(res => {
+          alert("댓글이 등록되었습니다");
+          setReply({ ...replydata, wr_parent2: 0, wr_content: "" });
+          router.push(router.asPath);
+        })
+        .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
     } else {
       alert("댓글을 입력해주세요");
     }

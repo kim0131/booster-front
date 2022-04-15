@@ -178,10 +178,13 @@ const TopicContentLayout = ({
     if (content == "삭제하기") {
       let result = confirm("정말 삭제하시겠습니까?");
       if (result) {
-        await axios.post(`/api2/topic/delete/${idx}`).then(res => {
-          alert("삭제되었습니다");
-          router.push("/topics");
-        });
+        await axios
+          .post(`/api2/topic/delete/${idx}`)
+          .then(res => {
+            alert("삭제되었습니다");
+            router.push("/topics");
+          })
+          .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
       }
     }
   };
@@ -210,7 +213,8 @@ const TopicContentLayout = ({
               setLikeCnt(likeCnt + 1);
             });
         }
-      });
+      })
+      .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   };
 
   const onClickScrap = async (id: any, bookmark: any) => {

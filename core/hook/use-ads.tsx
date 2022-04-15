@@ -13,20 +13,23 @@ const adsDetailFetcher = async (proms: any) => {
 
 const adsListFetcher = async () => {
   let result: any = [];
-  await axios.get("/api2/home/adbanner").then(res => {
-    const homeList = res.data.result;
-    homeList.map((item: any, idx: number) => {
-      result.push({
-        id: item.idx,
-        image_url: adsImageUrl + item.image_url,
-        posting_date: item.posting_date,
-        posting_exitdate: item.posting_exitdate,
-        title: item.title,
-        url: item.url,
-        priority: item.priority,
+  await axios
+    .get("/api2/home/adbanner")
+    .then(res => {
+      const homeList = res.data.result;
+      homeList.map((item: any, idx: number) => {
+        result.push({
+          id: item.idx,
+          image_url: adsImageUrl + item.image_url,
+          posting_date: item.posting_date,
+          posting_exitdate: item.posting_exitdate,
+          title: item.title,
+          url: item.url,
+          priority: item.priority,
+        });
       });
-    });
-  });
+    })
+    .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   result = result.sort(function (a: any, b: any) {
     return a.priority - b.priority;
   });

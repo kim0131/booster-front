@@ -97,7 +97,8 @@ const BusinessRegistration: NextPage = () => {
       .then(res => {
         const result = res.data.result;
         setUserIdx(result);
-      });
+      })
+      .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   };
   return (
     <AccountsLayout

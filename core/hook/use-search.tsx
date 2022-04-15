@@ -112,9 +112,7 @@ const searchFetcher = async (param: any) => {
           result: result2,
         });
       })
-      .catch(error => {
-        console.log(error);
-      });
+      .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   }
   return result[0];
 };
