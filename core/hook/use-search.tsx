@@ -12,7 +12,6 @@ const searchFetcher = async (param: any) => {
         member_idx: param.idx,
       })
       .then(async res => {
-        console.log(res.data);
         const topicResult = res.data.result;
         const topicCnt = res.data.topicCnt;
         const insightResult = res.data.insightResult;

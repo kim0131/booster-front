@@ -6,12 +6,14 @@ import Snb from "@components/templates/snb";
 import Board from "@components/templates/board";
 import { useTopicListFilter } from "@core/hook/use-topic-list";
 import { useEffect, useState } from "react";
+import useHistoryState from "@core/hook/use-history-state";
 
 const Bookmark: NextPage = () => {
   const router = useRouter();
-  const { category } = router.query;
+
   const { topicListFilter } = useTopicListFilter("scrap");
   const [topiceList, setTopiceList] = useState();
+  const [category, setCategory] = useHistoryState("all", "category");
   const [snbDatas, setSnbDatas] = useState([
     {
       id: 0,
@@ -99,7 +101,11 @@ const Bookmark: NextPage = () => {
     <SnbLayout>
       {topicListFilter && topiceList && (
         <>
-          <Snb category={category ? category : "all"} snbDatas={snbDatas} />
+          <Snb
+            category={category ? category : "all"}
+            snbDatas={snbDatas}
+            setCategory={setCategory}
+          />
 
           <Board
             category={category ? category : "all"}

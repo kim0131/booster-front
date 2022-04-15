@@ -6,11 +6,13 @@ import Snb from "@components/templates/snb";
 import Board from "@components/templates/board";
 import { useEffect, useState } from "react";
 import { useTopicListFilter } from "@core/hook/use-topic-list";
+import useHistoryState from "@core/hook/use-history-state";
 
 const MyTopics: NextPage = () => {
   const router = useRouter();
-  const { category } = router.query;
+
   const { topicListFilter } = useTopicListFilter("my");
+  const [category, setCategory] = useHistoryState("all", "category");
   const [topiceList, setTopiceList] = useState([
     {
       id: 0,
@@ -115,7 +117,11 @@ const MyTopics: NextPage = () => {
     <SnbLayout>
       {topicListFilter && (
         <>
-          <Snb category={category ? category : "all"} snbDatas={snbDatas} />
+          <Snb
+            category={category ? category : "all"}
+            snbDatas={snbDatas}
+            setCategory={setCategory}
+          />
 
           <Board
             category={category ? category : "all"}
