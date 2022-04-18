@@ -16,7 +16,8 @@ import useHistoryState from "@core/hook/use-history-state";
 const TopicDetail: NextPage = () => {
   const router = useRouter();
   const [category, setCategory] = useHistoryState("all", "category");
-  const { topicDetail } = useTopicDetail(router.query.id);
+  const { id } = router.query;
+  const { topicDetail } = useTopicDetail(id);
   const { topicListFilter } = useTopicListFilter(category);
   const { categorySubSide } = useCategorySubSide("topic");
 
@@ -32,25 +33,31 @@ const TopicDetail: NextPage = () => {
     <SnbLayout>
       {topicDetail && (
         <>
-          <Snb
-            category={category}
-            snbDatas={categorySubSide}
-            setCategory={setCategory}
-          />
-          <TopicContentLayout id={router.query.id} data={topicDetail}>
-            <TopicComment id={router.query.id} />
-            {topicListFilter && (
-              <Board
-                category={category}
-                title={
-                  _.find(categorySubSide[0].menus, { param: category })
-                    ?.content || ""
-                }
-                datas={topicListFilter}
-                onClickRouter={onClickRouter}
-              />
-            )}
-          </TopicContentLayout>
+          {topicListFilter && (
+            <>
+              {id && (
+                <>
+                  <Snb
+                    category={category}
+                    snbDatas={categorySubSide}
+                    setCategory={setCategory}
+                  />
+                  <TopicContentLayout id={router.query.id} data={topicDetail}>
+                    <TopicComment id={id} />
+                    <Board
+                      category={category}
+                      title={
+                        _.find(categorySubSide[0].menus, { param: category })
+                          ?.content || ""
+                      }
+                      datas={topicListFilter}
+                      onClickRouter={onClickRouter}
+                    />
+                  </TopicContentLayout>
+                </>
+              )}
+            </>
+          )}
         </>
       )}
     </SnbLayout>

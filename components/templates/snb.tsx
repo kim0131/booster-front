@@ -132,26 +132,27 @@ const Snb = ({ snbDatas, category, setCategory }: IPropsSnb) => {
   return isDesktop ? (
     <Style.Desktop.Container>
       <Style.Desktop.Category.Wapper>
-        {snbDatas.map((snbData: ISnbData) => (
-          <Style.Desktop.Category.Container key={snbData.id}>
-            <Body2 isBold>{snbData.category}</Body2>
-            <Style.Desktop.Category.Block>
-              {snbData.menus &&
-                snbData.menus.map(
-                  (menu: { id: number; content: string; param: string }) => (
-                    <Style.Desktop.Category.Button
-                      key={menu.id}
-                      isRoute={menu.param === category}
-                      value={menu.param}
-                      onClick={onClickRouter}
-                    >
-                      {menu.content}
-                    </Style.Desktop.Category.Button>
-                  ),
-                )}
-            </Style.Desktop.Category.Block>
-          </Style.Desktop.Category.Container>
-        ))}
+        {snbDatas &&
+          snbDatas.map((snbData: ISnbData) => (
+            <Style.Desktop.Category.Container key={snbData.id}>
+              <Body2 isBold>{snbData.category}</Body2>
+              <Style.Desktop.Category.Block>
+                {snbData.menus &&
+                  snbData.menus.map(
+                    (menu: { id: number; content: string; param: string }) => (
+                      <Style.Desktop.Category.Button
+                        key={menu.id}
+                        isRoute={menu.param === category}
+                        value={menu.param}
+                        onClick={onClickRouter}
+                      >
+                        {menu.content}
+                      </Style.Desktop.Category.Button>
+                    ),
+                  )}
+              </Style.Desktop.Category.Block>
+            </Style.Desktop.Category.Container>
+          ))}
       </Style.Desktop.Category.Wapper>
     </Style.Desktop.Container>
   ) : (

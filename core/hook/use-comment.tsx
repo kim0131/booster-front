@@ -66,30 +66,32 @@ const topicComment = async (url: string) => {
     .then(async res => {
       const CurrentTime = new Date();
       const comment = res.data.result;
-      for (const item of comment) {
-        let ContentTime = new Date(item.wr_datetime);
-        ContentTime.setHours(ContentTime.getHours());
-        const elapsedTime = Math.ceil(
-          (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 60),
-        );
-        const replyCount = await axios.get(
-          `/api2/topic/replycount/${item.idx}`,
-        );
+      if (comment) {
+        for (const item of comment) {
+          let ContentTime = new Date(item.wr_datetime);
+          ContentTime.setHours(ContentTime.getHours());
+          const elapsedTime = Math.ceil(
+            (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 60),
+          );
+          const replyCount = await axios.get(
+            `/api2/topic/replycount/${item.idx}`,
+          );
 
-        result.push(
-          await {
-            idx: item.idx,
-            wr_is_comment: item.wr_is_comment,
-            wr_is_comment2: item.wr_is_comment2,
-            wr_content: item.wr_content,
-            mb_name: item.mb_name,
-            wr_view: item.wr_view,
-            wr_good: item.wr_good,
-            wr_create: elapsedTime,
-            replycount: replyCount.data.result.length,
-            wr_reply: await getCommentIsReplyTopic(item.idx),
-          },
-        );
+          result.push(
+            await {
+              idx: item.idx,
+              wr_is_comment: item.wr_is_comment,
+              wr_is_comment2: item.wr_is_comment2,
+              wr_content: item.wr_content,
+              mb_name: item.mb_name,
+              wr_view: item.wr_view,
+              wr_good: item.wr_good,
+              wr_create: elapsedTime,
+              replycount: replyCount.data.result.length,
+              wr_reply: await getCommentIsReplyTopic(item.idx),
+            },
+          );
+        }
       }
     })
     .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
@@ -113,30 +115,32 @@ const insightComment = async (url: string) => {
     .then(async res => {
       const CurrentTime = new Date();
       const comment = res.data.result;
-      for (const item of comment) {
-        let ContentTime = new Date(item.wr_datetime);
-        ContentTime.setHours(ContentTime.getHours());
-        const elapsedTime = Math.ceil(
-          (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 60),
-        );
-        const replyCount = await axios.get(
-          `/api2/insight/replycount/${item.idx}`,
-        );
+      if (comment) {
+        for (const item of comment) {
+          let ContentTime = new Date(item.wr_datetime);
+          ContentTime.setHours(ContentTime.getHours());
+          const elapsedTime = Math.ceil(
+            (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 60),
+          );
+          const replyCount = await axios.get(
+            `/api2/insight/replycount/${item.idx}`,
+          );
 
-        result.push(
-          await {
-            idx: item.idx,
-            wr_is_comment: item.wr_is_comment,
-            wr_is_comment2: item.wr_is_comment2,
-            wr_content: item.wr_content,
-            mb_name: item.mb_name,
-            wr_view: item.wr_view,
-            wr_good: item.wr_good,
-            wr_create: elapsedTime,
-            replycount: replyCount.data.result.length,
-            wr_reply: await getCommentIsReplyInsight(item.idx),
-          },
-        );
+          result.push(
+            await {
+              idx: item.idx,
+              wr_is_comment: item.wr_is_comment,
+              wr_is_comment2: item.wr_is_comment2,
+              wr_content: item.wr_content,
+              mb_name: item.mb_name,
+              wr_view: item.wr_view,
+              wr_good: item.wr_good,
+              wr_create: elapsedTime,
+              replycount: replyCount.data.result.length,
+              wr_reply: await getCommentIsReplyInsight(item.idx),
+            },
+          );
+        }
       }
     })
     .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));

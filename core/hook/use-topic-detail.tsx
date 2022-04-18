@@ -13,19 +13,21 @@ const topicDetailfetcher = async (param: any) => {
     })
     .then(async res => {
       const TopicContent = res.data.result[0];
-      const CurrentTime = new Date();
-      const ContentTime = new Date(TopicContent.wr_datetime);
-      const elapsedTime = Math.ceil(
-        (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 60),
-      );
-      if (TopicContent.file_url) {
-        TopicContent.file_full_url =
-          (await topicImageUrl) + TopicContent.file_url;
+      if (TopicContent) {
+        const CurrentTime = new Date();
+        const ContentTime = new Date(TopicContent.wr_datetime);
+        const elapsedTime = Math.ceil(
+          (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 60),
+        );
+        if (TopicContent.file_url) {
+          TopicContent.file_full_url =
+            (await topicImageUrl) + TopicContent.file_url;
+        }
+        TopicContent.category = TopicContent.board_name;
+        TopicContent.bookmark = TopicContent.scrap; //추후필요
+        TopicContent.create = await elapsedTime;
+        topicList = TopicContent;
       }
-      TopicContent.category = TopicContent.board_name;
-      TopicContent.bookmark = TopicContent.scrap; //추후필요
-      TopicContent.create = await elapsedTime;
-      topicList = TopicContent;
     })
     .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   return topicList;
