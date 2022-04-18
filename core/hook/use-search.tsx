@@ -5,17 +5,29 @@ import useSWR from "swr";
 const searchFetcher = async (param: any) => {
   let result: any = [];
   const category = param.category ? param.category : "all";
-  if (param) {
+  if (param.idx) {
     await axios
       .post("/api2/home/search", {
         search_value: param.seachValue,
         member_idx: param.idx,
       })
       .then(async res => {
-        const topicResult = res.data.result;
+        const topicResult: any = res.data.result;
         const topicCnt = res.data.topicCnt;
-        const insightResult = res.data.insightResult;
+        const insightResult: any = res.data.insightResult;
         const insightCnt = res.data.insightCnt;
+        topicResult.map((data: any, idx: any) => {
+          topicResult[idx] = {
+            ...topicResult[idx],
+            sector: "topics",
+          };
+        });
+        insightResult.map((data: any, idx: any) => {
+          insightResult[idx] = {
+            ...insightResult[idx],
+            sector: "insights",
+          };
+        });
 
         const SearchSnbDatas = [
           {

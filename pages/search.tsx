@@ -26,7 +26,7 @@ const Search: NextPage = () => {
       }
     } else {
       if (param.sector == "topics") {
-        router.push(`/${param.sector}/detail?id=${param.idx}`);
+        router.push(`/${param.sector}/detail/${param.idx}`);
       } else {
         router.push(`/${param.sector}/${param.idx}`);
       }
