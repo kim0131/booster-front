@@ -165,7 +165,6 @@ const InsightsContentLayout = ({
     if (insightDetail) {
       setLikeCnt(insightDetail.likeCnt);
       setBookMark(insightDetail.scrap ? true : false);
-      console.log(insightDetail);
     }
   }, [insightDetail]);
   const onClickLikeButton = async () => {
