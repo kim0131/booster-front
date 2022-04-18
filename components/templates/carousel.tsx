@@ -22,13 +22,13 @@ interface IStyle {
 
 const Style = {
   Container: styled.div`
-    /* max-width: 100%; */
-    /* margin: 0 auto; */
+    max-width: 100%;
+    margin: 0.25rem auto;
     /* display: flex; */
-    /* overflow-x: hidden;
-    overflow-y: hidden; */
-    /* align-items: center;
-    justify-content: center; */
+    /* overflow-x: hidden; */
+    /* overflow-y: hidden; */
+    /* align-items: center; */
+    /* justify-content: center; */
     /* gap: 3rem; */
     /* text-align: center; */
   `,
@@ -87,10 +87,22 @@ const getContrast = (hexColor: string) => {
   return calcContrast >= 128 ? true : false;
 };
 
-const Item = ({ id, thumbnailcolor, title, content, url }: ICarouselData) => {
+const Item = ({
+  id,
+  thumbnailcolor,
+  title,
+  content,
+  url,
+  onClick,
+}: ICarouselData) => {
   const isWhite = getContrast(thumbnailcolor);
   return (
-    <Style.Item key={id} thumbnailcolor={thumbnailcolor} url={url}>
+    <Style.Item
+      key={id}
+      thumbnailcolor={thumbnailcolor}
+      url={url}
+      onClick={onClick}
+    >
       <Style.Title color={isWhite ? theme.color.gray[900] : theme.color.white}>
         {title}
       </Style.Title>
@@ -109,9 +121,9 @@ const StyledSlider = styled(Slider)`
   }
   .slick-track {
     display: flex;
-    /* gap: 3rem; */
     justify-content: center;
     margin: auto;
+    gap: 0.5rem;
   }
   .slick-slide > div {
     display: flex;
@@ -137,6 +149,10 @@ const MainCarousel = () => {
     autoplay: true,
     autoplaySpeed: 3000,
   };
+
+  const onClickRouter = (e: any, data: { url: string; target: string }) => {
+    window.open("http://" + data.url, data.target);
+  };
   return (
     <Style.Container>
       <StyledSlider {...settings}>
@@ -149,6 +165,7 @@ const MainCarousel = () => {
               title={data.title}
               content={data.content}
               url={data.image_url}
+              onClick={(e: any) => onClickRouter(e, data)}
             />
           ))}
       </StyledSlider>

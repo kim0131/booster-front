@@ -31,6 +31,7 @@ const mainBannerListFetcher = async () => {
           priority: item.priority,
           content: item.subtitle,
           thumbnailcolor: item.background_color,
+          target: item.open_tool,
         });
       });
     })
