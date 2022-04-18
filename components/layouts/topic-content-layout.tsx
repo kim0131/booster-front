@@ -15,6 +15,7 @@ import {
 } from "@components/icons";
 import theme from "@components/styles/theme";
 import { topicImageUrl } from "@core/config/imgurl";
+import { useDesktop } from "@core/hook/use-desktop";
 import { getCreateTime } from "@core/util/get-create-time";
 import styled from "@emotion/styled";
 import axios from "axios";
@@ -159,6 +160,7 @@ const TopicContentLayout = ({
   const router = useRouter();
   const topicContent = data;
   const [likeCnt, setLikeCnt] = useState(0);
+  const { isDesktop } = useDesktop();
   const [bookmark, setBookMark] = useState(false);
 
   useEffect(() => {
@@ -167,6 +169,7 @@ const TopicContentLayout = ({
       setBookMark(topicContent.bookmark ? true : false);
     }
   }, [topicContent]);
+
   const onClickLink = async (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,
   ) => {
@@ -333,7 +336,6 @@ const TopicContentLayout = ({
 
                 <Style.SubMore>
                   <IconMoreVertical />
-
                   <Dropdown
                     menu={[
                       {
@@ -344,6 +346,7 @@ const TopicContentLayout = ({
                       { id: 1, content: "삭제하기", url: topicContent.idx },
                     ]}
                     onClick={onClickLink}
+                    isRight={isDesktop ? true : false}
                   />
                 </Style.SubMore>
               </Style.Body.Button.Wrapper>

@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <SessionProvider>
         <SWRConfig
           value={{
-            revalidateIfStale: false,
+            revalidateIfStale: true,
             revalidateOnFocus: false,
             revalidateOnReconnect: false,
           }}

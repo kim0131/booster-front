@@ -141,7 +141,7 @@ const MainCarousel = () => {
     centerMode: true,
     infinite: true,
     centerPadding: "60px",
-    dots: true,
+    // dots: true,
 
     speed: 3000,
     slidesToShow: 2,

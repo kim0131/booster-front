@@ -234,6 +234,7 @@ const Header = () => {
   const onKeyPressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key == "Enter") {
       router.push(`/search?searchTerm=${state.data.searchTerm}`);
+      setState({ ...state, mobileSearch: false });
     }
   };
 
@@ -367,6 +368,9 @@ const Header = () => {
                 placeholder="검색"
                 width="100%"
                 prefix={<IconSearch />}
+                value={state.data.searchTerm}
+                onChange={onChangeSearchTerm}
+                onKeyPress={onKeyPressEnter}
                 suffix={
                   <Button
                     isRounded

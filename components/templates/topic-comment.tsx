@@ -20,6 +20,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
+import { useDesktop } from "@core/hook/use-desktop";
 interface IPropsStyle {
   isReply: boolean;
 }
@@ -191,14 +192,6 @@ interface IPropsLoader {
   color?: string;
 }
 
-const Loader = ({ size = "medium", color = "white" }: IPropsLoader) => (
-  <Container size={size}>
-    <Dot size={size} color={color} />
-    <Dot size={size} color={color} />
-    <Dot size={size} color={color} />
-  </Container>
-);
-
 interface IPropsComment {
   children?: React.ReactNode;
   id?: any;
@@ -207,11 +200,13 @@ interface IPropsComment {
 
 const TopicComment = ({ id, children, count }: IPropsComment) => {
   const router = useRouter();
-  const { data: session, status } = useSession();
-  const [comments, setComments] = useState([]);
+  const { data: session, status }: any = useSession();
+  const [comments, setComments] = useState<any>();
   const { commentsList } = useTopicComment(id);
   const [totalCount, setTotalCount] = useState(0);
   const [line, setLine] = useState(5);
+  const isDesktop = useDesktop();
+
   const [currentPage, setcurrentPage] = useState(1);
   const [commentdata, setCommentData] = useState({
     wr_content: "",
@@ -235,6 +230,10 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
   });
 
   useEffect(() => {
+    if (status != "authenticated") {
+      alert("로그인 후 이용가능합니다.");
+      router.push("/");
+    }
     getUserSet();
   }, [router]);
 
@@ -311,6 +310,47 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
     });
   };
 
+  const onClickLikeButton = async (id: number, rn: number) => {
+    await axios
+      .post(`/api2/topic/like/${id}`, {
+        member_idx: parseInt(session?.user?.idx),
+      })
+      .then(async res => {
+        const result = res.data.result.length;
+
+        if (result) {
+          await axios
+            .post(`/api2/topic/like/cancel/${id}`, {
+              member_idx: parseInt(session?.user?.idx),
+            })
+            .then(async () => {
+              const result = await comments.map((item: any, idx: any) => {
+                if (comments[idx].idx == id) {
+                  item.likeCnt = item.likeCnt - 1;
+                }
+                return item;
+              });
+              setComments(result);
+            });
+        } else {
+          await axios
+            .post(`/api2/topic/like/insert/${id}`, {
+              member_idx: parseInt(session?.user?.idx),
+            })
+            .then(async () => {
+              const result = await comments.map((item: any, idx: any) => {
+                if (comments[idx].idx == id) {
+                  item.likeCnt = item.likeCnt + 1;
+                }
+                return item;
+              });
+              setComments(result);
+            });
+        }
+      })
+      .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
+  };
+
   const onClickWriteComment = async () => {
     if (commentdata.wr_content) {
       await axios
@@ -360,6 +400,10 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
     }
   };
 
+  const checkMbName = (writer: string, userName: string) => {
+    return Boolean(writer == userName);
+  };
+
   return (
     <Style.Container>
       <Style.Comment>
@@ -379,12 +423,12 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
             >
               작성하기
             </Button>
-            <Button>취소</Button>
+            {/* <Button>취소</Button> */}
           </Style.AddComment.Button>
         </Style.AddComment.Container>
 
         {comments &&
-          comments.map((comment: any) => {
+          comments.map((comment: any, rn: number) => {
             return (
               <React.Fragment key={comment.idx}>
                 <Style.List.Container
@@ -394,35 +438,55 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
                     <Style.List.Content>
                       {comment.wr_content}
                     </Style.List.Content>
+
                     <Style.SubMore>
                       <IconMoreVertical />
-                      {!comment.wr_is_comment2 ? (
+                      {checkMbName(
+                        comment.mb_name,
+                        session?.user?.name as string,
+                      ) ? (
                         <Dropdown
-                          menu={[
-                            {
-                              id: 0,
-                              content: "댓글달기",
-                              url: comment.idx,
-                            },
-                            {
-                              id: 1,
-                              content: "삭제하기",
-                              url: comment.idx,
-                            },
-                          ]}
+                          menu={
+                            !comment.wr_is_comment2
+                              ? [
+                                  {
+                                    id: 0,
+                                    content: "댓글달기",
+                                    url: comment.idx,
+                                  },
+                                  {
+                                    id: 1,
+                                    content: "삭제하기",
+                                    url: comment.idx,
+                                  },
+                                ]
+                              : [
+                                  {
+                                    id: 1,
+                                    content: "삭제하기",
+                                    url: comment.idx,
+                                  },
+                                ]
+                          }
                           onClick={onClickLink}
+                          isRight={isDesktop ? true : false}
                         />
                       ) : (
-                        <Dropdown
-                          menu={[
-                            {
-                              id: 1,
-                              content: "삭제하기",
-                              url: comment.idx,
-                            },
-                          ]}
-                          onClick={onClickLink}
-                        />
+                        <>
+                          {!comment.wr_is_comment2 && (
+                            <Dropdown
+                              menu={[
+                                {
+                                  id: 0,
+                                  content: "댓글달기",
+                                  url: comment.idx,
+                                },
+                              ]}
+                              onClick={onClickLink}
+                              isRight={isDesktop ? true : false}
+                            />
+                          )}
+                        </>
                       )}
                     </Style.SubMore>
                   </Style.List.Header>
@@ -434,18 +498,20 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
                           {comment.mb_name}
                         </Body3>
                       </Style.List.Bottom.Badge>
-                      <Style.List.Bottom.Badge>
+                      <Style.List.Bottom.Badge
+                        onClick={() => onClickLikeButton(comment.idx, rn)}
+                      >
                         <IconLike size={16} color={theme.color.gray[500]} />
                         <Body3 color={theme.color.gray[500]}>
-                          {comment.wr_good}
+                          {comment.likeCnt}
                         </Body3>
                       </Style.List.Bottom.Badge>
-                      <Style.List.Bottom.Badge>
+                      {/* <Style.List.Bottom.Badge>
                         <IconView size={16} color={theme.color.gray[500]} />
                         <Body3 color={theme.color.gray[500]}>
                           {comment.wr_view}
                         </Body3>
-                      </Style.List.Bottom.Badge>
+                      </Style.List.Bottom.Badge> */}
                       <Style.List.Bottom.Badge>
                         <IconComment size={16} color={theme.color.gray[500]} />
                         <Body3 color={theme.color.gray[500]}>

@@ -3,6 +3,7 @@ import useSWR from "swr";
 
 const getCommentIsReplyTopic = async (idx: string | number) => {
   const reply = await axios.get(`/api2/topic/reply/${idx}`);
+
   if (reply.data.result.length) {
     const result: any = [];
     const CurrentTime = new Date();
@@ -21,6 +22,7 @@ const getCommentIsReplyTopic = async (idx: string | number) => {
         wr_view: item.wr_view,
         wr_good: item.wr_good,
         wr_create: elapsedTime,
+        likeCnt: item.likeCnt,
       });
     });
     return result;
@@ -31,6 +33,7 @@ const getCommentIsReplyTopic = async (idx: string | number) => {
 
 const getCommentIsReplyInsight = async (idx: string | number) => {
   const reply = await axios.get(`/api2/insight/reply/${idx}`);
+
   const CurrentTime = new Date();
   if (reply.data.result.length) {
     const result: any = [];
@@ -48,6 +51,7 @@ const getCommentIsReplyInsight = async (idx: string | number) => {
         mb_name: item.mb_name,
         wr_view: item.wr_view,
         wr_good: item.wr_good,
+        likeCnt: item.likeCnt,
         wr_create: elapsedTime,
       });
     });
@@ -86,6 +90,7 @@ const topicComment = async (url: string) => {
               mb_name: item.mb_name,
               wr_view: item.wr_view,
               wr_good: item.wr_good,
+              likeCnt: item.likeCnt,
               wr_create: elapsedTime,
               replycount: replyCount.data.result.length,
               wr_reply: await getCommentIsReplyTopic(item.idx),
@@ -136,6 +141,7 @@ const insightComment = async (url: string) => {
               wr_view: item.wr_view,
               wr_good: item.wr_good,
               wr_create: elapsedTime,
+              likeCnt: item.likeCnt,
               replycount: replyCount.data.result.length,
               wr_reply: await getCommentIsReplyInsight(item.idx),
             },
