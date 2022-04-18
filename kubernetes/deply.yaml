@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   annotations:
     autopilot.gke.io/resource-adjustment: >-
-      {"input":{"containers":[{"name":"booster-front-sha256-1"}]},"output":{"containers":[{"limits":{"cpu":"500m","ephemeral-storage":"1Gi","memory":"2Gi"},"requests":{"cpu":"500m","ephemeral-storage":"1Gi","memory":"2Gi"},"name":"booster-front-sha256-1"}]},"modified":true}
+      {"input":{"containers":[{"name":"booster-front-1"}]},"output":{"containers":[{"limits":{"cpu":"500m","ephemeral-storage":"1Gi","memory":"2Gi"},"requests":{"cpu":"500m","ephemeral-storage":"1Gi","memory":"2Gi"},"name":"booster-front-sha256-1"}]},"modified":true}
   labels:
     app: booster-front-1
   managedFields:
@@ -31,7 +31,7 @@ metadata:
                 "f:app": {}
             "f:spec":
               "f:containers":
-                'k:{"name":"booster-front-sha256-1"}':
+                'k:{"name":"booster-front-1"}':
                   .: {}
                   "f:imagePullPolicy": {}
                   "f:name": {}
@@ -72,7 +72,7 @@ metadata:
                 "f:app.kubernetes.io/version": {}
             "f:spec":
               "f:containers":
-                'k:{"name":"booster-front-sha256-1"}':
+                'k:{"name":"booster-front-1"}':
                   "f:image": {}
       manager: kubectl-client-side-apply
       operation: Update
@@ -130,7 +130,7 @@ spec:
       containers:
         - image: gcr.io/booster-345701/github.com/kretalabs-devops/booster-front
           imagePullPolicy: IfNotPresent
-          name: booster-front-sha256-1
+          name: booster-front-1
           resources:
             limits:
               cpu: 500m
