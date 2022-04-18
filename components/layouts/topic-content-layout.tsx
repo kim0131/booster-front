@@ -237,7 +237,6 @@ const TopicContentLayout = ({
           setBookMark(false);
         });
     } else {
-      console.log(2);
       await axios
         .post(`/api2/topic/scrap/insert/${id}`, {
           member_idx: session?.user?.idx,
@@ -311,24 +310,21 @@ const TopicContentLayout = ({
                 </Button>
               </Style.Body.Button.Wrapper>
               <Style.Body.Button.Wrapper>
-                <Button color="transparent">
+                <Button
+                  color="transparent"
+                  onClick={e => {
+                    onClickScrap(e, topicContent.idx, bookmark);
+                  }}
+                >
                   {bookmark ? (
-                    <div
-                      onClick={e => {
-                        onClickScrap(e, topicContent.idx, bookmark);
-                      }}
-                    >
+                    <div>
                       <IconBookmarkFill
                         size={20}
                         color={theme.color.blue[600]}
                       />
                     </div>
                   ) : (
-                    <div
-                      onClick={e => {
-                        onClickScrap(e, topicContent.idx, bookmark);
-                      }}
-                    >
+                    <div>
                       <IconBookmark size={20} color={theme.color.gray[500]} />
                     </div>
                   )}

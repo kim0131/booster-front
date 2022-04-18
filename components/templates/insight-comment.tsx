@@ -210,6 +210,7 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [comments, setComments] = useState([]);
+
   const { commentsList } = useInsightComment(id);
   const [totalCount, setTotalCount] = useState(0);
   const [line, setLine] = useState(5);

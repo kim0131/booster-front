@@ -29,7 +29,7 @@ const InsightId: NextPage = () => {
         <InsightsContentLayout
           insightDetail={insightDetail}
           id={id}
-          comments={<InsightComment id={id} />}
+          comments={id && <InsightComment id={id} />}
         >
           <LnbLayout>
             <Lnb
