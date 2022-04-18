@@ -46,6 +46,11 @@ const Style = {
     }
     background-color: #444;
     background-image: ${props => (props.photo ? `url(${props.photo})` : "")};
+    background-repeat: no-repeat;
+    object-fit: contain;
+    /* background-color: white; */
+    display: flex;
+
     cursor: pointer;
   `,
 };

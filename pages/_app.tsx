@@ -29,7 +29,13 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
       <SessionProvider>
-        <SWRConfig>
+        <SWRConfig
+          value={{
+            revalidateIfStale: false,
+            revalidateOnFocus: false,
+            revalidateOnReconnect: false,
+          }}
+        >
           <Global styles={global} />
           <Header />
           <Component {...pageProps} />

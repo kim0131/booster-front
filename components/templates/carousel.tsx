@@ -117,6 +117,8 @@ const StyledSlider = styled(Slider)`
     display: flex;
     justify-content: center;
   }
+  .slick-dots li button:before {
+  }
 `;
 
 const MainCarousel = () => {
