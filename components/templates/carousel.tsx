@@ -22,11 +22,11 @@ interface IStyle {
 
 const Style = {
   Container: styled.div`
-    max-width: 100%;
-    margin: 0.25rem auto;
+    width: 100%;
+    margin: 0 auto;
     /* display: flex; */
-    /* overflow-x: hidden; */
-    /* overflow-y: hidden; */
+    overflow-x: hidden;
+    overflow-y: hidden;
     /* align-items: center; */
     /* justify-content: center; */
     /* gap: 3rem; */

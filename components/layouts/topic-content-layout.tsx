@@ -250,6 +250,10 @@ const TopicContentLayout = ({
         });
     }
   };
+
+  const checkMbName = (writer: string, userName: string) => {
+    return Boolean(writer == userName);
+  };
   return (
     <>
       {topicContent && (
@@ -334,21 +338,30 @@ const TopicContentLayout = ({
                   스크랩
                 </Button>
 
-                <Style.SubMore>
-                  <IconMoreVertical />
-                  <Dropdown
-                    menu={[
-                      {
-                        id: 0,
-                        content: "수정하기",
-                        url: topicContent.idx,
-                      },
-                      { id: 1, content: "삭제하기", url: topicContent.idx },
-                    ]}
-                    onClick={onClickLink}
-                    isRight={isDesktop ? true : false}
-                  />
-                </Style.SubMore>
+                {checkMbName(
+                  topicContent.mb_name,
+                  session?.user?.name as string,
+                ) ? (
+                  <>
+                    <Style.SubMore>
+                      <IconMoreVertical />
+                      <Dropdown
+                        menu={[
+                          {
+                            id: 0,
+                            content: "수정하기",
+                            url: topicContent.idx,
+                          },
+                          { id: 1, content: "삭제하기", url: topicContent.idx },
+                        ]}
+                        onClick={onClickLink}
+                        isRight={isDesktop ? false : true}
+                      />
+                    </Style.SubMore>
+                  </>
+                ) : (
+                  ""
+                )}
               </Style.Body.Button.Wrapper>
             </Style.Body.Button.Container>
           </Style.Body.Container>

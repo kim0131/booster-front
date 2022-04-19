@@ -44,11 +44,11 @@ const Style = {
     ${props => props.theme.screen.md} {
       width: 20rem;
     }
-    background-color: #444;
+    /* background-color: #444; */
     background-image: ${props => (props.photo ? `url(${props.photo})` : "")};
     background-repeat: no-repeat;
     object-fit: contain;
-    /* background-color: white; */
+    background-color: white;
     display: flex;
 
     cursor: pointer;

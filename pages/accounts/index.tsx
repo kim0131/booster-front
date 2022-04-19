@@ -73,8 +73,17 @@ const Accounts: NextPage = () => {
             redirect: false,
           });
         })
-        .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
+        .catch(error =>
+          setState({
+            ...state,
+            invalid: "아이디 또는 비밀번호가 올바르지 않습니다.",
+          }),
+        );
     }
+  };
+
+  const onFousesetInvaild = () => {
+    setState({ ...state, invalid: "" });
   };
 
   const onClickLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -118,6 +127,7 @@ const Accounts: NextPage = () => {
             value={state.data.mb_id}
             onChange={onChangeAccounts}
             onKeyPress={onKeyPressEnter}
+            onFocus={onFousesetInvaild}
           />
           <TextField
             placeholder="비밀번호를 입력하세요"
@@ -127,6 +137,7 @@ const Accounts: NextPage = () => {
             value={state.data.mb_pw}
             onChange={onChangeAccounts}
             onKeyPress={onKeyPressEnter}
+            onFocus={onFousesetInvaild}
           />
           {state.invalid && (
             <Body2 color={theme.color.red[600]}>{state.invalid}</Body2>
