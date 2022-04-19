@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Badge from "@components/elements/badge";
 import Loader from "@components/elements/loader";
 import Pagination from "@components/elements/pagination";
@@ -8,19 +9,23 @@ import { useDesktop } from "@core/hook/use-desktop";
 import useInsightList from "@core/hook/use-insight-list";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { checkAuth } from "@core/util/check-auth";
+import { useSession } from "next-auth/react";
+import useHistoryState from "@core/hook/use-history-state";
+import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
 
 interface IPropsStyle {
   thumbnail: {
     photo?: string;
   };
+  setLine?: any;
 }
 
 const Style = {
-  Container: styled.div`
+  Container: styled.div<IPropsStyle["setLine"]>`
     display: grid;
     gap: 1.5rem;
-    min-width: 0;
     column-gap: 1.5rem;
     row-gap: 3rem;
     padding: 1.5rem 1.25rem;
@@ -96,65 +101,93 @@ interface IPropsPost {
 const Post = ({ category }: IPropsPost) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
-  const { insightList } = useInsightList();
+  const { insightList } = useInsightList(category);
+  const [totalCount, setTotalCount] = useState(0);
+  const [data, setData] = useState([]);
+  const [line, setLine] = useState(8);
+  const { id } = router.query;
+  const [page, setPage] = useHistoryState(1, "page");
+  const { status } = useSession();
+
+  useEffect(() => {
+    if (insightList) {
+      sliceTopicList();
+      setTotalCount(insightList.length);
+    }
+  }, [router, insightList, page]);
+  useEffect(() => {
+    setPage(1);
+  }, [category]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
+
+  const sliceTopicList = () => {
+    const result = insightList.slice((page - 1) * line, page * line);
+    setData(result);
+  };
+
+  const onClickPagenation = (e: any) => {
+    const value = parseInt(e.currentTarget.textContent);
+    onClickPage(value);
+  };
+
+  const onClickMoveFront = () => {
+    onClickPage(1);
+  };
+  const onClickMoveEnd = () => {
+    onClickPage(Math.ceil(totalCount / line));
+  };
+  const onClickPage = (page?: number) => {
+    setPage(page);
+  };
   const onClickRouterMove = (id: any) => {
-    router.push(`/insights/${id}`);
+    if (status != "authenticated") {
+      if (checkAuth()) {
+        return router.push("/accounts");
+      }
+    } else {
+      router.push(`/insights/${id}`);
+    }
   };
   return (
     <>
       {!insightList ? (
-        <Loader color="gray" />
+        <TopicSnbSkeleton />
       ) : (
-        <Style.Container>
+        <Style.Container setLine={setLine}>
           {insightList &&
-            insightList.map((content: any) => {
-              if (category) {
-                if (category == content.category) {
-                  return (
-                    <React.Fragment key={content.idx}>
-                      <Style.PostItem.Container
-                        onClick={() => onClickRouterMove(content.idx)}
-                      >
-                        <Style.PostItem.Thumbnail
-                          photo={content.file_full_url}
-                        />
-                        <Style.PostItem.Badge>
-                          <Badge>{content.category}</Badge>
-                        </Style.PostItem.Badge>
-                        <Style.PostItem.Title>
-                          {content.wr_subject}
-                        </Style.PostItem.Title>
-                        <Body3 color={theme.color.gray[500]}>
-                          {getCreateTime(content.create)}
-                        </Body3>
-                      </Style.PostItem.Container>
-                    </React.Fragment>
-                  );
-                }
-              } else {
-                return (
-                  <React.Fragment key={content.idx}>
-                    <Style.PostItem.Container
-                      onClick={() => onClickRouterMove(content.idx)}
-                    >
-                      <Style.PostItem.Thumbnail photo={content.file_full_url} />
-                      <Style.PostItem.Badge>
-                        <Badge>{content.category}</Badge>
-                      </Style.PostItem.Badge>
-                      <Style.PostItem.Title>
-                        {content.wr_subject}
-                      </Style.PostItem.Title>
-                      <Body3 color={theme.color.gray[500]}>
-                        {getCreateTime(content.create)}
-                      </Body3>
-                    </Style.PostItem.Container>
-                  </React.Fragment>
-                );
-              }
+            data.map((content: any) => {
+              return (
+                <React.Fragment key={content.idx}>
+                  <Style.PostItem.Container
+                    onClick={() => onClickRouterMove(content.idx)}
+                  >
+                    <Style.PostItem.Thumbnail photo={content.file_full_url} />
+                    <Style.PostItem.Badge>
+                      <Badge>{content.category}</Badge>
+                    </Style.PostItem.Badge>
+                    <Style.PostItem.Title>
+                      {content.wr_subject}
+                    </Style.PostItem.Title>
+                    <Body3 color={theme.color.gray[500]}>
+                      {getCreateTime(content.create)}
+                    </Body3>
+                  </Style.PostItem.Container>
+                </React.Fragment>
+              );
             })}
 
           <Style.Pagination>
-            <Pagination totalContent={0} line={0} currentPage={0} />
+            <Pagination
+              totalContent={totalCount}
+              line={line}
+              currentPage={page}
+              onClick={onClickPagenation}
+              MoveFront={onClickMoveFront}
+              MoveEnd={onClickMoveEnd}
+            />
           </Style.Pagination>
         </Style.Container>
       )}

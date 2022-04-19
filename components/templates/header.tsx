@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import {useDesktop} from "@core/hook/use-desktop";
+import { useDesktop } from "@core/hook/use-desktop";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
 import Button from "@components/elements/button";
@@ -21,6 +21,7 @@ import {
 import Dropdown from "@components/elements/dropdown";
 import { accountsNavigation } from "@core/config/navigation";
 import Portal from "./portal";
+import { checkAuth } from "@core/util/check-auth";
 
 interface IPropsStyle {
   isRoute?: boolean;
@@ -195,13 +196,10 @@ const Header = () => {
     mobileMenu: false,
     mobileSearch: false,
     desktopSearch: false,
+    data: {
+      searchTerm: "",
+    },
   });
-
-  useEffect(() => {
-    // if (status == "unauthenticated" && router.route != "/accounts") {
-    //   router.push("/accounts");
-    // }
-  }, [router, status]);
 
   const onClickLink = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,
@@ -210,20 +208,39 @@ const Header = () => {
     const link: string | undefined = e.currentTarget.dataset.value;
     const content: string | null = e.currentTarget.textContent;
     if (link) {
-      link === "logout" ? console.log("logout") : router.push(link);
+      link === "logout" ? "" : router.push(link);
     }
 
     if (content) {
       content === "로그아웃"
         ? signOut({
-            redirect: false,
+            redirect: true,
+            callbackUrl: "/",
           })
         : "";
     }
   };
 
   const oncClickPUshWrite = () => {
-    router.push("/topics/create");
+    if (status != "authenticated") {
+      if (checkAuth()) {
+        return router.push("/accounts");
+      }
+    } else {
+      router.push("/topics/create");
+    }
+  };
+
+  const onKeyPressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == "Enter") {
+      router.push(`/search?searchTerm=${state.data.searchTerm}`);
+      setState({ ...state, mobileSearch: false });
+    }
+  };
+
+  const onChangeSearchTerm = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.currentTarget;
+    setState({ ...state, data: { ...state.data, searchTerm: value } });
   };
 
   return (
@@ -254,10 +271,13 @@ const Header = () => {
               isRounded
               size="small"
               placeholder="검색"
+              value={state.data.searchTerm}
+              onChange={onChangeSearchTerm}
               width={state.desktopSearch ? "16rem" : "10rem"}
               onFocus={() => setState({ ...state, desktopSearch: true })}
               onBlur={() => setState({ ...state, desktopSearch: false })}
               prefix={<IconSearch />}
+              onKeyPress={onKeyPressEnter}
             />
           )}
           <Button variants="solid" size="small" onClick={oncClickPUshWrite}>
@@ -348,6 +368,9 @@ const Header = () => {
                 placeholder="검색"
                 width="100%"
                 prefix={<IconSearch />}
+                value={state.data.searchTerm}
+                onChange={onChangeSearchTerm}
+                onKeyPress={onKeyPressEnter}
                 suffix={
                   <Button
                     isRounded

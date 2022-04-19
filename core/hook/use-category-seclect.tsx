@@ -6,17 +6,21 @@ import useSWR from "swr";
 export const CategorySelectfetcher = async (url: string) => {
   const sector = url.slice(15);
   let CategoryList: any = [];
-  await axios.get("/api2/category").then(async res => {
-    let list = res.data.result;
-    list.map((item: any, idx: any) => {
-      if (item.sector == sector) {
-        CategoryList.push({
-          value: list[idx].idx,
-          content: list[idx].bo_subject,
-        });
-      }
-    });
-  });
+  await axios
+    .get("/api2/category")
+    .then(async res => {
+      let list = res.data.result;
+      list.map((item: any, idx: any) => {
+        if (item.sector == sector) {
+          CategoryList.push({
+            id: idx,
+            value: list[idx].idx,
+            content: list[idx].bo_subject,
+          });
+        }
+      });
+    })
+    .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
 
   return CategoryList;
 };

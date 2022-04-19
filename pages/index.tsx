@@ -3,7 +3,8 @@ import Carousel from "@components/templates/carousel";
 import HomeLayout from "@components/layouts/home-layout";
 import BestWidget from "@components/templates/best-widget";
 import { useHotTopic } from "@core/hook/use-hot-topic";
-import { useCategoryListHome } from "@core/hook/use-catagory-list";
+import { useCategoryListHome } from "@core/hook/use-category-list";
+import MainCarousel from "@components/templates/carousel";
 
 const Home: NextPage = () => {
   const { hotTopic } = useHotTopic();
@@ -11,10 +12,10 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Carousel />
+      <MainCarousel />
       <HomeLayout>
         {hotTopic && (
-          <BestWidget title="인기 토픽" url="인기글" col={2} datas={hotTopic} />
+          <BestWidget title="인기 토픽" url="hot" col={2} datas={hotTopic} />
         )}
         {categoryListHome &&
           categoryListHome.map((data: any) => {
@@ -22,7 +23,7 @@ const Home: NextPage = () => {
               <BestWidget
                 title={data.bo_subject}
                 col={1}
-                url={data.bo_subject}
+                url={data.bo_table}
                 datas={data.contents}
                 key={data.idx}
               />

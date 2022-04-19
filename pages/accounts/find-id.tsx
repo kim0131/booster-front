@@ -56,44 +56,55 @@ const FindId: NextPage = () => {
   const onClickFindPw = () => {
     router.push("/accounts/reset-password");
   };
+  const onClickSignUp = () => {
+    router.push("/accounts/signup");
+  };
   const onClickCancel = () => {
     router.push("/accounts");
   };
   const FindId = async () => {
-    let pass_fail = true;
-    if (!state.data.mb_ph) {
-      setState({
-        ...state,
-        invalid: { ...state.invalid, mb_ph: "휴대폰번호를 입력해주세요" },
-      });
-      pass_fail = false;
-    }
-    if (!state.data.mb_name) {
-      setState({
+    if (!state.data.mb_name)
+      return setState({
         ...state,
         invalid: { ...state.invalid, mb_name: "이름을 입력해주세요" },
       });
-      pass_fail = false;
-    }
+    if (!state.data.mb_ph)
+      return setState({
+        ...state,
+        invalid: { ...state.invalid, mb_ph: "휴대폰번호를 입력해주세요" },
+      });
 
-    if (pass_fail) {
-      await axios
-        .post("/api2/find-id", {
-          mb_name: state.data.mb_name,
-          mb_ph: state.data.mb_ph,
-        })
-        .then(res => {
-          let mb_id = res.data.result.mb_id;
-          let date = "가입일 " + res.data.result.mb_datetime.substr(0, 10);
-          setState({
-            ...state,
-            result: {
-              ...state.result,
-              mb_id: mb_id,
-              date: date,
-            },
-          });
+    await axios
+      .post("/api2/find-id", {
+        mb_name: state.data.mb_name,
+        mb_ph: state.data.mb_ph,
+      })
+      .then(res => {
+        let mb_id = res.data.result.mb_id;
+        let date = "가입일 " + res.data.result.mb_datetime.substr(0, 10);
+        setState({
+          ...state,
+          result: {
+            ...state.result,
+            mb_id: mb_id,
+            date: date,
+          },
         });
+      })
+      .catch(error => {
+        setState({
+          ...state,
+          result: {
+            ...state.result,
+            mb_id: "아이디가 존재하지 않습니다.",
+          },
+        });
+      });
+  };
+
+  const onKeyPressEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == "Enter") {
+      FindId();
     }
   };
   return (
@@ -113,6 +124,7 @@ const FindId: NextPage = () => {
             onChange={onChangeFindId}
             error={state.invalid.mb_name}
             onFocus={onFocusFindId}
+            onKeyPress={onKeyPressEnter}
           />
           <TextField
             name="mb_ph"
@@ -121,6 +133,7 @@ const FindId: NextPage = () => {
             onChange={onChangeFindId}
             error={state.invalid.mb_ph}
             onFocus={onFocusFindId}
+            onKeyPress={onKeyPressEnter}
           />
           {state.result.mb_id || state.result.message ? (
             <Callout
@@ -138,14 +151,25 @@ const FindId: NextPage = () => {
       section2={
         <>
           {state.result.mb_id ? (
-            <Button
-              variants="solid"
-              color="primary"
-              size="large"
-              onClick={onClickFindPw}
-            >
-              비밀번호 초기화
-            </Button>
+            state.result.mb_id == "아이디가 존재하지 않습니다." ? (
+              <Button
+                variants="solid"
+                color="primary"
+                size="large"
+                onClick={onClickSignUp}
+              >
+                회원가입
+              </Button>
+            ) : (
+              <Button
+                variants="solid"
+                color="primary"
+                size="large"
+                onClick={onClickFindPw}
+              >
+                비밀번호 초기화
+              </Button>
+            )
           ) : (
             <Button
               variants="solid"

@@ -78,7 +78,10 @@ const ChangePassword: NextPage = () => {
                 .then(res => {
                   alert("비밀번호가 수정되었습니다.");
                   router.push("/my/profile");
-                });
+                })
+                .catch(error =>
+                  alert(`관리자에게 문의하세요 error : ${error}`),
+                );
             }
           }
         });

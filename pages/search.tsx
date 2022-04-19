@@ -1,40 +1,62 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import SnbLayout from "@components/layouts/snb-layout";
 import Snb from "@components/templates/snb";
 import Board from "@components/templates/board";
-
-const sampleSearchSnbDatas = [
-  {
-    id: 0,
-    category: "토픽 (100)",
-    menus: [
-      { id: 0, content: "메뉴 1 (20)", param: "menu1" },
-      { id: 1, content: "메뉴 2 (50)", param: "menu2" },
-      { id: 2, content: "메뉴 3 (30)", param: "menu3" },
-    ],
-  },
-  {
-    id: 0,
-    category: "인사이트 (10)",
-    menus: [
-      { id: 0, content: "메뉴 4 (5)", param: "menu4" },
-      { id: 1, content: "메뉴 5 (2)", param: "menu5" },
-      { id: 2, content: "메뉴 6 (3)", param: "menu6" },
-    ],
-  },
-];
+import { useSearch } from "@core/hook/use-search";
+import { useEffect, useState } from "react";
+import { checkAuth } from "@core/util/check-auth";
+import { useSession } from "next-auth/react";
+import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
+import Loader from "@components/elements/loader";
+import useHistoryState from "@core/hook/use-history-state";
 
 const Search: NextPage = () => {
   const router = useRouter();
+  const { searchTerm } = router.query;
+  const { status } = useSession();
+  const [category, setCategory] = useHistoryState("all", "category");
+  const { searchResult } = useSearch(searchTerm, category);
+
+  const onClickRouter = (param: any) => {
+    if (status != "authenticated") {
+      if (checkAuth()) {
+        return router.push("/accounts");
+      }
+    } else {
+      if (param.sector == "topics") {
+        router.push(`/${param.sector}/detail/${param.idx}`);
+      } else {
+        router.push(`/${param.sector}/${param.idx}`);
+      }
+    }
+  };
+
   return (
     <SnbLayout>
-      <Snb category="menu1" snbDatas={sampleSearchSnbDatas} />
-      {/* <Board
-        category="test"
-        // Datas={category == "인기글" ? hotTopic : topicListFilter}
-        // onClickRouter={onClickRouter}
-      /> */}
+      {searchResult && (
+        <>
+          <Snb
+            category={category ? category : "all"}
+            snbDatas={searchResult.SearchSnbDatas}
+            searchTerm={searchTerm}
+            setCategory={setCategory}
+          />
+          <Board
+            category={category ? category : "all"}
+            title={"검색결과"}
+            datas={searchResult.result}
+            onClickRouter={onClickRouter}
+          />
+        </>
+      )}
+      {!searchResult && (
+        <>
+          <TopicSnbSkeleton />
+          <Loader />
+        </>
+      )}
     </SnbLayout>
   );
 };

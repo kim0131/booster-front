@@ -58,67 +58,64 @@ const ResetPassword: NextPage = () => {
   };
 
   const FindPw = async () => {
-    let pass_fail = true;
-    if (!state.data.mb_ph) {
-      setState({
-        ...state,
-        invalid: { ...state.invalid, mb_ph: "휴대폰번호를 입력해주세요" },
-      });
-      pass_fail = false;
-    }
-
-    if (!state.data.mb_name) {
-      setState({
-        ...state,
-        invalid: { ...state.invalid, mb_name: "이름을 입력해주세요" },
-      });
-      pass_fail = false;
-    }
-    if (!state.data.mb_id) {
-      setState({
+    if (!state.data.mb_id)
+      return setState({
         ...state,
         invalid: { ...state.invalid, mb_id: "아이디를 입력해주세요" },
       });
-      pass_fail = false;
-    }
+    if (!state.data.mb_name)
+      return setState({
+        ...state,
+        invalid: { ...state.invalid, mb_name: "이름을 입력해주세요" },
+      });
+    if (!state.data.mb_ph)
+      return setState({
+        ...state,
+        invalid: { ...state.invalid, mb_ph: "휴대폰번호를 입력해주세요" },
+      });
 
-    if (pass_fail) {
-      const resetPw = Math.random().toString(36).substr(2, 11); // 초기화된 비밀번호
-      await axios
-        .post("/api2/find-password", {
-          mb_name: state.data.mb_name,
-          mb_ph: state.data.mb_ph,
-          mb_id: state.data.mb_id,
-        })
-        .then(async res => {
-          let mb_id = res.data.result.mb_id;
-          let date = "가입일 " + res.data.result.mb_datetime.substr(0, 10);
-          await axios
-            .post("/api2/reset-password", {
-              mb_id: mb_id,
-              mb_pw: resetPw,
-            })
-            .then(res => {
-              setState({
-                ...state,
-                result: {
-                  ...state.result,
-                  mb_pw: "초기화된 비밀번호 : " + resetPw,
-                },
-              });
+    const resetPw = Math.random().toString(36).substr(2, 11); // 초기화된 비밀번호
+    await axios
+      .post("/api2/find-password", {
+        mb_name: state.data.mb_name,
+        mb_ph: state.data.mb_ph,
+        mb_id: state.data.mb_id,
+      })
+      .then(async res => {
+        let mb_id = res.data.result.mb_id;
+        let date = "가입일 " + res.data.result.mb_datetime.substr(0, 10);
+        await axios
+          .post("/api2/reset-password", {
+            mb_id: mb_id,
+            mb_pw: resetPw,
+          })
+          .then(res => {
+            setState({
+              ...state,
+              result: {
+                ...state.result,
+                mb_pw: "초기화된 비밀번호 : " + resetPw,
+              },
             });
-        })
-        .catch(function (error) {
-          setState({
-            ...state,
-            result: {
-              ...state.result,
-              mb_id: "",
-              date: "",
-              message: error.response.data.msg,
-            },
-          });
+          })
+          .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
+      })
+      .catch(function (error) {
+        setState({
+          ...state,
+          result: {
+            ...state.result,
+            mb_id: "",
+            date: "",
+            message: error.response.data.msg,
+          },
         });
+      });
+  };
+
+  const onKeyPressEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == "Enter") {
+      FindPw();
     }
   };
   return (
@@ -138,6 +135,7 @@ const ResetPassword: NextPage = () => {
             error={state.invalid.mb_id}
             onChange={onChangeFindPw}
             onFocus={onFocusFindPwd}
+            onKeyPress={onKeyPressEnter}
           />
           <TextField
             name="mb_name"
@@ -146,6 +144,7 @@ const ResetPassword: NextPage = () => {
             error={state.invalid.mb_name}
             onChange={onChangeFindPw}
             onFocus={onFocusFindPwd}
+            onKeyPress={onKeyPressEnter}
           />
           <TextField
             name="mb_ph"
@@ -154,6 +153,7 @@ const ResetPassword: NextPage = () => {
             error={state.invalid.mb_ph}
             onChange={onChangeFindPw}
             onFocus={onFocusFindPwd}
+            onKeyPress={onKeyPressEnter}
           />
           {state.result.mb_pw || state.result.message ? (
             <Callout

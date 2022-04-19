@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { KeyboardEventHandler } from "react";
 
 // Style
 interface IPropsStyle {
@@ -280,6 +280,7 @@ interface IPropsTextField {
   type?: string;
   ref?: React.RefObject<HTMLInputElement>;
   readonly?: any;
+  onKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
@@ -305,6 +306,7 @@ const TextField = ({
   onChange,
   onFocus,
   onBlur,
+  onKeyPress,
 }: IPropsTextField) => (
   <Style.Container size={size}>
     {label && <Style.Label size={size}>{label}</Style.Label>}
@@ -322,6 +324,7 @@ const TextField = ({
         onFocus={onFocus}
         onBlur={onBlur}
         readOnly={readonly ? true : false}
+        onKeyPress={onKeyPress}
       />
       {prefix && <Style.Prefix size={size}>{prefix}</Style.Prefix>}
       {suffix && <Style.Suffix size={size}>{suffix}</Style.Suffix>}

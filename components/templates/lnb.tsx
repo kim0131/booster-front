@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Body2 } from "@components/elements/types";
 import { IconChevronDown } from "@components/icons";
-import { useCategorySubSide } from "@core/hook/use-category-subSIde";
+import { useCategorySubSide } from "@core/hook/use-category-sub-side";
 import { useDesktop } from "@core/hook/use-desktop";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
@@ -117,9 +117,9 @@ const Lnb = ({ param, onClick }: IPropsLnb) => {
           <Style.Desktop.Button
             key={"all"}
             onClick={() => {
-              onClick("");
+              onClick("all");
             }}
-            isActive={!param}
+            isActive={param === "all"}
           >
             {"전체"}
           </Style.Desktop.Button>
@@ -128,9 +128,9 @@ const Lnb = ({ param, onClick }: IPropsLnb) => {
               <Style.Desktop.Button
                 key={lnbData.id}
                 onClick={() => {
-                  onClick(lnbData.content);
+                  onClick(lnbData.param);
                 }}
-                isActive={lnbData.content === param}
+                isActive={lnbData.param === param}
               >
                 {lnbData.content}
               </Style.Desktop.Button>
@@ -142,7 +142,7 @@ const Lnb = ({ param, onClick }: IPropsLnb) => {
             <option
               key={"all"}
               onClick={() => {
-                onClick("");
+                onClick("all");
               }}
             >
               {"전체"}

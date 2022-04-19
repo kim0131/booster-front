@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import type { NextPage } from "next";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -7,7 +8,7 @@ import Button from "@components/elements/button";
 import AccountsLayout from "@components/layouts/accounts-layout";
 import { Body1, Body2, Header4 } from "@components/elements/types";
 import { accountsDescription } from "@core/config/description";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import theme from "@components/styles/theme";
 import { IAccountsData } from "@core/interfaces/accounts";
 import { accountsNavigation } from "@core/config/navigation";
@@ -31,9 +32,11 @@ const Accounts: NextPage = () => {
   });
   const { data: session, status } = useSession();
 
-  if (status == "authenticated") {
-    router.push("/");
-  }
+  useEffect(() => {
+    if (status == "authenticated") {
+      router.push("/");
+    }
+  }, [status]);
 
   const onClickLink = (
     e: React.MouseEvent<HTMLButtonElement | HTMLParagraphElement>,
@@ -55,36 +58,54 @@ const Accounts: NextPage = () => {
     });
   };
 
+  const onKeyPressEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == "Enter") {
+      await axios
+        .post("/api2/login", state.data)
+        .then((res: any) => {
+          const user = res.data.result;
+
+          signIn("username-password", {
+            mb_id: user.mb_id,
+            mb_pw: user.mb_pw,
+            mb_nick: user.mb_nick,
+            mb_idx: user.idx,
+            redirect: false,
+          });
+        })
+        .catch(error =>
+          setState({
+            ...state,
+            invalid: "아이디 또는 비밀번호가 올바르지 않습니다.",
+          }),
+        );
+    }
+  };
+
+  const onFousesetInvaild = () => {
+    setState({ ...state, invalid: "" });
+  };
+
   const onClickLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    await axios.post("/api2/login", state.data).then((res: any) => {
-      const user = res.data.result;
-      console.log(user);
-      signIn("username-password", {
-        mb_id: user.mb_id,
-        mb_pw: user.mb_pw,
-        mb_nick: user.mb_nick,
-        mb_idx: user.idx,
-        redirect: false,
-      });
-    });
+    await axios
+      .post("/api2/login", state.data)
+      .then((res: any) => {
+        const user = res.data.result;
+
+        signIn("username-password", {
+          mb_id: user.mb_id,
+          mb_pw: user.mb_pw,
+          mb_nick: user.mb_nick,
+          mb_idx: user.idx,
+          redirect: false,
+        });
+      })
+      .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   };
   const onClickCertification = () => {
-    const form: HTMLFormElement | null | any =
-      document.querySelector("#form_chk");
-
-    window.open(
-      "",
-      "popupChk",
-      "width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no",
-    );
-    form.action = "/accounts/signup";
-    form.target = "popupChk";
-    // form.target = "test";
-
-    //submit! (본인인증 화면으로 전환)
-    form.submit();
+    router.push("/accounts/signup");
   };
 
   return (
@@ -103,14 +124,20 @@ const Accounts: NextPage = () => {
             type="text"
             size="large"
             width="100%"
+            value={state.data.mb_id}
             onChange={onChangeAccounts}
+            onKeyPress={onKeyPressEnter}
+            onFocus={onFousesetInvaild}
           />
           <TextField
             placeholder="비밀번호를 입력하세요"
             name="mb_pw"
             type="password"
             size="large"
+            value={state.data.mb_pw}
             onChange={onChangeAccounts}
+            onKeyPress={onKeyPressEnter}
+            onFocus={onFousesetInvaild}
           />
           {state.invalid && (
             <Body2 color={theme.color.red[600]}>{state.invalid}</Body2>

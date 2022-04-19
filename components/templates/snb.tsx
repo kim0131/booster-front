@@ -1,11 +1,11 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { ISnbData } from "@core/interfaces/snb";
 import styled from "@emotion/styled";
+import { ISnbData } from "@core/interfaces/snb";
 import { Body2 } from "@components/elements/types";
 import { IconChevronDown } from "@components/icons";
-import { useCategorySubSide } from "@core/hook/use-category-subSIde";
 import { useDesktop } from "@core/hook/use-desktop";
+import { useEffect } from "react";
+import useHistoryState from "@core/hook/use-history-state";
 
 interface IPropsStyle {
   isRoute?: boolean;
@@ -19,14 +19,23 @@ const Style = {
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
+      position: relative;
     `,
     Category: {
+      Wapper: styled.div`
+        width: 12rem;
+        position: fixed;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      `,
       Container: styled.div`
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
       `,
       Block: styled.div`
+        width: 100%;
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
@@ -92,50 +101,73 @@ const Style = {
 interface IPropsSnb {
   snbDatas: ISnbData[];
   category?: string | string[] | undefined;
+  searchTerm?: string | string[] | undefined;
+  setCategory?: any;
 }
 
-const Snb = ({ snbDatas, category }: IPropsSnb) => {
+const Snb = ({ snbDatas, category, setCategory }: IPropsSnb) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
-  const onClickRouter = (param: string) => {
-    router.push(`/topics/?category=${param}`);
+
+  const onClickRouter = (
+    e:
+      | React.MouseEvent<HTMLButtonElement>
+      | React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    e.preventDefault();
+
+    // let endUrl = "";
+    // if (searchTerm) endUrl += `searchTerm=${searchTerm}&`;
+    // endUrl += `category=${e.currentTarget.value}&`;
+    setCategory(e.currentTarget.value);
+    // if (router.pathname == "/search") {
+    //   router.push(`${router.pathname}?${endUrl}`);
+    // } else if (router.pathname == "/topics/detail/[id]") {
+    //   router.push(`/topics?${endUrl}`);
+    // } else {
+    //   router.push(`${router.pathname}?${endUrl}`);
+    // }
   };
 
   return isDesktop ? (
     <Style.Desktop.Container>
-      {snbDatas.map((snbData: ISnbData) => (
-        <Style.Desktop.Category.Container key={snbData.id}>
-          <Body2 isBold>{snbData.category}</Body2>
-          <Style.Desktop.Category.Block>
-            {snbData.menus &&
-              snbData.menus.map((menu: any) => (
-                <Style.Desktop.Category.Button
-                  key={menu.id}
-                  isRoute={menu.content === category}
-                  onClick={() => onClickRouter(menu.content)}
-                >
-                  {menu.content}
-                </Style.Desktop.Category.Button>
-              ))}
-          </Style.Desktop.Category.Block>
-        </Style.Desktop.Category.Container>
-      ))}
+      <Style.Desktop.Category.Wapper>
+        {snbDatas &&
+          snbDatas.map((snbData: ISnbData) => (
+            <Style.Desktop.Category.Container key={snbData.id}>
+              <Body2 isBold>{snbData.category}</Body2>
+              <Style.Desktop.Category.Block>
+                {snbData.menus &&
+                  snbData.menus.map(
+                    (menu: { id: number; content: string; param: string }) => (
+                      <Style.Desktop.Category.Button
+                        key={menu.id}
+                        isRoute={menu.param === category}
+                        value={menu.param}
+                        onClick={onClickRouter}
+                      >
+                        {menu.content}
+                      </Style.Desktop.Category.Button>
+                    ),
+                  )}
+              </Style.Desktop.Category.Block>
+            </Style.Desktop.Category.Container>
+          ))}
+      </Style.Desktop.Category.Wapper>
     </Style.Desktop.Container>
   ) : (
     <Style.Mobile.Wrapper>
-      <Style.Mobile.Selectbox defaultValue={category}>
-        {snbDatas.map((snbData: any) => (
+      <Style.Mobile.Selectbox defaultValue={category} onChange={onClickRouter}>
+        {snbDatas.map((snbData: ISnbData) => (
           <optgroup key={snbData.id} label={snbData.category}>
             {snbData.menus &&
-              snbData.menus.map((menu: any) => (
-                <option
-                  key={menu.id}
-                  value={menu.param}
-                  onClick={() => onClickRouter(menu.content)}
-                >
-                  {menu.content}
-                </option>
-              ))}
+              snbData.menus.map(
+                (menu: { id: number; content: string; param: string }) => (
+                  <option key={menu.id} value={menu.param}>
+                    {menu.content}
+                  </option>
+                ),
+              )}
           </optgroup>
         ))}
       </Style.Mobile.Selectbox>

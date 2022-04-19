@@ -107,14 +107,14 @@ interface IPropsPagination {
 const Pagination = ({
   totalContent = 102581,
   line = 20,
-  currentPage = 0,
+  currentPage = 1,
   onClick,
   MoveFront,
   MoveEnd,
 }: IPropsPagination) => {
   const totalPage = Math.ceil(totalContent / line);
   const pageArr =
-    totalPage < 3
+    totalPage < 5
       ? [...Array(totalPage)].map((v, i) => i + 1)
       : currentPage + 4 >= totalPage
       ? [totalPage - 4, totalPage - 3, totalPage - 2, totalPage - 1, totalPage]

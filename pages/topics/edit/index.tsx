@@ -115,10 +115,12 @@ const EditTopic: NextPage = () => {
 
   const onClickSubmitTopic = async () => {
     const formData = new FormData();
-    if (image.image_file) {
-      formData.append("file", image.image_file);
-      formData.append("exist_url", data.file_url);
-    }
+
+    formData.append("file", image.image_file);
+    formData.append("exist_url", data.file_url);
+    if (!data.board) return alert("카테고리를 선택해주세요");
+    if (!data.wr_subject) return alert("제목을 작성해주세요");
+    if (!data.wr_content) return alert("내용을 작성해주세요");
     await axios
       .post(`/api2/topic/update/${id}`, {
         wr_subject: data.wr_subject,
@@ -127,11 +129,13 @@ const EditTopic: NextPage = () => {
       })
       .then(async res => {
         if (image.image_file != data.file_url) {
-          await axios.post(`/api2/topic/upload/${id}`, formData);
+          formData.append("idx", `${id}`);
+          await axios.post(`/api2/upload/topic`, formData);
         }
         alert("토픽이 수정되었습니다");
         router.push(`/topics`);
-      });
+      })
+      .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   };
 
   return (

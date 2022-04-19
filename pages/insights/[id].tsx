@@ -12,15 +12,16 @@ const InsightId: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const { insightDetail } = useInsightDetail(id);
-
-  const [selectCategory, setCategory] = useState<any>();
-  const { category } = router.query;
-  useEffect(() => {
-    setCategory(category);
-  }, [category]);
+  const { category, page } = router.query;
 
   const onClickCategory = (content: any) => {
-    setCategory(content);
+    if (category == content) {
+      router.push(
+        `/insights/${id}?category=${content}${page ? `&page=${page}` : ""}`,
+      );
+    } else {
+      router.push(`/insights/${id}?category=${content}`);
+    }
   };
   return (
     <>
@@ -28,11 +29,14 @@ const InsightId: NextPage = () => {
         <InsightsContentLayout
           insightDetail={insightDetail}
           id={id}
-          comments={<InsightComment id={id} />}
+          comments={id && <InsightComment id={id} />}
         >
           <LnbLayout>
-            <Lnb param={selectCategory} onClick={onClickCategory} />
-            <Post category={selectCategory} />
+            <Lnb
+              param={category ? category : "all"}
+              onClick={onClickCategory}
+            />
+            <Post category={category ? category : "all"} />
           </LnbLayout>
         </InsightsContentLayout>
       )}

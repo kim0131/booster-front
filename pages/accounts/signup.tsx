@@ -88,17 +88,17 @@ const Signup: NextPage = () => {
     });
   };
 
-  const onClickNext = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onClickNext = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     let pass_fail = true;
-    mb_id_vaildate(state.data.mb_id).then(res => {
+    await mb_id_vaildate(state.data.mb_id).then(async res => {
       if (res) {
         setState({
           ...state,
           invalid: { ...state.invalid, mb_id: res },
         });
       } else {
-        mb_pw_vaildate(state.data.mb_pw).then(res => {
+        await mb_pw_vaildate(state.data.mb_pw).then(async res => {
           if (res) {
             setState({
               ...state,
@@ -125,23 +125,24 @@ const Signup: NextPage = () => {
   const onClickConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    mb_nick_vaildate(state.data.mb_nick).then(res => {
+    await mb_nick_vaildate(state.data.mb_nick).then(async res => {
       if (res) {
         setState({ ...state, invalid: { mb_nick: res } });
       } else {
-        mb_email_vaildate(state.data.mb_email).then(res => {
+        await mb_email_vaildate(state.data.mb_email).then(async res => {
           if (res) {
             setState({ ...state, invalid: { mb_email: res } });
           } else {
-            mb_name_vaildate(state.data.mb_name).then(res => {
+            await mb_name_vaildate(state.data.mb_name).then(async res => {
               if (res) {
                 setState({ ...state, invalid: { mb_name: res } });
               } else {
-                mb_ph_vaildate(state.data.mb_ph).then(res => {
+                await mb_ph_vaildate(state.data.mb_ph).then(async res => {
                   if (res) {
                     setState({ ...state, invalid: { mb_ph: res } });
                   } else {
-                    axios
+                    console.log(state.data.mb_pw);
+                    await axios
                       .post("/api2/signup", {
                         mb_id: state.data.mb_id,
                         mb_pw: state.data.mb_pw,
@@ -161,10 +162,14 @@ const Signup: NextPage = () => {
                           .then(async res => {
                             const business_idx = res.data.result.idx;
                             await axios.post(`/api2/user/update/${mb_idx}`, {
+                              mb_pw: state.data.mb_pw,
                               mb_business_num: business_idx,
                               mb_business_certify: 0,
                             });
-                          });
+                          })
+                          .catch(error =>
+                            alert(`관리자에게 문의하세요 error : ${error}`),
+                          );
                         signIn("username-password", {
                           mb_id: state.data.mb_id,
                           mb_pw: state.data.mb_pw,
@@ -174,7 +179,10 @@ const Signup: NextPage = () => {
                           mb_idx: mb_idx,
                         });
                         router.push("/accounts/business-registration");
-                      });
+                      })
+                      .catch(error =>
+                        alert(`관리자에게 문의하세요 error : ${error}`),
+                      );
                   }
                 });
               }
@@ -196,7 +204,7 @@ const Signup: NextPage = () => {
     axios.get("/api3/checkplus_main").then(res => {
       const form: HTMLFormElement | null | any =
         document.querySelector("#form_chk");
-      console.log(res.data.result.sEncData);
+      window.name = "parent";
       window.open(
         "",
         "popupChk",
@@ -240,7 +248,7 @@ const Signup: NextPage = () => {
               <Body2>아이디 및 비밀번호 정보</Body2>
               <TextField
                 name="mb_id"
-                placeholder="아이디을 입력하세요."
+                placeholder="아이디를 입력하세요."
                 size="large"
                 value={state.data.mb_id}
                 maxLength={50}

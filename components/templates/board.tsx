@@ -18,8 +18,10 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSWRConfig } from "swr";
+import { checkAuth } from "@core/util/check-auth";
+import useHistoryState from "@core/hook/use-history-state";
 
 const Style = {
   Container: styled.div`
@@ -122,13 +124,15 @@ const Style = {
 };
 
 interface IPropsBoard {
-  category: string | string[] | undefined;
-  Datas: {
+  category?: string | string[] | undefined;
+  title: string;
+  datas: {
     id: number;
+    idx?: number;
     category: string;
     title: string;
     content: string;
-    writer: string;
+    writer: string | null;
     like: number;
     view: number;
     comments: number;
@@ -141,66 +145,73 @@ interface IPropsBoard {
   onClickRouter?: any;
 }
 
-const Board = ({ category, Datas, onClickRouter }: IPropsBoard) => {
+const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
   const { isDesktop } = useDesktop();
-  const { mutate } = useSWRConfig();
-  const { data: session }: any = useSession();
-  const [datas, setData] = useState(Datas);
-
-  const [totalCount, setTotalCount] = useState(Datas.length);
+  const { data: session, status }: any = useSession();
+  const [data, setData] = useState(datas);
+  const router = useRouter();
+  const [totalCount, setTotalCount] = useState(datas.length);
   const [line, setLine] = useState(10);
-  const [currentPage, setcurrentPage] = useState(1);
+  const { id, searchTerm } = router.query;
+  const [page, setPage] = useHistoryState(1, "page");
 
   useEffect(() => {
     sliceTopicList();
-  }, [currentPage, Datas]);
-
-  useEffect(() => {
-    setTotalCount(Datas.length);
-    setcurrentPage(1);
-  }, [Datas]);
+    setTotalCount(datas.length);
+  }, [router, datas, page]);
 
   const sliceTopicList = () => {
-    const result = Datas.slice((currentPage - 1) * line, currentPage * line);
+    const result = datas.slice((page - 1) * line, page * line);
     setData(result);
   };
 
   const onClickPagenation = (e: any) => {
     const value = parseInt(e.currentTarget.textContent);
-    setcurrentPage(value);
+    onClickPage(value);
   };
 
   const onClickMoveFront = () => {
-    setcurrentPage(1);
+    onClickPage(1);
   };
   const onClickMoveEnd = () => {
-    setcurrentPage(Math.ceil(totalCount / line));
+    onClickPage(Math.ceil(totalCount / line));
   };
+
+  const onClickPage = (page?: number) => {
+    setPage(page);
+  };
+
   const onClickScrap = async (id: any, bookmark: any) => {
-    if (bookmark) {
-      await axios.post(`/api2/topic/scrap/cancel/${id}`, {
-        member_idx: session?.user?.idx,
-        sector: "topic",
-      });
-    } else {
-      await axios.post(`/api2/topic/scrap/insert/${id}`, {
-        member_idx: session?.user?.idx,
-        sector: "topic",
-      });
-    }
-    const result = await datas.map((item: any, idx: any) => {
-      if (datas[idx].id == id) {
-        item.bookmark = Boolean(!bookmark);
+    if (status != "authenticated") {
+      if (checkAuth()) {
+        return router.push("/accounts");
       }
-      return item;
-    });
-    setData(result);
+    } else {
+      if (bookmark) {
+        await axios.post(`/api2/topic/scrap/cancel/${id}`, {
+          member_idx: session?.user?.idx,
+          sector: "topic",
+        });
+      } else {
+        await axios.post(`/api2/topic/scrap/insert/${id}`, {
+          member_idx: session?.user?.idx,
+          sector: "topic",
+        });
+      }
+      const result = await datas.map((item: any, idx: any) => {
+        if (datas[idx].idx == id) {
+          item.bookmark = Boolean(!bookmark);
+        }
+        return item;
+      });
+      setData(result);
+    }
   };
 
   return (
     <>
       <Style.Container>
-        {isDesktop && <Header4> {category ? category : "전체"}</Header4>}
+        {isDesktop && <Header4>{title}</Header4>}
 
         <Style.BoardList.Container>
           {!datas.length ? (
@@ -222,11 +233,11 @@ const Board = ({ category, Datas, onClickRouter }: IPropsBoard) => {
               </Style.BoardList.Item.Bottom.Container>
             </Style.BoardList.Item.Container>
           ) : (
-            datas.map(data => (
+            data.map(data => (
               <Style.BoardList.Item.Container key={data.id}>
                 <Style.BoardList.Item.Top.Container>
                   <Style.BoardList.Item.Top.Content.Container
-                    onClick={() => onClickRouter(data.id)}
+                    onClick={() => onClickRouter(data)}
                   >
                     {data.category && (
                       <Style.BoardList.Item.Top.Content.Badge>
@@ -244,7 +255,7 @@ const Board = ({ category, Datas, onClickRouter }: IPropsBoard) => {
                     {data.bookmark ? (
                       <div
                         onClick={() => {
-                          onClickScrap(data.id, data.bookmark);
+                          onClickScrap(data.idx, data.bookmark);
                         }}
                       >
                         <IconBookmarkFill
@@ -255,7 +266,7 @@ const Board = ({ category, Datas, onClickRouter }: IPropsBoard) => {
                     ) : (
                       <div
                         onClick={() => {
-                          onClickScrap(data.id, data.bookmark);
+                          onClickScrap(data.idx, data.bookmark);
                         }}
                       >
                         <IconBookmark size={20} color={theme.color.gray[500]} />
@@ -264,7 +275,7 @@ const Board = ({ category, Datas, onClickRouter }: IPropsBoard) => {
                   </Style.BoardList.Item.Top.Button>
                 </Style.BoardList.Item.Top.Container>
                 <Style.BoardList.Item.Bottom.Container
-                  onClick={() => onClickRouter(data.id)}
+                  onClick={() => onClickRouter(data)}
                 >
                   <Style.BoardList.Item.Bottom.Info>
                     <Style.BoardList.Item.Bottom.Badge>
@@ -299,7 +310,7 @@ const Board = ({ category, Datas, onClickRouter }: IPropsBoard) => {
         <Pagination
           totalContent={totalCount}
           line={line}
-          currentPage={currentPage}
+          currentPage={page}
           onClick={onClickPagenation}
           MoveFront={onClickMoveFront}
           MoveEnd={onClickMoveEnd}

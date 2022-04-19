@@ -3,6 +3,7 @@ import useSWR from "swr";
 
 const getCommentIsReplyTopic = async (idx: string | number) => {
   const reply = await axios.get(`/api2/topic/reply/${idx}`);
+
   if (reply.data.result.length) {
     const result: any = [];
     const CurrentTime = new Date();
@@ -21,6 +22,7 @@ const getCommentIsReplyTopic = async (idx: string | number) => {
         wr_view: item.wr_view,
         wr_good: item.wr_good,
         wr_create: elapsedTime,
+        likeCnt: item.likeCnt,
       });
     });
     return result;
@@ -31,6 +33,7 @@ const getCommentIsReplyTopic = async (idx: string | number) => {
 
 const getCommentIsReplyInsight = async (idx: string | number) => {
   const reply = await axios.get(`/api2/insight/reply/${idx}`);
+
   const CurrentTime = new Date();
   if (reply.data.result.length) {
     const result: any = [];
@@ -48,6 +51,7 @@ const getCommentIsReplyInsight = async (idx: string | number) => {
         mb_name: item.mb_name,
         wr_view: item.wr_view,
         wr_good: item.wr_good,
+        likeCnt: item.likeCnt,
         wr_create: elapsedTime,
       });
     });
@@ -61,33 +65,41 @@ const getCommentIsReplyInsight = async (idx: string | number) => {
 const topicComment = async (url: string) => {
   let result: any = [];
   let result2: any = [];
-  await axios.get(url).then(async res => {
-    const CurrentTime = new Date();
-    const comment = res.data.result;
-    for (const item of comment) {
-      let ContentTime = new Date(item.wr_datetime);
-      ContentTime.setHours(ContentTime.getHours());
-      const elapsedTime = Math.ceil(
-        (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 60),
-      );
-      const replyCount = await axios.get(`/api2/topic/replycount/${item.idx}`);
+  await axios
+    .get(url)
+    .then(async res => {
+      const CurrentTime = new Date();
+      const comment = res.data.result;
+      if (comment) {
+        for (const item of comment) {
+          let ContentTime = new Date(item.wr_datetime);
+          ContentTime.setHours(ContentTime.getHours());
+          const elapsedTime = Math.ceil(
+            (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 60),
+          );
+          const replyCount = await axios.get(
+            `/api2/topic/replycount/${item.idx}`,
+          );
 
-      result.push(
-        await {
-          idx: item.idx,
-          wr_is_comment: item.wr_is_comment,
-          wr_is_comment2: item.wr_is_comment2,
-          wr_content: item.wr_content,
-          mb_name: item.mb_name,
-          wr_view: item.wr_view,
-          wr_good: item.wr_good,
-          wr_create: elapsedTime,
-          replycount: replyCount.data.result.length,
-          wr_reply: await getCommentIsReplyTopic(item.idx),
-        },
-      );
-    }
-  });
+          result.push(
+            await {
+              idx: item.idx,
+              wr_is_comment: item.wr_is_comment,
+              wr_is_comment2: item.wr_is_comment2,
+              wr_content: item.wr_content,
+              mb_name: item.mb_name,
+              wr_view: item.wr_view,
+              wr_good: item.wr_good,
+              likeCnt: item.likeCnt,
+              wr_create: elapsedTime,
+              replycount: replyCount.data.result.length,
+              wr_reply: await getCommentIsReplyTopic(item.idx),
+            },
+          );
+        }
+      }
+    })
+    .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   for (const item of result) {
     result2.push(item);
     if (item.wr_reply.length > 0) {
@@ -103,35 +115,41 @@ const topicComment = async (url: string) => {
 const insightComment = async (url: string) => {
   let result: any = [];
   let result2: any = [];
-  await axios.get(url).then(async res => {
-    const CurrentTime = new Date();
-    const comment = res.data.result;
-    for (const item of comment) {
-      let ContentTime = new Date(item.wr_datetime);
-      ContentTime.setHours(ContentTime.getHours());
-      const elapsedTime = Math.ceil(
-        (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 60),
-      );
-      const replyCount = await axios.get(
-        `/api2/insight/replycount/${item.idx}`,
-      );
+  await axios
+    .get(url)
+    .then(async res => {
+      const CurrentTime = new Date();
+      const comment = res.data.result;
+      if (comment) {
+        for (const item of comment) {
+          let ContentTime = new Date(item.wr_datetime);
+          ContentTime.setHours(ContentTime.getHours());
+          const elapsedTime = Math.ceil(
+            (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 60),
+          );
+          const replyCount = await axios.get(
+            `/api2/insight/replycount/${item.idx}`,
+          );
 
-      result.push(
-        await {
-          idx: item.idx,
-          wr_is_comment: item.wr_is_comment,
-          wr_is_comment2: item.wr_is_comment2,
-          wr_content: item.wr_content,
-          mb_name: item.mb_name,
-          wr_view: item.wr_view,
-          wr_good: item.wr_good,
-          wr_create: elapsedTime,
-          replycount: replyCount.data.result.length,
-          wr_reply: await getCommentIsReplyInsight(item.idx),
-        },
-      );
-    }
-  });
+          result.push(
+            await {
+              idx: item.idx,
+              wr_is_comment: item.wr_is_comment,
+              wr_is_comment2: item.wr_is_comment2,
+              wr_content: item.wr_content,
+              mb_name: item.mb_name,
+              wr_view: item.wr_view,
+              wr_good: item.wr_good,
+              wr_create: elapsedTime,
+              likeCnt: item.likeCnt,
+              replycount: replyCount.data.result.length,
+              wr_reply: await getCommentIsReplyInsight(item.idx),
+            },
+          );
+        }
+      }
+    })
+    .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   for (const item of result) {
     result2.push(item);
     if (item.wr_reply.length > 0) {

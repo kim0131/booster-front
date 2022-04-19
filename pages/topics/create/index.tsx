@@ -87,9 +87,12 @@ const CreateTopic: NextPage = () => {
 
   const onClickSubmitTopic = async () => {
     const formData = new FormData();
-    if (image.image_file) {
-      formData.append("file", image.image_file);
-    }
+
+    formData.append("file", image.image_file);
+
+    if (!data.board) return alert("카테고리를 선택해주세요");
+    if (!data.wr_subject) return alert("제목을 작성해주세요");
+    if (!data.wr_content) return alert("내용을 작성해주세요");
 
     await axios
       .post("/api2/topic/write", {
@@ -102,10 +105,15 @@ const CreateTopic: NextPage = () => {
       })
       .then(async res => {
         const id = res.data.result.idx;
-        await axios.post(`/api2/topic/upload/${id}`, formData);
+        if (image.image_file) {
+          formData.append("idx", id);
+          await axios.post(`/api2/upload/topic`, formData);
+        }
+
         alert("토픽이 등록되었습니다");
         router.push("/topics");
-      });
+      })
+      .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   };
 
   const onClickInput = () => {
@@ -117,6 +125,7 @@ const CreateTopic: NextPage = () => {
       category={
         categorySelect && (
           <Selectbox
+            key="create"
             options={categorySelect}
             placeholder={"카테고리"}
             onChange={onChangeSelcet}

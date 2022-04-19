@@ -44,8 +44,14 @@ const Style = {
     ${props => props.theme.screen.md} {
       width: 20rem;
     }
-    background-color: #444;
+    /* background-color: #444; */
     background-image: ${props => (props.photo ? `url(${props.photo})` : "")};
+    background-repeat: no-repeat;
+    object-fit: contain;
+    background-color: white;
+    display: flex;
+
+    cursor: pointer;
   `,
 };
 
@@ -56,7 +62,15 @@ interface IPropsHomeLayout {
 
 const HomeLayout = ({ children, banners }: IPropsHomeLayout) => {
   const { adsList } = useAdsList();
-  console.log(adsList);
+
+  const onClickAdsBanner = (
+    e:
+      | React.MouseEvent<HTMLButtonElement>
+      | React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const { url } = e.currentTarget.dataset;
+    window.open(url, "_blank");
+  };
   return (
     <Style.Container>
       <Style.Content>{children}</Style.Content>
@@ -64,7 +78,12 @@ const HomeLayout = ({ children, banners }: IPropsHomeLayout) => {
         {adsList &&
           adsList.map((item: any) => {
             return (
-              <Style.Dummy key={item.id} photo={item.image_url}></Style.Dummy>
+              <Style.Dummy
+                key={item.id}
+                photo={item.image_url}
+                data-url={"http://" + item.url}
+                onClick={onClickAdsBanner}
+              ></Style.Dummy>
             );
           })}
       </Style.Banner>

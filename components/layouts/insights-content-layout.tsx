@@ -3,6 +3,7 @@ import Button from "@components/elements/button";
 import { Body3, Header5 } from "@components/elements/types";
 import {
   IconBookmark,
+  IconBookmarkFill,
   IconComment,
   IconLike,
   IconMoreVertical,
@@ -48,6 +49,7 @@ const Style = {
     flex-direction: column;
     ${props => props.theme.screen.md} {
       max-width: 72rem;
+      min-width: 50rem;
       margin: 0 auto;
     }
   `,
@@ -158,6 +160,13 @@ const InsightsContentLayout = ({
 }: IPropsInsightsContentLayout) => {
   const { data: session, status }: any = useSession();
   const [likeCnt, setLikeCnt] = useState(insightDetail.likeCnt);
+  const [bookmark, setBookMark] = useState(false);
+  useEffect(() => {
+    if (insightDetail) {
+      setLikeCnt(insightDetail.likeCnt);
+      setBookMark(insightDetail.scrap ? true : false);
+    }
+  }, [insightDetail]);
   const onClickLikeButton = async () => {
     axios
       .post(`/api2/insight/like/${id}`, {
@@ -183,6 +192,33 @@ const InsightsContentLayout = ({
             });
         }
       });
+  };
+  const onClickScrap = async (
+    e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,
+    id: any,
+    bookmark: any,
+  ) => {
+    if (bookmark) {
+      await axios
+        .post(`/api2/insight/scrap/cancel/${id}`, {
+          member_idx: session?.user?.idx,
+          sector: "insight",
+        })
+        .then(() => {
+          setBookMark(false);
+        })
+        .catch(error => console.log(error));
+    } else {
+      await axios
+        .post(`/api2/insight/scrap/insert/${id}`, {
+          member_idx: session?.user?.idx,
+          sector: "insight",
+        })
+        .then(() => {
+          setBookMark(true);
+        })
+        .catch(error => console.log(error));
+    }
   };
   const createMarkup = () => {
     return { __html: insightDetail.wr_content };
@@ -242,8 +278,21 @@ const InsightsContentLayout = ({
               </Button>
             </Style.Body.Button.Wrapper>
             <Style.Body.Button.Wrapper>
-              <Button color="transparent">
-                <IconBookmark />
+              <Button
+                color="transparent"
+                onClick={e => {
+                  onClickScrap(e, insightDetail.idx, bookmark);
+                }}
+              >
+                {bookmark ? (
+                  <div>
+                    <IconBookmarkFill size={20} color={theme.color.blue[600]} />
+                  </div>
+                ) : (
+                  <div>
+                    <IconBookmark size={20} color={theme.color.gray[500]} />
+                  </div>
+                )}
                 스크랩
               </Button>
               <Button color="transparent">

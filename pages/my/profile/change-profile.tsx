@@ -65,7 +65,8 @@ const ChangeProfile: NextPage = () => {
       .then(() => {
         alert("변경되었습니다.");
         router.push(`/my/profile`);
-      });
+      })
+      .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   };
   return (
     <>

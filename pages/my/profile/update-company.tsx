@@ -76,20 +76,17 @@ const UpdateCompany: NextPage = () => {
 
   const onClickSubmitBusinessUrl = async () => {
     const formData = new FormData();
-    if (image.image_file) {
-      formData.append("file", image.image_file);
-    }
+
+    formData.append("file", image.image_file);
+    formData.append("idx", `${userInfo.member.mb_business_num}`);
     await axios.post(`/api2/user/update/${userInfo.member.idx}`, {
       mb_business_certify: 4,
     });
-    await axios.post(
-      `/api2/business/upload/${userInfo.member.mb_business_num}`,
-      formData,
-    );
+    await axios.post(`/api2/upload/business`, formData);
     alert("업데이트 신청이 접수되었습니다");
     router.push("/my/profile");
   };
-  console.log(userInfo);
+
   return (
     <>
       {userInfo && (

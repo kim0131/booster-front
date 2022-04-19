@@ -3,7 +3,9 @@ import Button from "@components/elements/button";
 import { Body3, Header5 } from "@components/elements/types";
 import { IconComment, IconLike, IconView } from "@components/icons";
 import theme from "@components/styles/theme";
+import { checkAuth } from "@core/util/check-auth";
 import styled from "@emotion/styled";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 interface IStyle {
@@ -120,11 +122,16 @@ interface IPropsBestWidget {
 
 const BestWidget = ({ col = 1, url, datas, title }: IPropsBestWidget) => {
   const router = useRouter();
+  const { status } = useSession();
   const onClickRouterCategory = () => {
     router.push(`/topics?category=${url}`);
   };
   const onClickRouterDetail = (id: any) => {
-    router.push(`/topics/detail?id=${id}`);
+    if (status != "authenticated") {
+      router.push(`/topics?category=${url}`);
+    } else {
+      router.push(`/topics/detail/${id}?category=${url}`);
+    }
   };
 
   return (

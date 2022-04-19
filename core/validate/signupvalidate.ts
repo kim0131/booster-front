@@ -24,7 +24,8 @@ export const mb_id_vaildate = async (mb_id: string) => {
       if (!res.data.success) {
         error = "아이디가 중복되었습니다.";
       }
-    });
+    })
+    .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
 
   return error;
 };
@@ -79,7 +80,8 @@ export const mb_nick_vaildate = async (mb_nick: string | undefined) => {
       if (!res.data.success) {
         error = "닉네임이 중복되었습니다.";
       }
-    });
+    })
+    .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
 
   return error;
 };
@@ -113,7 +115,8 @@ export const mb_email_vaildate = async (mb_email: string | undefined) => {
       if (!res.data.success) {
         error = "이메일이 중복되었습니다.";
       }
-    });
+    })
+    .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
 
   return error;
 };
@@ -137,7 +140,8 @@ export const mb_ph_vaildate = async (mb_ph: string | undefined) => {
       if (!res.data.success) {
         error = "휴대폰번호가 중복되었습니다.";
       }
-    });
+    })
+    .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
 
   return error;
 };

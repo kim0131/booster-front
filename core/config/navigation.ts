@@ -1,5 +1,5 @@
 export const globalNavigation = [
-  { id: 0, content: "토픽", url: "/topics?category=전체" },
+  { id: 0, content: "토픽", url: "/topics" },
   { id: 1, content: "인사이트", url: "/insights" },
   // { id: 2, content: "서비스", url: "/services" },
 ];
@@ -10,8 +10,10 @@ export const globalNavigationMore = [
 ];
 
 export const globalNavigationMy = [
-  { id: 0, content: "내 정보", url: "/my/profile" },
-  { id: 1, content: "로그아웃", url: "logout" },
+  { id: 0, content: "스크랩", url: "/my/bookmark" },
+  { id: 1, content: "내가 작성한 글", url: "/my/topics" },
+  { id: 2, content: "내 정보", url: "/my/profile" },
+  { id: 3, content: "로그아웃", url: "logout" },
 ];
 
 export const accountsNavigation = [

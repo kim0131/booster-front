@@ -1,42 +1,82 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import type { NextPage } from "next";
-import { useCategorySubSide } from "@core/hook/use-category-subSIde";
+import type { GetServerSideProps, NextPage } from "next";
 import { useTopicListFilter } from "@core/hook/use-topic-list";
 import { useRouter } from "next/router";
-import Loader from "@components/elements/loader";
 import SnbLayout from "@components/layouts/snb-layout";
 import Board from "@components/templates/board";
 import Snb from "@components/templates/snb";
-import { useHotTopic } from "@core/hook/use-hot-topic";
+import _ from "lodash";
+import { useCategorySubSide } from "@core/hook/use-category-sub-side";
+import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
+import { checkAuth } from "@core/util/check-auth";
+import { useSession } from "next-auth/react";
+import useHistoryState from "@core/hook/use-history-state";
 
-const Topics: NextPage = () => {
+interface IPropsTopics {
+  initCategory: string;
+}
+
+const Topics: NextPage<IPropsTopics> = () => {
   const router = useRouter();
-  const { hotTopic } = useHotTopic();
-  const { categorySubSide } = useCategorySubSide("topic");
-  const { category } = router.query || "";
-  const { topicListFilter, isValidating } = useTopicListFilter(category);
-
+  const { data: session, status } = useSession();
+  const urlCategory = router.query.category;
+  const [category, setCategory] = useHistoryState(
+    urlCategory ? urlCategory : "all",
+    "category",
+  );
+  const { categorySubSide, isCategorySubSideValidating } =
+    useCategorySubSide("topic");
+  const { topicListFilter, isTopicListValidating } =
+    useTopicListFilter(category);
   const onClickRouter = (param: any) => {
-    router.push(`/topics/detail?id=${param}`);
+    if (status != "authenticated") {
+      if (checkAuth()) {
+        return router.push("/accounts");
+      }
+    } else {
+      if (param.sector == "topics") {
+        router.push(
+          `/${param.sector}/detail/${param.idx}?category=${category}`,
+        );
+      } else {
+        router.push(`/${param.sector}/${param.idx}`);
+      }
+    }
   };
-
-  console.log(categorySubSide, category);
 
   return (
     <SnbLayout>
       {categorySubSide && (
-        <Snb category={category} snbDatas={categorySubSide} />
+        <>
+          {topicListFilter && (
+            <>
+              <Snb
+                category={category}
+                snbDatas={categorySubSide}
+                setCategory={setCategory}
+              />
+              <Board
+                category={category}
+                title={
+                  _.find(categorySubSide[0].menus, { param: category })
+                    ?.content || ""
+                }
+                datas={topicListFilter}
+                onClickRouter={onClickRouter}
+              />
+            </>
+          )}
+        </>
       )}
-      {topicListFilter && !isValidating && (
-        <Board
-          category={category}
-          Datas={category == "인기글" ? hotTopic : topicListFilter}
-          onClickRouter={onClickRouter}
-        />
-      )}
-      {isValidating && <Loader color="gray"></Loader>}
+      {!categorySubSide && <TopicSnbSkeleton />}
+      {!topicListFilter && <TopicSnbSkeleton />}
     </SnbLayout>
   );
 };
 
 export default Topics;
+
+export const getServerSideProps: GetServerSideProps = async context => {
+  const initCategory = context.query.category || "";
+  return { props: { initCategory } };
+};

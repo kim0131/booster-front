@@ -15,6 +15,7 @@ import {
 } from "@components/icons";
 import theme from "@components/styles/theme";
 import { topicImageUrl } from "@core/config/imgurl";
+import { useDesktop } from "@core/hook/use-desktop";
 import { getCreateTime } from "@core/util/get-create-time";
 import styled from "@emotion/styled";
 import axios from "axios";
@@ -159,12 +160,16 @@ const TopicContentLayout = ({
   const router = useRouter();
   const topicContent = data;
   const [likeCnt, setLikeCnt] = useState(0);
+  const { isDesktop } = useDesktop();
+  const [bookmark, setBookMark] = useState(false);
 
   useEffect(() => {
     if (topicContent) {
       setLikeCnt(topicContent.likeCnt);
+      setBookMark(topicContent.bookmark ? true : false);
     }
   }, [topicContent]);
+
   const onClickLink = async (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,
   ) => {
@@ -178,10 +183,13 @@ const TopicContentLayout = ({
     if (content == "삭제하기") {
       let result = confirm("정말 삭제하시겠습니까?");
       if (result) {
-        await axios.post(`/api2/topic/delete/${idx}`).then(res => {
-          alert("삭제되었습니다");
-          router.push("/topics");
-        });
+        await axios
+          .post(`/api2/topic/delete/${idx}`)
+          .then(res => {
+            alert("삭제되었습니다");
+            router.push("/topics");
+          })
+          .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
       }
     }
   };
@@ -210,25 +218,41 @@ const TopicContentLayout = ({
               setLikeCnt(likeCnt + 1);
             });
         }
-      });
-  };
-  const onClickBookmark = (result: boolean) => {
-    topicContent.bookmark = result;
+      })
+      .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   };
 
-  const onClickScrap = async (id: any, bookmark: any) => {
-    console.log(bookmark);
+  const onClickScrap = async (
+    e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,
+    id: any,
+    bookmark: any,
+  ) => {
+    e.preventDefault;
+
     if (bookmark) {
-      await axios.post(`/api2/topic/scrap/cancel/${id}`, {
-        member_idx: session?.user?.idx,
-        sector: "topic",
-      });
+      console.log(1);
+      await axios
+        .post(`/api2/topic/scrap/cancel/${id}`, {
+          member_idx: session?.user?.idx,
+          sector: "topic",
+        })
+        .then(() => {
+          setBookMark(false);
+        });
     } else {
-      await axios.post(`/api2/topic/scrap/insert/${id}`, {
-        member_idx: session?.user?.idx,
-        sector: "topic",
-      });
+      await axios
+        .post(`/api2/topic/scrap/insert/${id}`, {
+          member_idx: session?.user?.idx,
+          sector: "topic",
+        })
+        .then(() => {
+          setBookMark(true);
+        });
     }
+  };
+
+  const checkMbName = (writer: string, userName: string) => {
+    return Boolean(writer == userName);
   };
   return (
     <>
@@ -236,7 +260,7 @@ const TopicContentLayout = ({
         <Style.Container>
           <Style.Header.Container>
             <Style.Header.Badge>
-              <Badge size="large">{topicContent.category}</Badge>
+              <Badge size="large">{topicContent.board_name}</Badge>
             </Style.Header.Badge>
             <Style.Header.Title>{topicContent.wr_subject}</Style.Header.Title>
             <Style.Header.Bottom.Container>
@@ -293,47 +317,51 @@ const TopicContentLayout = ({
                 </Button>
               </Style.Body.Button.Wrapper>
               <Style.Body.Button.Wrapper>
-                <Button color="transparent">
-                  {topicContent.bookmark ? (
-                    <div
-                      onClick={() => {
-                        onClickScrap(topicContent.idx, topicContent.bookmark);
-                        onClickBookmark(false);
-                      }}
-                    >
+                <Button
+                  color="transparent"
+                  onClick={e => {
+                    onClickScrap(e, topicContent.idx, bookmark);
+                  }}
+                >
+                  {bookmark ? (
+                    <div>
                       <IconBookmarkFill
                         size={20}
                         color={theme.color.blue[600]}
                       />
                     </div>
                   ) : (
-                    <div
-                      onClick={() => {
-                        onClickScrap(topicContent.idx, topicContent.bookmark);
-                        onClickBookmark(true);
-                      }}
-                    >
+                    <div>
                       <IconBookmark size={20} color={theme.color.gray[500]} />
                     </div>
                   )}
                   스크랩
                 </Button>
 
-                <Style.SubMore>
-                  <IconMoreVertical />
-
-                  <Dropdown
-                    menu={[
-                      {
-                        id: 0,
-                        content: "수정하기",
-                        url: topicContent.idx,
-                      },
-                      { id: 1, content: "삭제하기", url: topicContent.idx },
-                    ]}
-                    onClick={onClickLink}
-                  />
-                </Style.SubMore>
+                {checkMbName(
+                  topicContent.mb_name,
+                  session?.user?.name as string,
+                ) ? (
+                  <>
+                    <Style.SubMore>
+                      <IconMoreVertical />
+                      <Dropdown
+                        menu={[
+                          {
+                            id: 0,
+                            content: "수정하기",
+                            url: topicContent.idx,
+                          },
+                          { id: 1, content: "삭제하기", url: topicContent.idx },
+                        ]}
+                        onClick={onClickLink}
+                        isRight={isDesktop ? false : true}
+                      />
+                    </Style.SubMore>
+                  </>
+                ) : (
+                  ""
+                )}
               </Style.Body.Button.Wrapper>
             </Style.Body.Button.Container>
           </Style.Body.Container>
