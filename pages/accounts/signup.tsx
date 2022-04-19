@@ -141,6 +141,7 @@ const Signup: NextPage = () => {
                   if (res) {
                     setState({ ...state, invalid: { mb_ph: res } });
                   } else {
+                    console.log(state.data.mb_pw);
                     await axios
                       .post("/api2/signup", {
                         mb_id: state.data.mb_id,
@@ -161,6 +162,7 @@ const Signup: NextPage = () => {
                           .then(async res => {
                             const business_idx = res.data.result.idx;
                             await axios.post(`/api2/user/update/${mb_idx}`, {
+                              mb_pw: state.data.mb_pw,
                               mb_business_num: business_idx,
                               mb_business_certify: 0,
                             });
