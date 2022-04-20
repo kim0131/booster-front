@@ -243,6 +243,7 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
 
   const sliccComment = () => {
     if (commentsList) {
+      setTotalCount(commentsList.length);
       const result = commentsList.slice(
         (currentPage - 1) * line,
         currentPage * line,
@@ -272,8 +273,6 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
           .post(`/api2/topic/delete/${idx}`)
           .then(res => {
             alert("삭제되었습니다");
-
-            router.reload();
           })
           .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
       }
@@ -371,7 +370,6 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
         .then(res => {
           alert("댓글이 등록되었습니다");
           setReply({ ...replydata, wr_parent2: 0, wr_content: "" });
-          router.push(router.asPath);
         })
         .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
     } else {
@@ -512,12 +510,17 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
                           {comment.wr_view}
                         </Body3>
                       </Style.List.Bottom.Badge> */}
-                      <Style.List.Bottom.Badge>
-                        <IconComment size={16} color={theme.color.gray[500]} />
-                        <Body3 color={theme.color.gray[500]}>
-                          {comment.replycount}
-                        </Body3>
-                      </Style.List.Bottom.Badge>
+                      {comment.replycount > 0 && (
+                        <Style.List.Bottom.Badge>
+                          <IconComment
+                            size={16}
+                            color={theme.color.gray[500]}
+                          />
+                          <Body3 color={theme.color.gray[500]}>
+                            {comment.replycount}
+                          </Body3>
+                        </Style.List.Bottom.Badge>
+                      )}
                     </Style.List.Bottom.Info>
                     <Body3 color={theme.color.gray[500]}>
                       {getCreateTime(comment.wr_create)}

@@ -27,28 +27,33 @@ const Style = {
   `,
   Banner: styled.div<any>`
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
+    flex-wrap: wrap;
     gap: 0.75rem;
     order: -9999;
+    justify-content: center;
+    align-items: center;
     padding: 0 1.25rem;
     ${props => props.theme.screen.md} {
-      flex: none;
+      flex: flex;
+      flex-direction: column;
+      justify-content: flex-start;
       width: 20rem;
       order: 9999;
       padding: 0;
     }
   `,
   Dummy: styled.div<any>`
-    width: 100%;
+    width: 20rem;
     height: 6rem;
     ${props => props.theme.screen.md} {
       width: 20rem;
     }
-    /* background-color: #444; */
+    background-color: #444;
     background-image: ${props => (props.photo ? `url(${props.photo})` : "")};
     background-repeat: no-repeat;
     object-fit: contain;
-    background-color: white;
+    /* background-color: white; */
     display: flex;
 
     cursor: pointer;
