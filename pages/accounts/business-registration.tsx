@@ -81,10 +81,7 @@ const BusinessRegistration: NextPage = () => {
     await axios.post(`/api2/user/update/${userIdx.idx}`, {
       mb_business_certify: 1,
     });
-    await axios.post(
-      `/api2/upload/business/upload/${userIdx.mb_business_num}`,
-      formData,
-    );
+    await axios.post(`/api2/upload/business`, formData);
     alert("사업자 등록증이 접수되었습니다");
     router.push("/");
   };

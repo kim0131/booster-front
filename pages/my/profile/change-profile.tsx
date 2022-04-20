@@ -10,6 +10,10 @@ import useGetUser from "@core/hook/use-user";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import router from "next/router";
+import {
+  mb_email_vaildate,
+  mb_nick_vaildate,
+} from "@core/validate/signupvalidate";
 
 const Style = {
   Container: styled.div`
@@ -38,6 +42,19 @@ const ChangeProfile: NextPage = () => {
     mb_name: "",
     mb_ph: "",
   });
+  const [inVaild, setInVaild] = useState({
+    mb_email: "",
+    mb_nick: "",
+  });
+
+  const onFocusProfile = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name } = e.currentTarget;
+    setInVaild({
+      ...inVaild,
+
+      [name]: "",
+    });
+  };
 
   useEffect(() => {
     if (userInfo) {
@@ -60,13 +77,25 @@ const ChangeProfile: NextPage = () => {
   };
 
   const onClickSubmitProfile = async () => {
-    await axios
-      .post(`/api2/user/update/${userInfo.member.idx}`, data)
-      .then(() => {
-        alert("변경되었습니다.");
-        router.push(`/my/profile`);
-      })
-      .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
+    await mb_nick_vaildate(data.mb_nick).then(async res => {
+      if (res) {
+        setInVaild({ ...inVaild, mb_nick: res });
+      } else {
+        await mb_email_vaildate(data.mb_email).then(async res => {
+          if (res) {
+            setInVaild({ ...inVaild, mb_email: res });
+          } else {
+            await axios
+              .post(`/api2/user/update/${userInfo.member.idx}`, data)
+              .then(() => {
+                alert("변경되었습니다.");
+                router.push(`/my/profile`);
+              })
+              .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
+          }
+        });
+      }
+    });
   };
   return (
     <>
@@ -94,11 +123,15 @@ const ChangeProfile: NextPage = () => {
               label="닉네임"
               value={data.mb_nick}
               onChange={onChangeProfiledata}
+              onFocus={onFocusProfile}
+              error={inVaild.mb_nick}
             />
             <TextField
               name={"mb_email"}
               label="이메일 주소"
               value={data.mb_email}
+              error={inVaild.mb_email}
+              onFocus={onFocusProfile}
               onChange={onChangeProfiledata}
             />
           </Style.Container>
@@ -118,7 +151,7 @@ const ChangeProfile: NextPage = () => {
               value={data.mb_ph}
               onChange={onChangeProfiledata}
             />
-            <Button>본인명의 인증</Button>
+            {/* <Button>본인명의 인증</Button> */}
           </Style.Container>
         </BasicLayout>
       )}

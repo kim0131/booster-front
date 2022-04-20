@@ -141,7 +141,6 @@ const Signup: NextPage = () => {
                   if (res) {
                     setState({ ...state, invalid: { mb_ph: res } });
                   } else {
-                    console.log(state.data.mb_pw);
                     await axios
                       .post("/api2/signup", {
                         mb_id: state.data.mb_id,

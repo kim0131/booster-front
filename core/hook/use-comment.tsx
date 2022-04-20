@@ -51,6 +51,7 @@ const insightComment = async (url: string) => {
           const elapsedTime = Math.ceil(
             (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 60),
           );
+
           result.push(
             await {
               idx: item.idx,
