@@ -16,6 +16,7 @@ const Style = {
     Container: styled.div`
       flex: none;
       width: 12rem;
+      height: auto;
       display: flex;
       flex-direction: column;
       gap: 1.5rem;

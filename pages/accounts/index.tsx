@@ -87,8 +87,6 @@ const Accounts: NextPage = () => {
   };
 
   const onClickLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
     await axios
       .post("/api2/login", state.data)
       .then((res: any) => {
@@ -102,7 +100,12 @@ const Accounts: NextPage = () => {
           redirect: false,
         });
       })
-      .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
+      .catch(error => {
+        setState({
+          ...state,
+          invalid: "아이디 또는 비밀번호가 올바르지 않습니다.",
+        });
+      });
   };
   const onClickCertification = () => {
     router.push("/accounts/signup");

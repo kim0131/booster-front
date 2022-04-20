@@ -118,9 +118,9 @@ const EditTopic: NextPage = () => {
 
     formData.append("file", image.image_file);
     formData.append("exist_url", data.file_url);
-    if (!data.board) return alert("카테고리를 선택해주세요");
-    if (!data.wr_subject) return alert("제목을 작성해주세요");
-    if (!data.wr_content) return alert("내용을 작성해주세요");
+    if (!data.board.trim()) return alert("카테고리를 선택해주세요");
+    if (!data.wr_subject.trim()) return alert("제목을 작성해주세요");
+    if (!data.wr_content.trim()) return alert("내용을 작성해주세요");
     await axios
       .post(`/api2/topic/update/${id}`, {
         wr_subject: data.wr_subject,
