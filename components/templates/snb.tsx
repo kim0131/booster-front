@@ -25,7 +25,8 @@ const Style = {
     Category: {
       Wapper: styled.div`
         width: 12rem;
-        position: fixed;
+
+        /* position: fixed; */
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
@@ -117,17 +118,7 @@ const Snb = ({ snbDatas, category, setCategory }: IPropsSnb) => {
   ) => {
     e.preventDefault();
 
-    // let endUrl = "";
-    // if (searchTerm) endUrl += `searchTerm=${searchTerm}&`;
-    // endUrl += `category=${e.currentTarget.value}&`;
     setCategory(e.currentTarget.value);
-    // if (router.pathname == "/search") {
-    //   router.push(`${router.pathname}?${endUrl}`);
-    // } else if (router.pathname == "/topics/detail/[id]") {
-    //   router.push(`/topics?${endUrl}`);
-    // } else {
-    //   router.push(`${router.pathname}?${endUrl}`);
-    // }
   };
 
   return isDesktop ? (

@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 const Style = styled.div`
   display: flex;
   flex-direction: column;
+
   ${props => props.theme.screen.md} {
     flex-direction: row;
     max-width: 72rem;

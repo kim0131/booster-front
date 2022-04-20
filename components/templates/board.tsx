@@ -159,7 +159,9 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
     sliceTopicList();
     setTotalCount(datas.length);
   }, [router, datas, page]);
-
+  useEffect(() => {
+    setPage(1);
+  }, [category]);
   const sliceTopicList = () => {
     const result = datas.slice((page - 1) * line, page * line);
     setData(result);
