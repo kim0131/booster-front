@@ -351,7 +351,7 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
   };
 
   const onClickWriteComment = async () => {
-    if (commentdata.wr_content) {
+    if (commentdata.wr_content.trim()) {
       await axios
         .post(`/api2/topic/write`, commentdata)
         .then(res => {
@@ -364,7 +364,7 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
     }
   };
   const onClickWriteReply = async () => {
-    if (replydata.wr_content) {
+    if (replydata.wr_content.trim()) {
       await axios
         .post(`/api2/topic/write`, replydata)
         .then(res => {

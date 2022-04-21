@@ -238,6 +238,10 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
   });
 
   useEffect(() => {
+    if (status != "authenticated") {
+      alert("로그인 후 이용가능합니다.");
+      router.push("/");
+    }
     getUserSet();
   }, [router]);
 
@@ -247,6 +251,7 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
 
   const sliccComment = () => {
     if (commentsList) {
+      setTotalCount(commentsList.length);
       const result = commentsList.slice(
         (currentPage - 1) * line,
         currentPage * line,
@@ -276,7 +281,6 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
           .post(`/api2/insight/delete/${idx}`)
           .then(res => {
             alert("삭제되었습니다");
-            router.push(router.asPath);
           })
           .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
       }
@@ -313,24 +317,22 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
   };
 
   const onClickWriteComment = async () => {
-    if (!commentdata.wr_content) return alert("댓글내용을 입력해주세요");
+    if (!commentdata.wr_content.trim()) return alert("댓글내용을 입력해주세요");
     await axios
       .post(`/api2/insight/write`, commentdata)
       .then(res => {
         alert("댓글이 등록되었습니다");
         setCommentData({ ...commentdata, wr_content: "" });
-        router.push(router.asPath);
       })
       .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   };
   const onClickWriteReply = async () => {
-    if (!replydata.wr_content) return alert("댓글내용을 입력해주세요");
+    if (!replydata.wr_content.trim()) return alert("댓글내용을 입력해주세요");
     await axios
       .post(`/api2/insight/write`, replydata)
       .then(res => {
         alert("댓글이 등록되었습니다");
         setReply({ ...replydata, wr_parent2: 0, wr_content: "" });
-        router.push(router.asPath);
       })
       .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   };
@@ -505,12 +507,17 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
                           {comment.wr_view}
                         </Body3>
                       </Style.List.Bottom.Badge> */}
-                      <Style.List.Bottom.Badge>
-                        <IconComment size={16} color={theme.color.gray[500]} />
-                        <Body3 color={theme.color.gray[500]}>
-                          {comment.replycount}
-                        </Body3>
-                      </Style.List.Bottom.Badge>
+                      {comment.replycount > 0 && (
+                        <Style.List.Bottom.Badge>
+                          <IconComment
+                            size={16}
+                            color={theme.color.gray[500]}
+                          />
+                          <Body3 color={theme.color.gray[500]}>
+                            {comment.replycount}
+                          </Body3>
+                        </Style.List.Bottom.Badge>
+                      )}
                     </Style.List.Bottom.Info>
                     <Body3 color={theme.color.gray[500]}>
                       {getCreateTime(comment.wr_create)}
