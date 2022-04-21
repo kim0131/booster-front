@@ -16,17 +16,17 @@ const Style = {
     Container: styled.div`
       flex: none;
       width: 12rem;
-      height: auto;
+      height: 100%;
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
-      position: relative;
+      position: sticky;
+      top: 5rem;
     `,
     Category: {
       Wapper: styled.div`
         width: 12rem;
 
-        /* position: fixed; */
         display: flex;
         flex-direction: column;
         gap: 1.5rem;

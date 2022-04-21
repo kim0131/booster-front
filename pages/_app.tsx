@@ -34,6 +34,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             revalidateIfStale: false,
             revalidateOnFocus: false,
             revalidateOnReconnect: false,
+            refreshInterval: 1000,
           }}
         >
           <Global styles={global} />
