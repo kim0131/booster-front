@@ -33,6 +33,7 @@ const Style = {
     /* text-align: center; */
   `,
   Item: styled(motion.div)<IStyle["item"]>`
+    cursor: pointer;
     flex: none;
     display: flex;
     flex-direction: column;

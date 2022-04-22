@@ -62,6 +62,7 @@ const Style = {
         Container: styled.div`
           display: flex;
           align-items: flex-start;
+          cursor: pointer;
         `,
         Content: {
           Container: styled.div`
@@ -107,6 +108,7 @@ const Style = {
           align-items: center;
           justify-content: space-between;
           gap: 1.5rem;
+          cursor: pointer;
         `,
         Info: styled.div`
           display: flex;

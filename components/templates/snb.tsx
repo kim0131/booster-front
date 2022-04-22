@@ -26,7 +26,6 @@ const Style = {
     Category: {
       Wapper: styled.div`
         width: 12rem;
-
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
@@ -118,7 +117,11 @@ const Snb = ({ snbDatas, category, setCategory }: IPropsSnb) => {
   ) => {
     e.preventDefault();
 
-    setCategory(e.currentTarget.value);
+    if (router.pathname == "/topics/detail/[id]") {
+      router.push(`/topics?category=${e.currentTarget.value}`);
+    } else {
+      setCategory(e.currentTarget.value);
+    }
   };
 
   return isDesktop ? (

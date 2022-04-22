@@ -51,17 +51,18 @@ const categoryHomeFetcher = async (url: string) => {
             url: `/api2/topic/list/${item.bo_table}`,
           })
             .then(res => {
-              filterresult.push({
-                idx: item.idx,
-                bo_table: item.bo_table,
-                bo_subject: item.bo_subject,
-                num_board: item.board,
-                num_view: item.wr_view,
-                num_good: item.wr_good,
-                sector: item.sector,
-                edit_subject: "수정 및 삭제하기",
-                contents: res.slice(0, 5),
-              });
+              if (res.length > 0)
+                filterresult.push({
+                  idx: item.idx,
+                  bo_table: item.bo_table,
+                  bo_subject: item.bo_subject,
+                  num_board: item.board,
+                  num_view: item.wr_view,
+                  num_good: item.wr_good,
+                  sector: item.sector,
+                  edit_subject: "수정 및 삭제하기",
+                  contents: res.slice(0, 5),
+                });
             })
             .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
         }

@@ -61,6 +61,7 @@ const Style = {
         align-items: center;
         gap: 0.75rem;
       }
+      cursor: pointer;
     `,
     Category: styled.div`
       display: flex;
