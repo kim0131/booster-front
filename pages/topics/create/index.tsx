@@ -165,7 +165,7 @@ const CreateTopic: NextPage = () => {
             ref={hiddenFileInput}
             onChange={onLoadFile}
           />
-          <Button size="large">취소</Button>
+          <Button size="large" onClick={()=>{history.back();}}>취소</Button>
         </>
       }
     />

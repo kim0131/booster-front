@@ -14,19 +14,21 @@ import useHistoryState from "@core/hook/use-history-state";
 
 const Search: NextPage = () => {
   const router = useRouter();
+  const urlCategory = router.query.category;
   const { searchTerm } = router.query;
   const { status } = useSession();
   const [category, setCategory] = useHistoryState("all", "category");
   const { searchResult } = useSearch(searchTerm, category);
-
   const onClickRouter = (param: any) => {
+    const urlCategory = param.bo_table;
+
     if (status != "authenticated") {
       if (checkAuth()) {
         return router.push("/accounts");
       }
     } else {
       if (param.sector == "topics") {
-        router.push(`/${param.sector}/detail/${param.idx}`);
+        router.push(`/${param.sector}/detail/${param.idx}/?category=${urlCategory}`);
       } else {
         router.push(`/${param.sector}/${param.idx}`);
       }

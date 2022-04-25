@@ -233,6 +233,7 @@ const Header = () => {
 
   const onKeyPressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key == "Enter") {
+      console.log(`${state.data.searchTerm}`);
       router.push(`/search?searchTerm=${state.data.searchTerm}`);
       setState({ ...state, mobileSearch: false });
     }
@@ -275,7 +276,7 @@ const Header = () => {
               onChange={onChangeSearchTerm}
               width={state.desktopSearch ? "16rem" : "10rem"}
               onFocus={() => setState({ ...state, desktopSearch: true })}
-              onBlur={() => setState({ ...state, desktopSearch: false })}
+              onBlur={() => setState({ ...state, desktopSearch: false , data:{searchTerm:""}})}
               prefix={<IconSearch />}
               onKeyPress={onKeyPressEnter}
             />
