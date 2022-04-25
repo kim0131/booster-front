@@ -15,7 +15,11 @@ import useHistoryState from "@core/hook/use-history-state";
 
 const TopicDetail: NextPage = () => {
   const router = useRouter();
-  const [category, setCategory] = useHistoryState("all", "category");
+  const urlCategory = router.query.category;
+  const [category, setCategory] = useHistoryState(
+    urlCategory ? urlCategory : "all",
+    "category",
+  );
   const { id } = router.query;
   const { topicDetail } = useTopicDetail(id);
   const { topicListFilter } = useTopicListFilter(category);
