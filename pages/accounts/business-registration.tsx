@@ -64,6 +64,7 @@ const BusinessRegistration: NextPage = () => {
   };
 
   const deleteImage = () => {
+    hiddenFileInput.current.value = "";
     setImage({
       image_file: "",
       preview_URL: "",

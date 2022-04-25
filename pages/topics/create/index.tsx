@@ -57,6 +57,7 @@ const CreateTopic: NextPage = () => {
 
   const onChangeTopic = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.currentTarget;
+
     setData({
       ...data,
       [name]: value,
@@ -65,7 +66,8 @@ const CreateTopic: NextPage = () => {
     });
   };
   const onLoadFile = (e: any) => {
-    e.preventDefault();
+    // e.preventDefault();
+
     const fileReader = new FileReader();
     if (e.target.files[0]) {
       fileReader.readAsDataURL(e.target.files[0]);
@@ -79,6 +81,7 @@ const CreateTopic: NextPage = () => {
   };
 
   const deleteImage = () => {
+    hiddenFileInput.current.value = "";
     setImage({
       image_file: "",
       preview_URL: "",
@@ -165,7 +168,14 @@ const CreateTopic: NextPage = () => {
             ref={hiddenFileInput}
             onChange={onLoadFile}
           />
-          <Button size="large" onClick={()=>{history.back();}}>취소</Button>
+          <Button
+            size="large"
+            onClick={() => {
+              history.back();
+            }}
+          >
+            취소
+          </Button>
         </>
       }
     />
