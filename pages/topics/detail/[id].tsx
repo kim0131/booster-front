@@ -22,12 +22,14 @@ const TopicDetail: NextPage = () => {
   );
   const { id } = router.query;
   const { topicDetail } = useTopicDetail(id);
-  const { topicListFilter } = useTopicListFilter(category);
+  const { topicListFilter } = useTopicListFilter(urlCategory);
   const { categorySubSide } = useCategorySubSide("topic");
 
   const onClickRouter = (param: any) => {
     if (param.sector == "topics") {
-      router.push(`/${param.sector}/detail/${param.idx}?category=${category}`);
+      router.push(
+        `/${param.sector}/detail/${param.idx}?category=${urlCategory}`,
+      );
     } else {
       router.push(`/${param.sector}/${param.idx}`);
     }
@@ -42,16 +44,16 @@ const TopicDetail: NextPage = () => {
               {id && (
                 <>
                   <Snb
-                    category={category}
+                    category={urlCategory}
                     snbDatas={categorySubSide}
                     setCategory={setCategory}
                   />
                   <TopicContentLayout id={router.query.id} data={topicDetail}>
                     <TopicComment id={id} />
                     <Board
-                      category={category}
+                      category={urlCategory}
                       title={
-                        _.find(categorySubSide[0].menus, { param: category })
+                        _.find(categorySubSide[0].menus, { param: urlCategory })
                           ?.content || ""
                       }
                       datas={topicListFilter}
