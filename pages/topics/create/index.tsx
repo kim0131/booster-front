@@ -165,6 +165,7 @@ const CreateTopic: NextPage = () => {
           <input
             style={{ display: "none" }}
             type="file"
+            accept=".jpg, .jpeg, .gif, .png, .svg, .ico, .jfif, .webp, .bmp"
             ref={hiddenFileInput}
             onChange={onLoadFile}
           />
