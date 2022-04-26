@@ -106,11 +106,14 @@ const Style = {
         display: flex;
         flex-wrap: wrap;
         gap: 0.75rem;
-      `,
-      Badge: styled.div`
+        `,
+        Badge: styled.div`
         display: inline-flex;
         align-items: center;
         gap: 0.25rem;
+        &:nth-of-type(2){
+          cursor:pointer;
+        }
       `,
     },
   },

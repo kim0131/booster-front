@@ -39,6 +39,8 @@ const categoryHomeFetcher = async (url: string) => {
     .then(async (res: any) => {
       const list = res.data.result;
 
+      // console.log(res.data.result);//(12)개의 정렬된 토픽
+
       for (const item of list) {
         if (!item.wr_view) {
           item.wr_view = 0;
@@ -62,13 +64,15 @@ const categoryHomeFetcher = async (url: string) => {
                   sector: item.sector,
                   edit_subject: "수정 및 삭제하기",
                   contents: res.slice(0, 5),
+                  priority:item.priority,
                 });
             })
             .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
         }
       }
       filterresult = filterresult.sort((a: any, b: any) => {
-        return b.num_view - a.num_view;
+        return b.priority - a.priority;
+        //priority
       });
     })
     .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));

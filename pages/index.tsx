@@ -10,6 +10,7 @@ const Home: NextPage = () => {
   const { hotTopic } = useHotTopic();
   const { categoryListHome } = useCategoryListHome();
 
+  // console.log(categoryListHome);//(8)개의 토픽!
   return (
     <>
       <MainCarousel />

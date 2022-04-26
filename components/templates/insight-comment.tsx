@@ -18,9 +18,10 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { Children, useEffect, useState } from "react";
 import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
 import { useDesktop } from "@core/hook/use-desktop";
+import { nth } from "lodash";
 
 interface IPropsStyle {
   isReply: boolean;
@@ -107,12 +108,16 @@ const Style = {
         display: flex;
         flex-wrap: wrap;
         gap: 0.75rem;
-      `,
-      Badge: styled.div`
+        `,
+        Badge: styled.div`
         display: inline-flex;
         align-items: center;
         gap: 0.25rem;
+        &:nth-of-type(2){
+          cursor:pointer;
+        }
       `,
+      
     },
   },
   SubMore: styled.div`
