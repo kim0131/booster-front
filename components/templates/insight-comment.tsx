@@ -18,7 +18,7 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React, { Children, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
 import { useDesktop } from "@core/hook/use-desktop";
 import { nth } from "lodash";
