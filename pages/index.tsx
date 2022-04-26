@@ -10,7 +10,6 @@ const Home: NextPage = () => {
   const { hotTopic } = useHotTopic();
   const { categoryListHome } = useCategoryListHome();
 
-  // console.log(categoryListHome);//(8)개의 토픽!
   return (
     <>
       <MainCarousel />
@@ -20,6 +19,7 @@ const Home: NextPage = () => {
         )}
         {categoryListHome &&
           categoryListHome.map((data: any) => {
+            if(data.open != "true") return;
             return (
               <BestWidget
                 title={data.bo_subject}
@@ -30,6 +30,7 @@ const Home: NextPage = () => {
               />
             );
           })}
+          
       </HomeLayout>
     </>
   );
