@@ -78,13 +78,13 @@ const ChangeProfile: NextPage = () => {
 
   const onClickSubmitProfile = async () => {
     const mb_nick = await mb_nick_vaildate(data.mb_nick);
-    if (mb_nick && data.mb_nick != userInfo.member.mb_nick) {
+    if (mb_nick && data.mb_nick == userInfo.member.mb_nick) {
       setInVaild({ ...inVaild, mb_nick: mb_nick });
       return;
     }
 
     const mb_email = await mb_email_vaildate(data.mb_email);
-    if (mb_email && data.mb_email != userInfo.member.mb_email) {
+    if (mb_email && data.mb_email == userInfo.member.mb_email) {
       setInVaild({ ...inVaild, mb_email: mb_email });
       return;
     }

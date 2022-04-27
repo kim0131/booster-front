@@ -5,10 +5,6 @@ import BestWidget from "@components/templates/best-widget";
 import { useHotTopic } from "@core/hook/use-hot-topic";
 import { useCategoryListHome } from "@core/hook/use-category-list";
 import MainCarousel from "@components/templates/carousel";
-import {
-  BestWidgetskelton,
-  HomeSkeletonCarouselLayout,
-} from "@components/layouts/skeleton/home-skeleton";
 
 const Home: NextPage = () => {
   const { hotTopic } = useHotTopic();
@@ -33,16 +29,10 @@ const Home: NextPage = () => {
               />
             );
           })}
-        {!categoryListHome && (
-          <>
-            <BestWidgetskelton />
-            <BestWidgetskelton />
-            <BestWidgetskelton />
-            <BestWidgetskelton />
-          </>
-        )}
+          
       </HomeLayout>
     </>
   );
 };
+
 export default Home;
