@@ -74,6 +74,7 @@ const categoryHomeFetcher = async (url: string) => {
       filterresult = filterresult.sort((a: any, b: any) => {
         return a.priority - b.priority;
       });
+      
     })
     .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
 

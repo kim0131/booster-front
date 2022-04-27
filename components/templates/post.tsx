@@ -108,6 +108,7 @@ const Post = ({ category }: IPropsPost) => {
   const { id } = router.query;
   const [page, setPage] = useHistoryState(1, "page");
   const { status } = useSession();
+  
 
   useEffect(() => {
     if (insightList) {
@@ -142,27 +143,29 @@ const Post = ({ category }: IPropsPost) => {
   const onClickPage = (page?: number) => {
     setPage(page);
   };
-  const onClickRouterMove = (id: any) => {
+  const onClickRouterMove = (id: any, content:any) => {
+    const urlCategory = content;
     if (status != "authenticated") {
       if (checkAuth()) {
         return router.push("/accounts");
       }
     } else {
-      router.push(`/insights/${id}`);
+      router.push(`/insights/${id}?category=${urlCategory}`);
     }
+    
   };
   return (
     <>
       {!insightList ? (
         <TopicSnbSkeleton />
-      ) : (
-        <Style.Container setLine={setLine}>
+        ) : (
+          <Style.Container setLine={setLine}>
           {insightList &&
             data.map((content: any) => {
               return (
                 <React.Fragment key={content.idx}>
                   <Style.PostItem.Container
-                    onClick={() => onClickRouterMove(content.idx)}
+                    onClick={() => onClickRouterMove(content.idx, content.bo_table)}
                   >
                     <Style.PostItem.Thumbnail photo={content.file_full_url} />
                     <Style.PostItem.Badge>
