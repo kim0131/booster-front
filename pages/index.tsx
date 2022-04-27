@@ -19,7 +19,6 @@ const Home: NextPage = () => {
         )}
         {categoryListHome &&
           categoryListHome.map((data: any) => {
-            if(data.open != "true") return;
             return (
               <BestWidget
                 title={data.bo_subject}
