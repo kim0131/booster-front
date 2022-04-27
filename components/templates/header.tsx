@@ -237,13 +237,20 @@ const Header = () => {
 
   const onKeyPressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key == "Enter") {
-      if (!state.data.searchTerm.trim()) return alert("검색어를 입력해주세요");
-      router.push(`/search?searchTerm=${state.data.searchTerm}`);
-      setState({
-        ...state,
-        mobileSearch: false,
-        data: { ...state.data, searchTerm: "" },
-      });
+      if (status != "authenticated") {
+        if (checkAuth()) {
+          return router.push("/accounts");
+        }
+      } else {
+        if (!state.data.searchTerm.trim())
+          return alert("검색어를 입력해주세요");
+        router.push(`/search?searchTerm=${state.data.searchTerm}`);
+        setState({
+          ...state,
+          mobileSearch: false,
+          data: { ...state.data, searchTerm: "" },
+        });
+      }
     }
   };
 
