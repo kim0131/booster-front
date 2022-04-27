@@ -107,7 +107,9 @@ const ChangePassword: NextPage = () => {
           <Button size="large" variants="solid" onClick={onClickSubmitProfile}>
             완료
           </Button>
-          <Button size="large">취소</Button>
+          <Button size="large" onClick={() => router.back()}>
+            취소
+          </Button>
         </>
       }
     >

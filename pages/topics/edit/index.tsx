@@ -179,7 +179,9 @@ const EditTopic: NextPage = () => {
           <Button variants="solid" size="large" onClick={onClickSubmitTopic}>
             수정하기
           </Button>
-          <Button size="large">취소</Button>
+          <Button size="large" onClick={() => router.back()}>
+            취소
+          </Button>
           <input
             style={{ display: "none" }}
             type="file"

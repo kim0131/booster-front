@@ -201,11 +201,17 @@ const Profile: NextPage = () => {
                 </>
               }
               buttons={
-                <Button
-                  onClick={() => router.push("/my/profile/update-company")}
-                >
-                  회사 업데이트
-                </Button>
+                <>
+                  {userInfo.member.mb_business_certify == 3 ? (
+                    <Button
+                      onClick={() => router.push("/my/profile/update-company")}
+                    >
+                      회사 업데이트
+                    </Button>
+                  ) : (
+                    ""
+                  )}
+                </>
               }
               datas={[
                 {
