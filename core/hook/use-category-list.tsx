@@ -29,17 +29,17 @@ const categoryFetcher = async (url: string) => {
       });
     })
     .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
-  return result;
-};
-
-const categoryHomeFetcher = async (url: string) => {
+    return result;
+  };
+  
+  const categoryHomeFetcher = async (url: string) => {
   let filterresult: any = [];
   await axios
-    .get("/api2/category")
+  .get("/api2/category")
     .then(async (res: any) => {
       const list = res.data.result;
       for (const item of list) {
-        if (item.open === "" || null) {
+        if (item.open !== "true") {
           continue;
         }
         if (!item.wr_view) {
@@ -72,6 +72,11 @@ const categoryHomeFetcher = async (url: string) => {
         }
       }
       filterresult = filterresult.sort((a: any, b: any) => {
+        console.log(a);
+        console.log(b);
+        console.log("=================");
+        console.log(a.priority);
+        console.log(b.priority);
         return a.priority - b.priority;
       });
       
