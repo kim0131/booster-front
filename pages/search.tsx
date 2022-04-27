@@ -19,6 +19,7 @@ const Search: NextPage = () => {
   const { status } = useSession();
   const [category, setCategory] = useHistoryState("all", "category");
   const { searchResult } = useSearch(searchTerm, category);
+
   const onClickRouter = (param: any) => {
     const urlCategory = param.bo_table;
 
@@ -28,7 +29,9 @@ const Search: NextPage = () => {
       }
     } else {
       if (param.sector == "topics") {
-        router.push(`/${param.sector}/detail/${param.idx}/?category=${urlCategory}`);
+        router.push(
+          `/${param.sector}/detail/${param.idx}/?category=${urlCategory}`,
+        );
       } else {
         router.push(`/${param.sector}/${param.idx}`);
       }

@@ -1,3 +1,4 @@
+import Skeleton from "@components/elements/skeleton";
 import styled from "@emotion/styled";
 
 const Style = {
@@ -16,6 +17,18 @@ const Style = {
       }
     }
   `,
+  Widget: styled.div`
+    flex: none;
+    width: 12rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  `,
+  SubMenu: styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  `,
 };
 
 interface IPropsHomeSkeletonLayout {
@@ -26,4 +39,19 @@ export const HomeSkeletonCarouselLayout = ({
   children,
 }: IPropsHomeSkeletonLayout) => {
   return <Style.Carousel>{children}</Style.Carousel>;
+};
+
+export const BestWidgetskelton = () => {
+  return (
+    <Style.Widget>
+      <Style.SubMenu>
+        <Skeleton width="6rem" height="1rem" />
+        <Skeleton height="2rem" />
+        <Skeleton height="2rem" />
+        <Skeleton height="2rem" />
+        <Skeleton height="2rem" />
+        <Skeleton height="2rem" />
+      </Style.SubMenu>
+    </Style.Widget>
+  );
 };
