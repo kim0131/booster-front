@@ -72,11 +72,6 @@ const categoryFetcher = async (url: string) => {
         }
       }
       filterresult = filterresult.sort((a: any, b: any) => {
-        console.log(a);
-        console.log(b);
-        console.log("=================");
-        console.log(a.priority);
-        console.log(b.priority);
         return a.priority - b.priority;
       });
       

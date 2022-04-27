@@ -8,6 +8,7 @@ import Callout from "@components/elements/callout";
 import useGetUser from "@core/hook/use-user";
 import { useSession } from "next-auth/react";
 import axios from "axios";
+import router from "next/router";
 
 const Style = {
   Container: styled.div`
@@ -101,7 +102,7 @@ const Archive: NextPage = () => {
                   탈퇴하기
                 </Button>
               )}
-              <Button size="large">취소</Button>
+              <Button size="large" onClick={() => router.back()}>취소</Button>
             </>
           }
         >
