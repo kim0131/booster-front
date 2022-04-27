@@ -103,7 +103,9 @@ const UpdateCompany: NextPage = () => {
               >
                 업데이트
               </Button>
-              <Button size="large">취소</Button>
+              <Button size="large" onClick={() => router.back()}>
+                취소
+              </Button>
             </>
           }
         >

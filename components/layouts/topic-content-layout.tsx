@@ -230,7 +230,6 @@ const TopicContentLayout = ({
     e.preventDefault;
 
     if (bookmark) {
-      console.log(1);
       await axios
         .post(`/api2/topic/scrap/cancel/${id}`, {
           member_idx: session?.user?.idx,

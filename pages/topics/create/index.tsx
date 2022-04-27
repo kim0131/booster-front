@@ -66,12 +66,16 @@ const CreateTopic: NextPage = () => {
     });
   };
   const onLoadFile = (e: any) => {
-    // e.preventDefault();
-
+    e.preventDefault();
+    if (!e.target.files[0].type.includes("image")) {
+      alert("이미지 파일만 업로드 할 수 있습니다.");
+      return;
+    }
     const fileReader = new FileReader();
     if (e.target.files[0]) {
       fileReader.readAsDataURL(e.target.files[0]);
     }
+
     fileReader.onload = () => {
       setImage({
         image_file: e.target.files[0],
@@ -165,16 +169,11 @@ const CreateTopic: NextPage = () => {
           <input
             style={{ display: "none" }}
             type="file"
-            accept="image/*" /* Now available extension =>( .jpg, .jpeg, .gif, .png, .svg, .ico, .jfif, .webp, .bmp )*/ 
+            accept="image/*" /* Now available extension =>( .jpg, .jpeg, .gif, .png, .svg, .ico, .jfif, .webp, .bmp )*/
             ref={hiddenFileInput}
             onChange={onLoadFile}
           />
-          <Button
-            size="large"
-            onClick={() => {
-              history.back();
-            }}
-          >
+          <Button size="large" onClick={() => router.back()}>
             취소
           </Button>
         </>

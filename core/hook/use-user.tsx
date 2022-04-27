@@ -5,6 +5,7 @@ import useSWR from "swr";
 
 const userFetcher = async (url: string) => {
   let result: any = { member: {}, business: {} };
+  if (url == `/api2/user/undefined`) return;
   await axios
     .get(url)
     .then(async res => {

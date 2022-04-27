@@ -112,7 +112,6 @@ export const mb_email_vaildate = async (mb_email: string | undefined) => {
       mb_email: mb_email,
     })
     .then(res => {
-      console.log(res);
       if (!res.data.success) {
         error = "이메일이 중복되었습니다.";
       }
