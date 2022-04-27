@@ -50,15 +50,18 @@ const TopicDetail: NextPage = () => {
                   />
                   <TopicContentLayout id={router.query.id} data={topicDetail}>
                     <TopicComment id={id} />
-                    <Board
-                      category={urlCategory}
-                      title={
-                        _.find(categorySubSide[0].menus, { param: urlCategory })
-                          ?.content || ""
-                      }
-                      datas={topicListFilter}
-                      onClickRouter={onClickRouter}
-                    />
+                    {categorySubSide && (
+                      <Board
+                        category={urlCategory}
+                        title={
+                          _.find(categorySubSide[0].menus, {
+                            param: urlCategory,
+                          })?.content || ""
+                        }
+                        datas={topicListFilter}
+                        onClickRouter={onClickRouter}
+                      />
+                    )}
                   </TopicContentLayout>
                 </>
               )}

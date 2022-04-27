@@ -66,7 +66,7 @@ const searchFetcher = async (param: any) => {
         });
 
         await insightCnt.map((data: any, idx: any) => {
-          if (data.inCnt) {
+          if (data.inCnt > 0) {
             SearchSnbDatas[2].menus.push({
               id: data.idx,
               content: data.bo_subject + " (" + data.inCnt + ")",
