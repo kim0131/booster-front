@@ -6,5 +6,5 @@ export interface ICarouselData {
   content: string;
   url: string;
   thumbnailcolor: string;
-  onClick: any;
+  onClick?: any;
 }

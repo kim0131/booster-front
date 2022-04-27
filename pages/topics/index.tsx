@@ -11,6 +11,7 @@ import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
 import { checkAuth } from "@core/util/check-auth";
 import { useSession } from "next-auth/react";
 import useHistoryState from "@core/hook/use-history-state";
+import { useEffect } from "react";
 
 interface IPropsTopics {
   initCategory: string;
@@ -24,6 +25,7 @@ const Topics: NextPage<IPropsTopics> = () => {
     urlCategory ? urlCategory : "all",
     "category",
   );
+
   const { categorySubSide, isCategorySubSideValidating } =
     useCategorySubSide("topic");
   const { topicListFilter, isTopicListValidating } =

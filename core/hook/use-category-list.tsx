@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import axios from "axios";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { topicfilterfetcher } from "./use-topic-list";
 
@@ -65,8 +66,7 @@ const categoryHomeFetcher = async (url: string) => {
                   edit_subject: "수정 및 삭제하기",
                   contents: res.slice(0, 5),
                   priority: item.priority,
-                }
-                );
+                });
             })
             .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
         }
@@ -74,7 +74,6 @@ const categoryHomeFetcher = async (url: string) => {
       filterresult = filterresult.sort((a: any, b: any) => {
         return a.priority - b.priority;
       });
-      
     })
     .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
 
@@ -83,14 +82,13 @@ const categoryHomeFetcher = async (url: string) => {
 
 const useCategoryList = () => {
   const { data: categoryList } = useSWR(
-    `/api2/category/list`, 
-    categoryFetcher, 
+    `/api2/category/list`,
+    categoryFetcher,
     {},
-    );
-    return { categoryList };
+  );
+  return { categoryList };
 };
 export default useCategoryList;
-
 
 export const useCategoryListHome = () => {
   const { data: categoryListHome } = useSWR(
@@ -100,4 +98,3 @@ export const useCategoryListHome = () => {
   );
   return { categoryListHome };
 };
-

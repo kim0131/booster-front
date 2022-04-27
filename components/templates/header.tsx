@@ -22,6 +22,7 @@ import Dropdown from "@components/elements/dropdown";
 import { accountsNavigation } from "@core/config/navigation";
 import Portal from "./portal";
 import { checkAuth } from "@core/util/check-auth";
+import useHistoryState from "@core/hook/use-history-state";
 
 interface IPropsStyle {
   isRoute?: boolean;
@@ -192,6 +193,7 @@ const Header = () => {
   const { isDesktop } = useDesktop();
   const { data: session, status } = useSession();
   const router = useRouter();
+
   const [state, setState] = useState({
     mobileMenu: false,
     mobileSearch: false,
@@ -227,7 +229,9 @@ const Header = () => {
         return router.push("/accounts");
       }
     } else {
-      router.push("/topics/create");
+      router.push(
+        `/topics/create?category=${localStorage.getItem("category")}`,
+      );
     }
   };
 
