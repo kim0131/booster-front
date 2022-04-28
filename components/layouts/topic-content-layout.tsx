@@ -338,8 +338,8 @@ const TopicContentLayout = ({
                 </Button>
 
                 {checkMbName(
-                  topicContent.mb_name,
-                  session?.user?.name as string,
+                  topicContent.mb_id,
+                  session?.user?.id as string,
                 ) ? (
                   <>
                     <Style.SubMore>

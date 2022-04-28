@@ -43,15 +43,47 @@ export const HomeSkeletonCarouselLayout = ({
 
 export const BestWidgetskelton = () => {
   return (
-    <Style.Widget>
-      <Style.SubMenu>
-        <Skeleton width="6rem" height="1rem" />
-        <Skeleton height="2rem" />
-        <Skeleton height="2rem" />
-        <Skeleton height="2rem" />
-        <Skeleton height="2rem" />
-        <Skeleton height="2rem" />
-      </Style.SubMenu>
-    </Style.Widget>
+    <>
+      <Style.Widget>
+        <Style.SubMenu>
+          <Skeleton width="6rem" height="1rem" />
+          <Skeleton height="2rem" />
+          <Skeleton height="2rem" />
+          <Skeleton height="2rem" />
+          <Skeleton height="2rem" />
+          <Skeleton height="2rem" />
+        </Style.SubMenu>
+      </Style.Widget>
+      <Style.Widget>
+        <Style.SubMenu>
+          <Skeleton width="6rem" height="1rem" />
+          <Skeleton height="2rem" />
+          <Skeleton height="2rem" />
+          <Skeleton height="2rem" />
+          <Skeleton height="2rem" />
+          <Skeleton height="2rem" />
+        </Style.SubMenu>
+      </Style.Widget>
+      <Style.Widget>
+        <Style.SubMenu>
+          <Skeleton width="6rem" height="1rem" />
+          <Skeleton height="2rem" />
+          <Skeleton height="2rem" />
+          <Skeleton height="2rem" />
+          <Skeleton height="2rem" />
+          <Skeleton height="2rem" />
+        </Style.SubMenu>
+      </Style.Widget>
+      <Style.Widget>
+        <Style.SubMenu>
+          <Skeleton width="6rem" height="1rem" />
+          <Skeleton height="2rem" />
+          <Skeleton height="2rem" />
+          <Skeleton height="2rem" />
+          <Skeleton height="2rem" />
+          <Skeleton height="2rem" />
+        </Style.SubMenu>
+      </Style.Widget>
+    </>
   );
 };
