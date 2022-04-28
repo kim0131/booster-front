@@ -109,7 +109,7 @@ interface IPropsSnb {
 const Snb = ({ snbDatas, category, setCategory }: IPropsSnb) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
-
+  
   const onClickRouter = (
     e:
       | React.MouseEvent<HTMLButtonElement>
@@ -120,17 +120,24 @@ const Snb = ({ snbDatas, category, setCategory }: IPropsSnb) => {
     if (isDesktop) {
       if (router.pathname == "/topics/detail/[id]") {
         router.push(`/topics?category=${e.currentTarget.value}`);
+        if (id == 901 || id == 900) {
+          localStorage.removeItem("category"); return;
+        }
+        localStorage.setItem("category", id);
+
       } else {
         setCategory(e.currentTarget.value);
-
+        if (id == 901 || id == 900) {
+          localStorage.removeItem("category"); return;
+        }
         localStorage.setItem("category", id);
       }
-    } else {
+    }
+    else {
       if (router.pathname == "/topics/detail/[id]") {
         router.push(`/topics?category=${e.currentTarget.value}`);
       } else {
         setCategory(e.currentTarget.value);
-
         localStorage.setItem("category", e.currentTarget.value);
       }
     }

@@ -10,7 +10,7 @@ import { BestWidgetskelton } from "@components/layouts/skeleton/home-skeleton";
 const Home: NextPage = () => {
   const { hotTopic } = useHotTopic();
   const { categoryListHome } = useCategoryListHome();
-
+  localStorage.removeItem("category");
   return (
     <>
       <MainCarousel />

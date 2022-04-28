@@ -229,9 +229,16 @@ const Header = () => {
         return router.push("/accounts");
       }
     } else {
-      router.push(
-        `/topics/create?category=${localStorage.getItem("category")}`,
-      );
+      if(localStorage.getItem("category") == null){
+        router.push(
+          `/topics/create`,
+          );
+      }else{
+          router.push(
+            `/topics/create?category=${localStorage.getItem("category")}`,
+            );
+
+        }
     }
   };
 
