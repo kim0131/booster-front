@@ -34,7 +34,6 @@ const TopicDetail: NextPage = () => {
       router.push(`/${param.sector}/${param.idx}`);
     }
   };
-
   return (
     <SnbLayout>
       {topicDetail && (

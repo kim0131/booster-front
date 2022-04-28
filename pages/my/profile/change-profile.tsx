@@ -77,23 +77,27 @@ const ChangeProfile: NextPage = () => {
   };
 
   const onClickSubmitProfile = async () => {
+    //-------->수정부분
     const mb_nick = await mb_nick_vaildate(data.mb_nick);
-    if (mb_nick && data.mb_nick == userInfo.member.mb_nick) {
-      setInVaild({ ...inVaild, mb_nick: mb_nick });
-      return;
-    }
-
     const mb_email = await mb_email_vaildate(data.mb_email);
-    if (mb_email && data.mb_email == userInfo.member.mb_email) {
-      setInVaild({ ...inVaild, mb_email: mb_email });
+    
+    if ((mb_nick && data.mb_nick == userInfo.member.mb_nick) && (mb_email && data.mb_email == userInfo.member.mb_email)) {
+      setInVaild({ mb_nick: mb_nick, mb_email: mb_email });
       return;
+    }else{
+      if((mb_nick && data.mb_nick != userInfo.member.mb_nick) || (mb_email && data.mb_email != userInfo.member.mb_email)){
+        setInVaild({ ...inVaild, mb_nick: mb_nick, mb_email: mb_email});
+        return;
+      }
     }
+    //-------->수정부분
+    
     await axios
-      .post(`/api2/user/update/${userInfo.member.idx}`, data)
-      .then(() => {
-        alert("변경되었습니다.");
-        router.push(`/my/profile`);
-      })
+    .post(`/api2/user/update/${userInfo.member.idx}`, data)
+    .then(() => {
+      alert("변경되었습니다.");
+      router.push(`/my/profile`);
+    })
       .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   };
   return (

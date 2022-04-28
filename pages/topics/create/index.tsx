@@ -17,6 +17,7 @@ const CreateTopic: NextPage = () => {
   const { data: session, status } = useSession();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const { categorySelect } = useCategorySelect("topic");
+  const { category } = router.query;
 
   const [image, setImage] = useState<any>({
     image_file: "",
@@ -38,7 +39,7 @@ const CreateTopic: NextPage = () => {
 
   const getUserIp = async () => {
     const res = await axios.get("/json/");
-    setData({ ...data, wr_ip: res.data.IPv4 });
+    setData({ ...data, wr_ip: res.data.IPv4, board: category });
   };
 
   const onChangeheight = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
