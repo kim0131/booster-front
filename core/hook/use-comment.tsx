@@ -7,6 +7,7 @@ const topicComment = async (url: string) => {
     .get(url)
     .then(async res => {
       const CurrentTime = new Date();
+
       const comment = res.data.result;
       if (comment) {
         for (const item of comment) {
@@ -22,6 +23,7 @@ const topicComment = async (url: string) => {
               wr_is_comment2: item.wr_is_comment2,
               wr_content: item.wr_content,
               mb_name: item.mb_name,
+              mb_id: item.mb_id,
               wr_view: item.wr_view,
               wr_good: item.wr_good,
               likeCnt: item.likeCnt,
@@ -61,6 +63,7 @@ const insightComment = async (url: string) => {
               mb_name: item.mb_name,
               wr_view: item.wr_view,
               wr_good: item.wr_good,
+              mb_id: item.mb_id,
               likeCnt: item.likeCnt,
               wr_create: elapsedTime,
               replycount: item.replyCnt,

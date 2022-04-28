@@ -22,7 +22,6 @@ import React, { useEffect, useState } from "react";
 import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
 import { useDesktop } from "@core/hook/use-desktop";
 
-
 interface IPropsStyle {
   isReply: boolean;
 }
@@ -108,16 +107,15 @@ const Style = {
         display: flex;
         flex-wrap: wrap;
         gap: 0.75rem;
-        `,
-        Badge: styled.div`
+      `,
+      Badge: styled.div`
         display: inline-flex;
         align-items: center;
         gap: 0.25rem;
-        &:nth-of-type(2){
-          cursor:pointer;
+        &:nth-of-type(2) {
+          cursor: pointer;
         }
       `,
-      
     },
   },
   SubMore: styled.div`
@@ -442,8 +440,8 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
                     <Style.SubMore>
                       <IconMoreVertical />
                       {checkMbName(
-                        comment.mb_name,
-                        session?.user?.name as string,
+                        comment.mb_id,
+                        session?.user?.id as string,
                       ) ? (
                         <Dropdown
                           menu={

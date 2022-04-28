@@ -114,13 +114,25 @@ const Snb = ({ snbDatas, category, setCategory }: IPropsSnb) => {
     e:
       | React.MouseEvent<HTMLButtonElement>
       | React.ChangeEvent<HTMLSelectElement>,
+    id: any,
   ) => {
     e.preventDefault();
+    if (isDesktop) {
+      if (router.pathname == "/topics/detail/[id]") {
+        router.push(`/topics?category=${e.currentTarget.value}`);
+      } else {
+        setCategory(e.currentTarget.value);
 
-    if (router.pathname == "/topics/detail/[id]") {
-      router.push(`/topics?category=${e.currentTarget.value}`);
+        localStorage.setItem("category", id);
+      }
     } else {
-      setCategory(e.currentTarget.value);
+      if (router.pathname == "/topics/detail/[id]") {
+        router.push(`/topics?category=${e.currentTarget.value}`);
+      } else {
+        setCategory(e.currentTarget.value);
+
+        localStorage.setItem("category", e.currentTarget.value);
+      }
     }
   };
 
@@ -139,7 +151,7 @@ const Snb = ({ snbDatas, category, setCategory }: IPropsSnb) => {
                         key={menu.id}
                         isRoute={menu.param === category}
                         value={menu.param}
-                        onClick={onClickRouter}
+                        onClick={e => onClickRouter(e, menu.id)}
                       >
                         {menu.content}
                       </Style.Desktop.Category.Button>
@@ -152,13 +164,16 @@ const Snb = ({ snbDatas, category, setCategory }: IPropsSnb) => {
     </Style.Desktop.Container>
   ) : (
     <Style.Mobile.Wrapper>
-      <Style.Mobile.Selectbox defaultValue={category} onChange={onClickRouter}>
+      <Style.Mobile.Selectbox
+        defaultValue={category}
+        onChange={e => onClickRouter(e, 0)}
+      >
         {snbDatas.map((snbData: ISnbData) => (
           <optgroup key={snbData.id} label={snbData.category}>
             {snbData.menus &&
               snbData.menus.map(
                 (menu: { id: number; content: string; param: string }) => (
-                  <option key={menu.id} value={menu.param}>
+                  <option key={menu.id} value={menu.id}>
                     {menu.content}
                   </option>
                 ),

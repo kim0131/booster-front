@@ -18,7 +18,6 @@ const CreateTopic: NextPage = () => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const { categorySelect } = useCategorySelect("topic");
   const { category } = router.query;
-
   const [image, setImage] = useState<any>({
     image_file: "",
     preview_URL: "",

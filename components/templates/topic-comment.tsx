@@ -106,13 +106,13 @@ const Style = {
         display: flex;
         flex-wrap: wrap;
         gap: 0.75rem;
-        `,
-        Badge: styled.div`
+      `,
+      Badge: styled.div`
         display: inline-flex;
         align-items: center;
         gap: 0.25rem;
-        &:nth-of-type(2){
-          cursor:pointer;
+        &:nth-of-type(2) {
+          cursor: pointer;
         }
       `,
     },
@@ -443,8 +443,8 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
                     <Style.SubMore>
                       <IconMoreVertical />
                       {checkMbName(
-                        comment.mb_name,
-                        session?.user?.name as string,
+                        comment.mb_id,
+                        session?.user?.id as string,
                       ) ? (
                         <Dropdown
                           menu={

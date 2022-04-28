@@ -166,7 +166,7 @@ const MainCarousel = () => {
               title={data.title}
               content={data.content}
               url={data.image_url}
-              onClick={(e: any) => onClickRouter(e, data)}
+              // onClick={(e: any) => onClickRouter(e, data)}
             />
           ))}
       </StyledSlider>
