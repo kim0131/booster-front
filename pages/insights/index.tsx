@@ -14,7 +14,7 @@ const Insights: NextPage = () => {
 
   return (
     <LnbLayout>
-      <Lnb param={category ? category : "all"} onClick={setCategory} />
+      {/* <Lnb param={category ? category : "all"} onClick={setCategory} /> */}
       <Post category={category ? category : "all"} />
     </LnbLayout>
   );

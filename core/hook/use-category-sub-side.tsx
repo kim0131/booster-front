@@ -44,11 +44,16 @@ const categorySnbMenuFetcher = async (url: string) => {
             id: Getcategory[idx].idx,
             content: Getcategory[idx].bo_subject,
             param: Getcategory[idx].bo_table,
+            priority: Getcategory[idx].priority,
           });
         }
       });
     })
     .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
+  result[0].menus = result[0].menus.sort(function (a: any, b: any) {
+    return a.priority - b.priority;
+  });
+
   return result;
 };
 
