@@ -207,7 +207,6 @@ const Header = () => {
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,
   ) => {
     e.preventDefault();
-    localStorage.removeItem("category");
     const link: string | undefined = e.currentTarget.dataset.value;
     const content: string | null = e.currentTarget.textContent;
     if (link) {

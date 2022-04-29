@@ -6,10 +6,15 @@ import { useHotTopic } from "@core/hook/use-hot-topic";
 import { useCategoryListHome } from "@core/hook/use-category-list";
 import MainCarousel from "@components/templates/carousel";
 import { BestWidgetskelton } from "@components/layouts/skeleton/home-skeleton";
+import { useEffect } from "react";
 
 const Home: NextPage = () => {
   const { hotTopic } = useHotTopic();
   const { categoryListHome } = useCategoryListHome();
+  useEffect(() => {
+    console.log("rendered Test");
+    localStorage.removeItem("category");
+  }, ["category"]);
   return (
     <>
       <MainCarousel />

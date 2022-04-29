@@ -406,26 +406,6 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
   return (
     <Style.Container>
       <Style.Comment>
-        <Style.AddComment.Container>
-          <Header5>{commentsList && commentsList.length}개의 댓글</Header5>
-          <Style.AddComment.TextArea
-            rows={3}
-            name={"wr_content"}
-            onChange={onChangeTextareaComment}
-            value={commentdata.wr_content}
-          />
-          <Style.AddComment.Button>
-            <Button
-              variants="solid"
-              color="primary"
-              onClick={onClickWriteComment}
-            >
-              작성하기
-            </Button>
-            {/* <Button>취소</Button> */}
-          </Style.AddComment.Button>
-        </Style.AddComment.Container>
-
         {comments &&
           comments.map((comment: any, rn: number) => {
             return (
@@ -561,6 +541,25 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
           })}
         {!commentsList && <TopicSnbSkeleton />}
       </Style.Comment>
+      <Style.AddComment.Container>
+          <Header5>{commentsList && commentsList.length}개의 댓글</Header5>
+          <Style.AddComment.TextArea
+            rows={3}
+            name={"wr_content"}
+            onChange={onChangeTextareaComment}
+            value={commentdata.wr_content}
+          />
+          <Style.AddComment.Button>
+            <Button
+              variants="solid"
+              color="primary"
+              onClick={onClickWriteComment}
+            >
+              작성하기
+            </Button>
+            {/* <Button>취소</Button> */}
+          </Style.AddComment.Button>
+        </Style.AddComment.Container>
       <Pagination
         totalContent={totalCount}
         line={line}

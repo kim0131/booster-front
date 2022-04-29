@@ -77,7 +77,6 @@ const ChangeProfile: NextPage = () => {
   };
 
   const onClickSubmitProfile = async () => {
-    //-------->수정부분
     const mb_nick = await mb_nick_vaildate(data.mb_nick);
     const mb_email = await mb_email_vaildate(data.mb_email);
     
@@ -90,7 +89,6 @@ const ChangeProfile: NextPage = () => {
         return;
       }
     }
-    //-------->수정부분
     
     await axios
     .post(`/api2/user/update/${userInfo.member.idx}`, data)
