@@ -12,9 +12,8 @@ const Home: NextPage = () => {
   const { hotTopic } = useHotTopic();
   const { categoryListHome } = useCategoryListHome();
   useEffect(() => {
-    console.log("rendered Test");
     localStorage.removeItem("category");
-  }, ["category"]);
+  });
   return (
     <>
       <MainCarousel />

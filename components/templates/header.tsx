@@ -207,6 +207,10 @@ const Header = () => {
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement | SVGElement>,
   ) => {
     e.preventDefault();
+<<<<<<< HEAD
+=======
+
+>>>>>>> b0359bf88e2d51563c4bb93476bf91cbd430aff4
     const link: string | undefined = e.currentTarget.dataset.value;
     const content: string | null = e.currentTarget.textContent;
     if (link) {
@@ -229,16 +233,13 @@ const Header = () => {
         return router.push("/accounts");
       }
     } else {
-      if(localStorage.getItem("category") == null){
+      if (localStorage.getItem("category") == null) {
+        router.push(`/topics/create`);
+      } else {
         router.push(
-          `/topics/create`,
-          );
-      }else{
-          router.push(
-            `/topics/create?category=${localStorage.getItem("category")}`,
-            );
-
-        }
+          `/topics/create?category=${localStorage.getItem("category")}`,
+        );
+      }
     }
   };
 
