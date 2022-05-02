@@ -32,10 +32,10 @@ const InsightId: NextPage = () => {
           comments={id && <InsightComment id={id} />}
         >
           <LnbLayout>
-            <Lnb
+            {/* <Lnb
               param={category ? category : "all"}
               onClick={onClickCategory}
-            />
+            /> */}
             <Post category={category ? category : "all"} />
           </LnbLayout>
         </InsightsContentLayout>
