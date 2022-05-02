@@ -137,22 +137,23 @@ const StyledSlider = styled(Slider)`
 const MainCarousel = () => {
   const [state, setState] = useState([0]);
   const { mainBannerList } = useMainBanner();
-
+  
   const settings = {
     centerMode: true,
     infinite: true,
     centerPadding: "60px",
     // dots: true,
-
-    speed: 3000,
+    
     slidesToShow: 2,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 2000,
+    pauseOnFocus:false,
   };
-
   const onClickRouter = (e: any, data: { url: string; target: string }) => {
-    window.open("http://" + data.url, data.target);
+   
+     // window.open("http://" + data.url, data.target);
+      
   };
   return (
     <Style.Container>
@@ -166,7 +167,7 @@ const MainCarousel = () => {
               title={data.title}
               content={data.content}
               url={data.image_url}
-              // onClick={(e: any) => onClickRouter(e, data)}
+              onClick={(e: any) => onClickRouter(e, data)}
             />
           ))}
       </StyledSlider>
