@@ -543,9 +543,9 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
             );
           })}
         {!commentsList && <TopicSnbSkeleton />}
-      </Style.Comment>
+      </Style.Comment>z
       <Style.AddComment.Container>
-          <Header5>{commentsList && commentsList.length}개의 댓글</Header5>
+          <Header5>{commentsList && commentsList.length}개의 댓글1234</Header5>
           <Style.AddComment.TextArea
             rows={3}
             name={"wr_content"}
