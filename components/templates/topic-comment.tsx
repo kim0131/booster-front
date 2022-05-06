@@ -44,7 +44,7 @@ const Style = {
       flex-direction: column;
       gap: 1.5rem;
       padding: 1.5rem 1.25rem;
-      box-shadow: ${props => props.theme.shadow.inset.bottom};
+      // box-shadow: ${props => props.theme.shadow.inset.bottom};
       ${props => props.theme.screen.md} {
         padding: 1.5rem 0;
       }
@@ -112,6 +112,12 @@ const Style = {
         align-items: center;
         gap: 0.25rem;
         &:nth-of-type(2) {
+          cursor: pointer;
+        }
+        &:nth-of-type(3) {
+          cursor: pointer;
+        }
+        &:nth-of-type(4) {
           cursor: pointer;
         }
       `,
@@ -281,7 +287,15 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
       }
     }
   };
-
+  const onClickLinkButton = async (id: any
+  ) => {
+    const idx: any = id;
+    if (idx == replydata.wr_parent2) {
+      setReply({ ...replydata, wr_parent2: 0, wr_content: "" });
+    } else {
+      setReply({ ...replydata, wr_parent2: parseInt(idx), wr_content: "" });
+    }
+  };
   const onClickPagenation = (e: any) => {
     const value = parseInt(e.currentTarget.textContent);
     setcurrentPage(value);
@@ -319,7 +333,6 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
       })
       .then(async res => {
         const result = res.data.result.length;
-
         if (result) {
           await axios
             .post(`/api2/topic/like/cancel/${id}`, {
@@ -430,24 +443,24 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
                           menu={
                             !comment.wr_is_comment2
                               ? [
-                                  {
-                                    id: 0,
-                                    content: "댓글달기",
-                                    url: comment.idx,
-                                  },
-                                  {
-                                    id: 1,
-                                    content: "삭제하기",
-                                    url: comment.idx,
-                                  },
-                                ]
+                                {
+                                  id: 0,
+                                  content: "댓글달기",
+                                  url: comment.idx,
+                                },
+                                {
+                                  id: 1,
+                                  content: "삭제하기",
+                                  url: comment.idx,
+                                },
+                              ]
                               : [
-                                  {
-                                    id: 1,
-                                    content: "삭제하기",
-                                    url: comment.idx,
-                                  },
-                                ]
+                                {
+                                  id: 1,
+                                  content: "삭제하기",
+                                  url: comment.idx,
+                                },
+                              ]
                           }
                           onClick={onClickLink}
                           isRight={isDesktop ? true : false}
@@ -490,7 +503,7 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
                       {/* <Style.List.Bottom.Badge>
                         <IconView size={16} color={theme.color.gray[500]} />
                         <Body3 color={theme.color.gray[500]}>
-                          {comment.wr_view}
+                        {comment.wr_view}
                         </Body3>
                       </Style.List.Bottom.Badge> */}
                       {comment.replycount > 0 && (
@@ -504,14 +517,24 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
                           </Body3>
                         </Style.List.Bottom.Badge>
                       )}
+
+                      <Style.List.Bottom.Badge
+                        onClick={() => onClickLinkButton(comment.idx)}
+                      >
+                        <IconComment size={16} color={theme.color.gray[500]} />
+                        <Body3 color={theme.color.gray[500]}>
+                          댓글달기
+                        </Body3>
+                      </Style.List.Bottom.Badge>
                     </Style.List.Bottom.Info>
                     <Body3 color={theme.color.gray[500]}>
                       {getCreateTime(comment.wr_create)}
                     </Body3>
                   </Style.List.Bottom.Container>
                 </Style.List.Container>
+
                 {replydata.wr_parent2 == comment.idx &&
-                !comment.wr_is_comment2 ? (
+                  !comment.wr_is_comment2 ? (
                   <Style.AddComment.Container>
                     <Style.AddComment.TextArea
                       rows={3}
@@ -543,26 +566,7 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
             );
           })}
         {!commentsList && <TopicSnbSkeleton />}
-      </Style.Comment>z
-      <Style.AddComment.Container>
-          <Header5>{commentsList && commentsList.length}개의 댓글1234</Header5>
-          <Style.AddComment.TextArea
-            rows={3}
-            name={"wr_content"}
-            onChange={onChangeTextareaComment}
-            value={commentdata.wr_content}
-          />
-          <Style.AddComment.Button>
-            <Button
-              variants="solid"
-              color="primary"
-              onClick={onClickWriteComment}
-            >
-              작성하기
-            </Button>
-            {/* <Button>취소</Button> */}
-          </Style.AddComment.Button>
-        </Style.AddComment.Container>
+      </Style.Comment>
       <Pagination
         totalContent={totalCount}
         line={line}
@@ -571,6 +575,25 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
         MoveFront={onClickMoveFront}
         MoveEnd={onClickMoveEnd}
       />
+      <Style.AddComment.Container>
+        <Header5>댓글쓰기</Header5>
+        <Style.AddComment.TextArea
+          rows={3}
+          name={"wr_content"}
+          onChange={onChangeTextareaComment}
+          value={commentdata.wr_content}
+        />
+        <Style.AddComment.Button>
+          <Button
+            variants="solid"
+            color="primary"
+            onClick={onClickWriteComment}
+          >
+            작성하기
+          </Button>
+          {/* <Button>취소</Button> */}
+        </Style.AddComment.Button>
+      </Style.AddComment.Container>
     </Style.Container>
   );
 };
