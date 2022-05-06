@@ -59,6 +59,9 @@ const hotTopicFetcher = async (param: any) => {
         let ContentTime = new Date(content.wr_datetime);
         ContentTime.setHours(ContentTime.getHours());
         const elapsedTime = Math.ceil(
+          (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 60),
+        );
+        const elapsedTime2 = Math.ceil(
           (CurrentTime.getTime() - ContentTime.getTime()) / (1000 * 3600 * 24),
         );
         const T = content.wr_subject.length;
@@ -66,8 +69,8 @@ const hotTopicFetcher = async (param: any) => {
         const L = content.likeCnt;
         const C = content.commentCnt;
         let hotPoint;
-        if (elapsedTime < 7) {
-          hotPoint = (elapsedTime + 7) * (T + V + C + L ** 2);
+        if (elapsedTime2 < 7) {
+          hotPoint = (elapsedTime2 + 7) * (T + V + C + L ** 2);
         } else {
           hotPoint = T + V + C + L ** 2;
         }
