@@ -299,7 +299,7 @@ const InsightsContentLayout = ({
                 <IconMoreVertical />
               </Button>
             </Style.Body.Button.Wrapper>
-          </Style.Body.Button.Container><Header5>{insightDetail && insightDetail.commentCnt}개의 댓글</Header5>
+          </Style.Body.Button.Container>
         </Style.Body.Container>
         {comments}
       </Style.Wrapper>

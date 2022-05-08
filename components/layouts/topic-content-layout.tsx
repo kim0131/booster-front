@@ -362,7 +362,7 @@ console.log(topicContent);
                   ""
                 )}
               </Style.Body.Button.Wrapper>
-            </Style.Body.Button.Container><Header5>{topicContent && topicContent.commentCnt}개의 댓글</Header5>
+            </Style.Body.Button.Container>
           </Style.Body.Container>
           {children}
         </Style.Container>
