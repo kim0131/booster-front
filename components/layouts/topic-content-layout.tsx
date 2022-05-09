@@ -249,7 +249,6 @@ const TopicContentLayout = ({
         });
     }
   };
-console.log(topicContent);
   const checkMbName = (writer: string, userName: string) => {
     return Boolean(writer == userName);
   };
@@ -362,7 +361,10 @@ console.log(topicContent);
                   ""
                 )}
               </Style.Body.Button.Wrapper>
-            </Style.Body.Button.Container><Header5>{topicContent && topicContent.commentCnt}개의 댓글</Header5>
+            </Style.Body.Button.Container>
+            <Header5>
+              {topicContent && topicContent.commentCnt}개의 댓글
+            </Header5>
           </Style.Body.Container>
           {children}
         </Style.Container>
