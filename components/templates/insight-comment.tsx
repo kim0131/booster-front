@@ -45,7 +45,7 @@ const Style = {
       flex-direction: column;
       gap: 1.5rem;
       padding: 1.5rem 1.25rem;
-      // box-shadow: ${props => props.theme.shadow.inset.bottom};
+      box-shadow: ${props => props.theme.shadow.inset.bottom};
       ${props => props.theme.screen.md} {
         padding: 1.5rem 0;
       }
@@ -573,7 +573,7 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
         MoveEnd={onClickMoveEnd}
       />
       <Style.AddComment.Container>
-        <Header5>댓글쓰기</Header5>
+      <Header5>{commentsList && commentsList.length}개의 댓글</Header5>
         <Style.AddComment.TextArea
           rows={3}
           name={"wr_content"}

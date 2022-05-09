@@ -362,9 +362,12 @@ const TopicContentLayout = ({
                 )}
               </Style.Body.Button.Wrapper>
             </Style.Body.Button.Container>
+<<<<<<< HEAD
             <Header5>
               {topicContent && topicContent.commentCnt}개의 댓글
             </Header5>
+=======
+>>>>>>> 6ece7c01cc0478a47ae39ad6469da2c8fb041819
           </Style.Body.Container>
           {children}
         </Style.Container>
