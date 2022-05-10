@@ -109,7 +109,7 @@ interface IPropsSnb {
 const Snb = ({ snbDatas, category, setCategory }: IPropsSnb) => {
   const { isDesktop } = useDesktop();
   const router = useRouter();
-  
+
   const onClickRouter = (
     e:
       | React.MouseEvent<HTMLButtonElement>
@@ -117,23 +117,24 @@ const Snb = ({ snbDatas, category, setCategory }: IPropsSnb) => {
     id: any,
   ) => {
     e.preventDefault();
+
     if (isDesktop) {
       if (router.pathname == "/topics/detail/[id]") {
         router.push(`/topics?category=${e.currentTarget.value}`);
         if (id == 901 || id == 900) {
-          localStorage.removeItem("category"); return;
+          localStorage.removeItem("category");
+          return;
         }
         localStorage.setItem("category", id);
-
       } else {
         setCategory(e.currentTarget.value);
         if (id == 901 || id == 900) {
-          localStorage.removeItem("category"); return;
+          localStorage.removeItem("category");
+          return;
         }
         localStorage.setItem("category", id);
       }
-    }
-    else {
+    } else {
       if (router.pathname == "/topics/detail/[id]") {
         router.push(`/topics?category=${e.currentTarget.value}`);
       } else {
@@ -180,7 +181,7 @@ const Snb = ({ snbDatas, category, setCategory }: IPropsSnb) => {
             {snbData.menus &&
               snbData.menus.map(
                 (menu: { id: number; content: string; param: string }) => (
-                  <option key={menu.id} value={menu.id}>
+                  <option key={menu.id} value={menu.param}>
                     {menu.content}
                   </option>
                 ),

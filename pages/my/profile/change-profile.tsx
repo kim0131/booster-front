@@ -81,7 +81,7 @@ const ChangeProfile: NextPage = () => {
     const mb_email = await mb_email_vaildate(data.mb_email);
     
     if ((mb_nick && data.mb_nick == userInfo.member.mb_nick) && (mb_email && data.mb_email == userInfo.member.mb_email)) {
-      setInVaild({ mb_nick: mb_nick, mb_email: mb_email });
+      setInVaild({ ...inVaild, mb_nick: mb_nick, mb_email: mb_email });
       return;
     }else{
       if((mb_nick && data.mb_nick != userInfo.member.mb_nick) || (mb_email && data.mb_email != userInfo.member.mb_email)){

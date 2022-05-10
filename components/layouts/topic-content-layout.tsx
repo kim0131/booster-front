@@ -249,7 +249,6 @@ const TopicContentLayout = ({
         });
     }
   };
-
   const checkMbName = (writer: string, userName: string) => {
     return Boolean(writer == userName);
   };
