@@ -58,7 +58,7 @@ const Dropdown = ({
   width = "12rem",
   size = "large",
   menu,
-  isRight = true,
+  isRight = false,
   onClick,
 }: IPropsDropdown) => {
   return (
