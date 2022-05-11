@@ -73,8 +73,8 @@ const Style = {
     `,
     Title: styled.div`
       flex: 1 1 0%;
-      font-size: ${props => props.theme.fontSize.body1};
-      line-height: ${props => props.theme.lineHeight.body1};
+      font-size: ${props => props.theme.fontSize.body2};
+      line-height: ${props => props.theme.lineHeight.body2};
       margin-top: 0.5rem;
       overflow: hidden;
       text-overflow: ellipsis;

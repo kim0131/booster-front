@@ -78,8 +78,8 @@ const Style = {
             gap: 0.25rem;
           `,
           Title: styled.div`
-            font-size: ${props => props.theme.fontSize.body1};
-            line-height: ${props => props.theme.lineHeight.body1};
+            font-size: ${props => props.theme.fontSize.body2};
+            line-height: ${props => props.theme.lineHeight.body2};
             font-weight: 700;
             text-overflow: ellipsis;
             white-space: nowrap;
