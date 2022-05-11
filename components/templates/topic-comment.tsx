@@ -18,9 +18,10 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { LegacyRef, useEffect, useState } from "react";
 import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
 import { useDesktop } from "@core/hook/use-desktop";
+import { useRef } from "react";
 interface IPropsStyle {
   isReply: boolean;
 }
@@ -215,7 +216,7 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
   const [totalCount, setTotalCount] = useState(0);
   const [line, setLine] = useState(10);
   const isDesktop = useDesktop();
-
+  const commentContainerRef = useRef<any>();
   const [currentPage, setcurrentPage] = useState(1);
   const [commentdata, setCommentData] = useState({
     wr_content: "",
@@ -296,8 +297,13 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
     }
   };
   const onClickPagenation = (e: any) => {
+    const headerHeight: any = document.querySelector("header");
     const value = parseInt(e.currentTarget.textContent);
     setcurrentPage(value);
+    window.scrollTo({
+      top: commentContainerRef.current.offsetTop - headerHeight.offsetHeight,
+      behavior: "smooth",
+    });
   };
 
   const onClickMoveFront = () => {
@@ -419,7 +425,7 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
 
   return (
     <Style.Container>
-      <Style.Comment>
+      <Style.Comment ref={commentContainerRef}>
         {comments &&
           comments.map((comment: any, rn: number) => {
             return (
@@ -516,13 +522,19 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
                           </Body3>
                         </Style.List.Bottom.Badge>
                       )}
-
-                      <Style.List.Bottom.Badge
-                        onClick={() => onClickLinkButton(comment.idx)}
-                      >
-                        <IconComment size={16} color={theme.color.gray[500]} />
-                        <Body3 color={theme.color.gray[500]}>댓글달기</Body3>
-                      </Style.List.Bottom.Badge>
+                      {comment.wr_is_comment2 ? (
+                        ""
+                      ) : (
+                        <Style.List.Bottom.Badge
+                          onClick={() => onClickLinkButton(comment.idx)}
+                        >
+                          <IconComment
+                            size={16}
+                            color={theme.color.gray[500]}
+                          />
+                          <Body3 color={theme.color.gray[500]}>댓글달기</Body3>
+                        </Style.List.Bottom.Badge>
+                      )}
                     </Style.List.Bottom.Info>
                     <Body3 color={theme.color.gray[500]}>
                       {getCreateTime(comment.wr_create)}

@@ -160,6 +160,7 @@ const TopicContentLayout = ({
   const router = useRouter();
   const topicContent = data;
   const [likeCnt, setLikeCnt] = useState(0);
+  const [like, setLike] = useState(false)
   const { isDesktop } = useDesktop();
   const [bookmark, setBookMark] = useState(false);
 
@@ -167,6 +168,7 @@ const TopicContentLayout = ({
     if (topicContent) {
       setLikeCnt(topicContent.likeCnt);
       setBookMark(topicContent.bookmark ? true : false);
+      checkMeneberLike()
     }
   }, [topicContent]);
 
@@ -207,6 +209,7 @@ const TopicContentLayout = ({
               member_idx: parseInt(session?.user?.idx),
             })
             .then(() => {
+              setLike(false)
               setLikeCnt(likeCnt - 1);
             });
         } else {
@@ -215,6 +218,7 @@ const TopicContentLayout = ({
               member_idx: parseInt(session?.user?.idx),
             })
             .then(() => {
+              setLike(true)
               setLikeCnt(likeCnt + 1);
             });
         }
@@ -252,6 +256,17 @@ const TopicContentLayout = ({
   const checkMbName = (writer: string, userName: string) => {
     return Boolean(writer == userName);
   };
+  const checkMeneberLike = ()=>{
+    axios
+    .post(`/api2/topic/like/${id}`, {
+      member_idx: parseInt(session?.user?.idx),
+    })
+    .then(async res => {
+      const result = res.data.result.length;
+      setLike(Boolean(result))
+    })
+    .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
+  }
   return (
     <>
       {topicContent && (
@@ -305,8 +320,8 @@ const TopicContentLayout = ({
             </Style.Body.ImageContainer>
             <Style.Body.Button.Container>
               <Style.Body.Button.Wrapper>
-                <Button color="transparent" onClick={onClickLikeButton}>
-                  <IconLike />
+                <Button color={like ? "primary" : "transparent"} onClick={onClickLikeButton}>
+                <IconLike size={16} color={theme.color.blue[500]} />
                   {likeCnt}
                 </Button>
                 <Button color="transparent">

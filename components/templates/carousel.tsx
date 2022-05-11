@@ -129,7 +129,6 @@ interface IStateCarousel {
 const Carousel = () => {
   const { isDesktop } = useDesktop();
   const { mainBannerList } = useMainBanner();
-  console.log(mainBannerList);
 
   const [move, setMove] = useState(false);
   const [isHandled, setIsHandled] = useState(false);
