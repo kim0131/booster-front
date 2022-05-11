@@ -91,6 +91,9 @@ const Style = {
         justify-content: flex-end;
         background-position: right bottom;
       }
+      & > * {
+        cursor: pointer;
+      }
     `,
   },
   Pagination: {
@@ -250,81 +253,83 @@ const Carousel = () => {
   );
 
   return (
-    <>
-      {state.isLoading && (
-        <>
-          <Style.Container>
-            <Style.Viewport
-              currentPage={state.currentPage}
-              itemSize={isDesktop ? 664 : 332}
-              dragX={dragX}
-              transitionTime={state.transitionTime}
-              onMouseOver={() => setIsHandled(true)}
-              onMouseOut={() => setIsHandled(false)}
-            >
-              {state.pages?.map((item: ICarouselData, idx: number) => {
-                const itemIndex = getItemIndex(idx, state.pages?.length || 1);
-                return (
-                  <Style.Item.Container
-                    key={itemIndex}
-                    onMouseDown={handleTouchStart}
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
-                    onMouseMove={handleTouchMove}
-                    onMouseUp={handleMouseSwipe}
-                    onTouchEnd={handleMouseSwipe}
-                    onMouseLeave={handleMouseSwipe}
+    state.isLoading && (
+      <>
+        <Style.Container>
+          <Style.Viewport
+            currentPage={state.currentPage}
+            itemSize={isDesktop ? 664 : 332}
+            dragX={dragX}
+            transitionTime={state.transitionTime}
+            onMouseOver={() => setIsHandled(true)}
+            onMouseOut={() => setIsHandled(false)}
+          >
+            {state.pages?.map((item: ICarouselData, idx: number) => {
+              const itemIndex = getItemIndex(idx, state.pages?.length || 1);
+              return (
+                <Style.Item.Container
+                  key={itemIndex}
+                  onMouseDown={handleTouchStart}
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onMouseMove={handleTouchMove}
+                  onMouseUp={handleMouseSwipe}
+                  onTouchEnd={handleMouseSwipe}
+                  onMouseLeave={handleMouseSwipe}
+                >
+                  <Style.Item.Wrapper
+                    thumbnailColor={item.thumbnailColor}
+                    imageUrl={item.imageUrl}
                   >
-                    <Style.Item.Wrapper
-                      thumbnailColor={item.thumbnailColor}
-                      imageUrl={item.imageUrl}
+                    <Header3
+                      color={
+                        getContrast(item.thumbnailColor)
+                          ? theme.color.gray[900]
+                          : theme.color.white
+                      }
                     >
-                      <Header3
-                        color={
-                          getContrast(item.thumbnailColor)
-                            ? theme.color.gray[900]
-                            : theme.color.white
-                        }
-                      >
-                        {item.title}
-                      </Header3>
-                      <Body1
-                        color={
-                          getContrast(item.thumbnailColor)
-                            ? theme.color.gray[900]
-                            : theme.color.white
-                        }
-                      >
-                        {item.content}
-                      </Body1>
-                    </Style.Item.Wrapper>
-                  </Style.Item.Container>
-                );
-              })}
-            </Style.Viewport>
-            <Style.PrevButton onClick={() => !move && onItemMove(-1)}>
-              <Button size="large" isRounded>
-                <IconChevronLeft />
-              </Button>
-            </Style.PrevButton>
-            <Style.NextButton onClick={() => !move && onItemMove(1)}>
-              <Button size="large" isRounded>
-                <IconChevronRight size={40} />
-              </Button>
-            </Style.NextButton>
-          </Style.Container>
-          <Style.Pagination.Container>
-            {mainBannerList.map((item: ICarouselData, idx: number) => (
-              <Style.Pagination.Indicator
-                key={idx + 1}
-                isCurrent={idx + 1 === state.currentPage}
-                onClick={() => onItemMove(idx + 1 - state.currentPage)}
-              />
-            ))}
-          </Style.Pagination.Container>
-        </>
-      )}
-    </>
+                      {item.title}
+                    </Header3>
+                    <Body1
+                      color={
+                        getContrast(item.thumbnailColor)
+                          ? theme.color.gray[900]
+                          : theme.color.white
+                      }
+                    >
+                      {item.content}
+                    </Body1>
+                  </Style.Item.Wrapper>
+                </Style.Item.Container>
+              );
+            })}
+          </Style.Viewport>
+          <Style.PrevButton onClick={() => !move && onItemMove(-1)}>
+            <Button size="large" isRounded>
+              <IconChevronLeft />
+            </Button>
+          </Style.PrevButton>
+          <Style.NextButton onClick={() => !move && onItemMove(1)}>
+            <Button size="large" isRounded>
+              <IconChevronRight size={40} />
+            </Button>
+          </Style.NextButton>
+        </Style.Container>
+        <Style.Pagination.Container>
+          {mainBannerList.map((item: ICarouselData, idx: number) => (
+            <Style.Pagination.Indicator
+              key={idx + 1}
+              isCurrent={
+                state.currentPage === idx + 1 ||
+                state.currentPage === idx + mainBannerList.length + 1 ||
+                state.currentPage === idx - mainBannerList.length + 1
+              }
+              onClick={() => onItemMove(idx + 1 - state.currentPage)}
+            />
+          ))}
+        </Style.Pagination.Container>
+      </>
+    )
   );
 };
 
