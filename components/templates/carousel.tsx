@@ -230,70 +230,70 @@ const Carousel = () => {
 
   return (
     <>
-      state.isLoading && (
-      <>
-        <Style.Container>
-          <Style.Viewport
-            currentPage={state.currentPage}
-            itemSize={isDesktop ? 664 : 332}
-            dragX={dragX}
-            transitionTime={state.transitionTime}
-            onMouseOver={() => setIsHandled(true)}
-            onMouseOut={() => setIsHandled(false)}
-          >
-            {state.pages?.map((item: ICarouselData, idx: number) => {
-              const itemIndex = getItemIndex(idx, state.pages?.length || 1);
-              return (
-                <Style.Item.Container
-                  key={itemIndex}
-                  onMouseDown={handleTouchStart}
-                  onTouchStart={handleTouchStart}
-                  onTouchMove={handleTouchMove}
-                  onMouseMove={handleTouchMove}
-                  onMouseUp={handleMouseSwipe}
-                  onTouchEnd={handleMouseSwipe}
-                  onMouseLeave={handleMouseSwipe}
-                >
-                  <Style.Item.Wrapper
-                    thumbnailColor={item.thumbnailColor}
-                    imageUrl={item.imageUrl}
+      {state.isLoading && (
+        <>
+          <Style.Container>
+            <Style.Viewport
+              currentPage={state.currentPage}
+              itemSize={isDesktop ? 664 : 332}
+              dragX={dragX}
+              transitionTime={state.transitionTime}
+              onMouseOver={() => setIsHandled(true)}
+              onMouseOut={() => setIsHandled(false)}
+            >
+              {state.pages?.map((item: ICarouselData, idx: number) => {
+                const itemIndex = getItemIndex(idx, state.pages?.length || 1);
+                return (
+                  <Style.Item.Container
+                    key={itemIndex}
+                    onMouseDown={handleTouchStart}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onMouseMove={handleTouchMove}
+                    onMouseUp={handleMouseSwipe}
+                    onTouchEnd={handleMouseSwipe}
+                    onMouseLeave={handleMouseSwipe}
                   >
-                    <Header3
-                      color={
-                        getContrast(item.thumbnailColor)
-                          ? theme.color.gray[900]
-                          : theme.color.white
-                      }
+                    <Style.Item.Wrapper
+                      thumbnailColor={item.thumbnailColor}
+                      imageUrl={item.imageUrl}
                     >
-                      {item.title}
-                    </Header3>
-                    <Body1
-                      color={
-                        getContrast(item.thumbnailColor)
-                          ? theme.color.gray[900]
-                          : theme.color.white
-                      }
-                    >
-                      {item.content}
-                    </Body1>
-                  </Style.Item.Wrapper>
-                </Style.Item.Container>
-              );
-            })}
-          </Style.Viewport>
-          <Style.PrevButton onClick={() => !move && onItemMove(-1)}>
-            <Button size="large" isRounded>
-              <IconChevronLeft />
-            </Button>
-          </Style.PrevButton>
-          <Style.NextButton onClick={() => !move && onItemMove(1)}>
-            <Button size="large" isRounded>
-              <IconChevronRight size={40} />
-            </Button>
-          </Style.NextButton>
-        </Style.Container>
-      </>
-      )
+                      <Header3
+                        color={
+                          getContrast(item.thumbnailColor)
+                            ? theme.color.gray[900]
+                            : theme.color.white
+                        }
+                      >
+                        {item.title}
+                      </Header3>
+                      <Body1
+                        color={
+                          getContrast(item.thumbnailColor)
+                            ? theme.color.gray[900]
+                            : theme.color.white
+                        }
+                      >
+                        {item.content}
+                      </Body1>
+                    </Style.Item.Wrapper>
+                  </Style.Item.Container>
+                );
+              })}
+            </Style.Viewport>
+            <Style.PrevButton onClick={() => !move && onItemMove(-1)}>
+              <Button size="large" isRounded>
+                <IconChevronLeft />
+              </Button>
+            </Style.PrevButton>
+            <Style.NextButton onClick={() => !move && onItemMove(1)}>
+              <Button size="large" isRounded>
+                <IconChevronRight size={40} />
+              </Button>
+            </Style.NextButton>
+          </Style.Container>
+        </>
+      )}
     </>
   );
 };
