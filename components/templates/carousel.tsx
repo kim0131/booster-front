@@ -229,7 +229,8 @@ const Carousel = () => {
   );
 
   return (
-    state.isLoading && (
+    <>
+      state.isLoading && (
       <>
         <Style.Container>
           <Style.Viewport
@@ -292,7 +293,8 @@ const Carousel = () => {
           </Style.NextButton>
         </Style.Container>
       </>
-    )
+      )
+    </>
   );
 };
 
