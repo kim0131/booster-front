@@ -4,7 +4,7 @@ import HomeLayout from "@components/layouts/home-layout";
 import BestWidget from "@components/templates/best-widget";
 import { useHotTopic } from "@core/hook/use-hot-topic";
 import { useCategoryListHome } from "@core/hook/use-category-list";
-import MainCarousel from "@components/templates/carousel";
+// import MainCarousel from "@components/templates/carousel";
 import { BestWidgetskelton } from "@components/layouts/skeleton/home-skeleton";
 import { useEffect } from "react";
 
@@ -16,7 +16,7 @@ const Home: NextPage = () => {
   });
   return (
     <>
-      <MainCarousel />
+      <Carousel />
       <HomeLayout>
         {hotTopic && (
           <BestWidget title="인기 토픽" url="hot" col={2} datas={hotTopic} />
