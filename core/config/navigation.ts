@@ -6,7 +6,11 @@ export const globalNavigation = [
 
 export const globalNavigationMore = [
   { id: 0, content: "공지사항", url: "/" },
-  { id: 1, content: "도움센터", url: "/" },
+  { id: 1, content: "부스터 소개", url: "/" },
+  { id: 2, content: "이용약관", url: "/" },
+  { id: 3, content: "개인정보처리방침", url: "/" },
+  { id: 4, content: "도움센터", url: "/" },
+  { id: 5, content: "채용", url: "/" },
 ];
 
 export const globalNavigationMy = [
@@ -21,12 +25,4 @@ export const accountsNavigation = [
   { id: 1, content: "회원가입", url: "/accounts/signup" },
   { id: 2, content: "아이디 찾기", url: "/accounts/find-id" },
   { id: 3, content: "비밀번호 초기화", url: "/accounts/reset-password" },
-];
-
-export const footerNavigation = [
-  { id: 0, content: "커뮤니티소개", url: "/" },
-  { id: 1, content: "이용약관", url: "/" },
-  { id: 2, content: "개인정보처리방침", url: "/" },
-  { id: 3, content: "도움센터", url: "/" },
-  { id: 4, content: "채용", url: "/" },
 ];

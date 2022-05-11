@@ -281,7 +281,11 @@ const Header = () => {
             ))}
             <Style.NavMore>
               더보기
-              <Dropdown menu={globalNavigationMore} onClick={() => {}} />
+              <Dropdown
+                // isRight
+                menu={globalNavigationMore}
+                onClick={() => {}}
+              />
             </Style.NavMore>
           </Style.Nav>
         )}
@@ -315,11 +319,7 @@ const Header = () => {
               <Button variants="ghost" size="small">
                 <IconProfile />
               </Button>
-              <Dropdown
-                menu={globalNavigationMy}
-                isRight
-                onClick={onClickLink}
-              />
+              <Dropdown menu={globalNavigationMy} onClick={onClickLink} />
             </Style.ProfileWrapper>
           ) : (
             // )
@@ -378,8 +378,11 @@ const Header = () => {
                 <IconClose />
               </Button>
             </Style.MobileMenu.Header>
-            <Style.MobileMenu.Menu>공지사항</Style.MobileMenu.Menu>
-            <Style.MobileMenu.Menu>고객센터</Style.MobileMenu.Menu>
+            {globalNavigationMore.map(nav => (
+              <Style.MobileMenu.Menu key={nav.id}>
+                {nav.content}
+              </Style.MobileMenu.Menu>
+            ))}
             {/* <Style.MobileMenu.Divider /> */}
           </Style.MobileMenu.Container>
         </Portal>

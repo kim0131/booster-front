@@ -1,5 +1,5 @@
 import { companyInfo } from "@core/config/company-info";
-import { footerNavigation } from "@core/config/navigation";
+import { globalNavigationMore } from "@core/config/navigation";
 import styled from "@emotion/styled";
 
 const Style = {
@@ -55,7 +55,7 @@ const Footer = () => {
       <Style.Container>
         <Style.Wrapper>
           <Style.Nav>
-            {footerNavigation.map(nav => (
+            {globalNavigationMore.map(nav => (
               <Style.NavItem key={nav.id}>{nav.content}</Style.NavItem>
             ))}
           </Style.Nav>
