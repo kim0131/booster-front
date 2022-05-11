@@ -23,14 +23,14 @@ const mainBannerListFetcher = async () => {
       homeList.map((item: any, idx: number) => {
         result.push({
           id: item.idx,
-          image_url: homeImageUrl + item.image_url,
+          imageUrl: homeImageUrl + item.image_url,
           posting_date: item.posting_date,
           posting_exitdate: item.posting_exitdate,
           title: item.title,
           url: item.url,
           priority: item.priority,
           content: item.subtitle,
-          thumbnailcolor: item.background_color,
+          thumbnailColor: item.background_color,
           target: item.open_tool,
         });
       });
