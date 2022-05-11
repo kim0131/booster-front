@@ -19,6 +19,7 @@ interface IStyle {
   transitionTime?: number;
   dragX?: number;
   imageUrl?: string;
+  isCurrent?: boolean;
 }
 
 const Style = {
@@ -79,6 +80,7 @@ const Style = {
       display: flex;
       flex-direction: column;
       padding: 1.5rem;
+      cursor: pointer;
       border-radius: ${props => props.theme.rounded.lg};
       background-color: ${props => props.thumbnailColor};
       background-image: ${props => `url(${props.imageUrl})`};
@@ -89,6 +91,25 @@ const Style = {
         justify-content: flex-end;
         background-position: right bottom;
       }
+    `,
+  },
+  Pagination: {
+    Container: styled.div`
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5rem;
+      gap: 0.5rem;
+      padding: 0 1.25rem;
+    `,
+    Indicator: styled.div<IStyle>`
+      width: 2.5rem;
+      height: 0.25rem;
+      cursor: pointer;
+      background-color: ${props =>
+        props.isCurrent
+          ? props.theme.color.blue[600]
+          : props.theme.color.gray[300]};
+      border-radius: ${props => props.theme.rounded.full};
     `,
   },
 };
@@ -291,6 +312,15 @@ const Carousel = () => {
             </Button>
           </Style.NextButton>
         </Style.Container>
+        <Style.Pagination.Container>
+          {mainBannerList.map((item: ICarouselData, idx: number) => (
+            <Style.Pagination.Indicator
+              key={idx + 1}
+              isCurrent={idx + 1 === state.currentPage}
+              onClick={() => onItemMove(idx + 1 - state.currentPage)}
+            />
+          ))}
+        </Style.Pagination.Container>
       </>
     )
   );
