@@ -1,34 +1,106 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { motion, useMotionValue } from "framer-motion";
 import theme from "@components/styles/theme";
 import useMainBanner from "@core/hook/use-main-banner";
 import { ICarouselData } from "@core/interfaces/carousel";
+import { useDesktop } from "@core/hook/use-desktop";
+import useInterval from "@core/hook/use-interval";
+import { Body1, Header3 } from "@components/elements/types";
+import Button from "@components/elements/button";
+import { IconChevronLeft, IconChevronRight } from "@components/icons";
 
-interface IStyleItem {
-  color: string;
-  isHide: boolean;
+const TRANSITION_TIME = 300;
+const TRANSITION_INTERVAL = 5000;
+
+interface IStyle {
+  currentPage?: number;
+  itemSize?: number;
+  thumbnailColor?: string;
+  transitionTime?: number;
+  dragX?: number;
+  imageUrl?: string;
 }
 
 const Style = {
   Container: styled.div`
     overflow-x: hidden;
+    position: relative;
   `,
-  Viewport: styled.div`
+  PrevButton: styled.div`
+    position: absolute;
+    width: 3rem;
+    height: 3rem;
+    left: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    ${props => props.theme.screen.md} {
+      left: 3rem;
+    }
+  `,
+  NextButton: styled.div`
+    position: absolute;
+    width: 3rem;
+    height: 3rem;
+    right: 1.5rem;
+    ${props => props.theme.screen.md} {
+      right: 3rem;
+    }
+    top: 50%;
+    transform: translateY(-50%);
+  `,
+
+  Viewport: styled.div<IStyle>`
     display: flex;
-    justify-content: center;
-    gap: 1.5rem;
+    transform: ${props =>
+      `translateX(calc(50% - ${props.itemSize}px * (1.5 + ${
+        props.currentPage
+      }) + ${props.dragX || 0}px))`};
+    transition-property: transform;
+    transition-duration: ${props => `${props.transitionTime}ms`};
   `,
-  Item: styled(motion.div)<IStyleItem>`
-    width: 40rem;
-    height: 20rem;
-    display: flex;
-    flex: none;
-    align-items: center;
-    justify-content: center;
-    background-color: ${props => props.color};
-    visibility: ${props => (props.isHide ? "hidden" : "visible")};
-  `,
+  Item: {
+    Container: styled.div<IStyle>`
+      width: 20rem;
+      height: 26.25rem;
+      flex: none;
+      padding: 0 0.375rem;
+      box-sizing: content-box;
+      margin-top: 1.5rem;
+
+      ${props => props.theme.screen.md} {
+        width: 40rem;
+        height: 20rem;
+        padding: 0 0.75rem;
+      }
+    `,
+    Wrapper: styled.div<IStyle>`
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+      border-radius: ${props => props.theme.rounded.lg};
+      background-color: ${props => props.thumbnailColor};
+      background-image: ${props => `url(${props.imageUrl})`};
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: bottom;
+      ${props => props.theme.screen.md} {
+        justify-content: flex-end;
+        background-position: right bottom;
+      }
+    `,
+  },
+};
+
+const getItemIndex = (index: number, length: number) => {
+  index -= 2;
+  if (index < 0) {
+    index += length;
+  } else if (index >= length) {
+    index -= length;
+  }
+  return index + 1;
 };
 
 const getContrast = (hexColor: string) => {
@@ -39,77 +111,189 @@ const getContrast = (hexColor: string) => {
   return calcContrast >= 128 ? true : false;
 };
 
+const getClientX = (event: any) => {
+  return event._reactName == "onTouchStart"
+    ? event.touches[0].clientX
+    : event._reactName == "onTouchMove" || event._reactName == "onTouchEnd"
+    ? event.changedTouches[0].clientX
+    : event.clientX;
+};
+
+interface IStateCarousel {
+  pages?: ICarouselData[];
+  currentPage: number;
+  isLoading: boolean;
+  transitionTime: number;
+}
+
 const Carousel = () => {
+  const { isDesktop } = useDesktop();
   const { mainBannerList } = useMainBanner();
-  const [state, setState] = useState([
-    "#33a",
-    "#8c9",
-    "#f3e074",
-    "#dddeee",
-    "#f35293",
-  ]);
   console.log(mainBannerList);
-  const x = useMotionValue(0);
 
-  const onPrev = () => {
-    const first = state.pop()!;
-    console.log(state, first);
-    setState([first, ...state]);
+  const [move, setMove] = useState(false);
+  const [isHandled, setIsHandled] = useState(false);
+  const [originX, setOriginX] = useState(0);
+  const [dragX, setDragX] = useState(0);
+  const [state, setState] = useState<IStateCarousel>({
+    pages: [],
+    currentPage: 1,
+    isLoading: false,
+    transitionTime: TRANSITION_TIME,
+  });
+
+  useEffect(() => {
+    if (mainBannerList) {
+      let addedFront = [];
+      let addedLast = [];
+      var index = 0;
+      while (index < 2) {
+        addedLast.push(mainBannerList[index % mainBannerList.length]);
+        addedFront.unshift(
+          mainBannerList[
+            mainBannerList.length - 1 - (index % mainBannerList.length)
+          ],
+        );
+        index++;
+      }
+      console.log([...addedFront, ...mainBannerList, ...addedLast]);
+      setState({
+        ...state,
+        pages: [...addedFront, ...mainBannerList, ...addedLast],
+        currentPage: 1,
+        isLoading: true,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mainBannerList]);
+
+  const onItemMove = (amount: number) => {
+    setMove(true);
+    setState({
+      ...state,
+      currentPage: state.currentPage + amount,
+      transitionTime: TRANSITION_TIME,
+    });
+    if (state.currentPage + amount > mainBannerList.length) {
+      setTimeout(() => {
+        setState({ ...state, currentPage: 1, transitionTime: 0 });
+      }, TRANSITION_TIME);
+    }
+    if (state.currentPage + amount <= 0) {
+      setTimeout(() => {
+        setState({
+          ...state,
+          currentPage: mainBannerList.length,
+          transitionTime: 0,
+        });
+      }, TRANSITION_TIME);
+    }
+    setTimeout(() => {
+      setMove(false);
+    }, TRANSITION_TIME);
   };
 
-  const onNext = () => {
-    const first = state.shift()!;
-    state.push(first);
-    setState([...state]);
+  const handleTouchStart = (
+    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>,
+  ) => {
+    setOriginX(getClientX(e));
   };
 
-  const handleDragEnd = (e: any, { offset }: any) => {
-    console.log(offset.x);
-    if (offset.x >= 128) {
-      onPrev();
-      return;
-    } else if (offset.x <= -128) {
-      onNext();
-      return;
+  const handleTouchMove = (
+    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>,
+  ) => {
+    if (originX) {
+      setDragX(getClientX(e) - originX);
     }
   };
 
+  const handleMouseSwipe = (
+    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>,
+  ) => {
+    if (dragX) {
+      const currentTouchX = getClientX(e);
+      if (originX > currentTouchX + 100) {
+        onItemMove(1);
+      } else if (originX < currentTouchX - 100) {
+        onItemMove(-1);
+      }
+      setDragX(0);
+    }
+    setOriginX(0);
+  };
+
+  useInterval(
+    () => {
+      onItemMove(1);
+    },
+    !move && !isHandled ? TRANSITION_INTERVAL : null,
+  );
+
   return (
-    <Style.Container>
-      <Style.Viewport>
-        {state.map((item, idx) => (
-          <Style.Item
-            key={item}
-            color={item}
-            layout
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.25}
-            onDragEnd={handleDragEnd}
-            style={{ x }}
-            isHide={idx === 0 || idx + 1 === state.length}
+    state.isLoading && (
+      <>
+        <Style.Container>
+          <Style.Viewport
+            currentPage={state.currentPage}
+            itemSize={isDesktop ? 664 : 332}
+            dragX={dragX}
+            transitionTime={state.transitionTime}
+            onMouseOver={() => setIsHandled(true)}
+            onMouseOut={() => setIsHandled(false)}
           >
-            {item} -{idx + 1}
-          </Style.Item>
-        ))}
-      </Style.Viewport>
-    </Style.Container>
-    // <Style.Container>
-    //   <StyledSlider {...settings}>
-    //     {mainBannerList &&
-    //       mainBannerList.map((data: any) => (
-    //         <Item
-    //           id={data.id}
-    //           key={data.id}
-    //           thumbnailcolor={data.thumbnailcolor}
-    //           title={data.title}
-    //           content={data.content}
-    //           url={data.image_url}
-    //           // onClick={(e: any) => onClickRouter(e, data)}
-    //         />
-    //       ))}
-    //   </StyledSlider>
-    // </Style.Container>
+            {state.pages?.map((item: ICarouselData, idx: number) => {
+              const itemIndex = getItemIndex(idx, state.pages?.length || 1);
+              return (
+                <Style.Item.Container
+                  key={itemIndex}
+                  onMouseDown={handleTouchStart}
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onMouseMove={handleTouchMove}
+                  onMouseUp={handleMouseSwipe}
+                  onTouchEnd={handleMouseSwipe}
+                  onMouseLeave={handleMouseSwipe}
+                >
+                  <Style.Item.Wrapper
+                    thumbnailColor={item.thumbnailColor}
+                    imageUrl={item.imageUrl}
+                  >
+                    <Header3
+                      color={
+                        getContrast(item.thumbnailColor)
+                          ? theme.color.gray[900]
+                          : theme.color.white
+                      }
+                    >
+                      {item.title}
+                    </Header3>
+                    <Body1
+                      color={
+                        getContrast(item.thumbnailColor)
+                          ? theme.color.gray[900]
+                          : theme.color.white
+                      }
+                    >
+                      {item.content}
+                    </Body1>
+                  </Style.Item.Wrapper>
+                </Style.Item.Container>
+              );
+            })}
+          </Style.Viewport>
+          <Style.PrevButton onClick={() => !move && onItemMove(-1)}>
+            <Button size="large" isRounded>
+              <IconChevronLeft />
+            </Button>
+          </Style.PrevButton>
+          <Style.NextButton onClick={() => !move && onItemMove(1)}>
+            <Button size="large" isRounded>
+              <IconChevronRight size={40} />
+            </Button>
+          </Style.NextButton>
+        </Style.Container>
+      </>
+    )
   );
 };
 
