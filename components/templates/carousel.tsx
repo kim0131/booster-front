@@ -4,6 +4,7 @@ import { motion, useMotionValue } from "framer-motion";
 import theme from "@components/styles/theme";
 import useMainBanner from "@core/hook/use-main-banner";
 import { ICarouselData } from "@core/interfaces/carousel";
+import { useEffect } from "react";
 
 interface IStyleItem {
   color: string;
@@ -48,7 +49,11 @@ const Carousel = () => {
     "#dddeee",
     "#f35293",
   ]);
-  console.log(mainBannerList);
+
+  useEffect(() => {
+    autoPage();
+  }, []);
+
   const x = useMotionValue(0);
 
   const onPrev = () => {
@@ -64,7 +69,6 @@ const Carousel = () => {
   };
 
   const handleDragEnd = (e: any, { offset }: any) => {
-    console.log(offset.x);
     if (offset.x >= 128) {
       onPrev();
       return;
@@ -72,6 +76,13 @@ const Carousel = () => {
       onNext();
       return;
     }
+  };
+
+  const autoPage = () => {
+    onNext();
+    setTimeout(() => {
+      autoPage();
+    }, 3000);
   };
 
   return (
