@@ -166,6 +166,10 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
   }, [category]);
   const sliceTopicList = () => {
     const result = datas.slice((page - 1) * line, page * line);
+    for(const resultContent of result){
+      resultContent.content = resultContent.content.replace(/(<([^>]+)>)/ig, "");
+    }
+    console.log(result);
     setData(result);
   };
 
