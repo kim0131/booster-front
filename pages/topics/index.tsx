@@ -31,6 +31,7 @@ const Topics: NextPage<IPropsTopics> = () => {
   const { topicListFilter, isTopicListValidating } =
     useTopicListFilter(category);
   const onClickRouter = (param: any) => {
+    if (!param.idx) return;
     if (status != "authenticated") {
       if (checkAuth()) {
         return router.push("/accounts");
