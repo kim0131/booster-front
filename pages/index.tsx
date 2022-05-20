@@ -1,12 +1,12 @@
 import type { NextPage } from "next";
 import Carousel from "@components/templates/carousel";
 import HomeLayout from "@components/layouts/home-layout";
-import BestWidget from "@components/templates/best-widget";
+import BoardWidget from "@components/templates/board-widget";
 import { useHotTopic } from "@core/hook/use-hot-topic";
 import { useCategoryListHome } from "@core/hook/use-category-list";
-// import MainCarousel from "@components/templates/carousel";
-import { BestWidgetskelton } from "@components/layouts/skeleton/home-skeleton";
 import { useEffect } from "react";
+import { HomeSkeletonBoardWidgetLayout } from "@components/layouts/skeleton/home-skeleton";
+import Banner from "@components/templates/banner";
 
 const Home: NextPage = () => {
   const { hotTopic } = useHotTopic();
@@ -15,16 +15,19 @@ const Home: NextPage = () => {
     localStorage.removeItem("category");
   });
   return (
-    <>
-      <Carousel />
-      <HomeLayout>
-        {hotTopic && (
-          <BestWidget title="인기 토픽" url="hot" col={2} datas={hotTopic} />
-        )}
-        {categoryListHome &&
-          categoryListHome.map((data: any) => {
+    <HomeLayout carousel={<Carousel />} banner={<Banner />}>
+      {categoryListHome && hotTopic ? (
+        <>
+          <BoardWidget
+            title="인기 토픽"
+            url="hot"
+            col={2}
+            datas={hotTopic}
+            isHotTopic
+          />
+          {categoryListHome.map((data: any) => {
             return (
-              <BestWidget
+              <BoardWidget
                 title={data.bo_subject}
                 col={1}
                 url={data.bo_table}
@@ -33,9 +36,11 @@ const Home: NextPage = () => {
               />
             );
           })}
-        {!categoryListHome && <BestWidgetskelton />}
-      </HomeLayout>
-    </>
+        </>
+      ) : (
+        <HomeSkeletonBoardWidgetLayout />
+      )}
+    </HomeLayout>
   );
 };
 
