@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { useState } from "react";
 import axios from "axios";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import Button from "@components/elements/button";
 import TextField from "@components/elements/text-field";
 import { IAccountsData } from "@core/interfaces/accounts";
@@ -37,7 +37,6 @@ const Signup: NextPage = () => {
       mb_nick: "",
       mb_ph: "",
       mb_pw_token: "",
-
       mb_business_num: 0,
     },
     invalid: {
@@ -49,7 +48,6 @@ const Signup: NextPage = () => {
       mb_nick: "",
       mb_ph: "",
       mb_pw_token: "",
-
       mb_business_num: "",
     },
     page: 1,
@@ -235,58 +233,43 @@ const Signup: NextPage = () => {
         </>
       }
       section1={
-        state.page === 1 ? (
-          !mb_ph ? (
-            <>
-              {" "}
-              <Button
-                variants="solid"
-                color="primary"
-                size="large"
-                onClick={onClickCertification}
-              >
-                휴대폰 인증
-              </Button>
-            </>
-          ) : (
-            <>
-              <Body2>아이디 및 비밀번호 정보</Body2>
-              <TextField
-                name="mb_id"
-                placeholder="아이디를 입력하세요."
-                size="large"
-                value={state.data.mb_id}
-                maxLength={50}
-                onChange={onChangeSignup}
-                onFocus={onFocusSignup}
-                error={state.invalid.mb_id}
-              />
-              <TextField
-                name="mb_pw"
-                placeholder="비밀번호를 입력하세요"
-                size="large"
-                value={state.data.mb_pw}
-                maxLength={50}
-                onChange={onChangeSignup}
-                onFocus={onFocusSignup}
-                error={state.invalid.mb_pw}
-                type="password"
-              />
-              <TextField
-                name="mb_pw2"
-                placeholder="비밀번호 확인"
-                size="large"
-                value={state.data.mb_pw2}
-                maxLength={50}
-                onChange={onChangeSignup}
-                onFocus={onFocusSignup}
-                error={state.invalid.mb_pw2}
-                type="password"
-              />
-            </>
-          )
-        ) : (
-          ""
+        state.page === 1 &&
+        mb_ph && (
+          <>
+            <Body2>아이디 및 비밀번호 정보</Body2>
+            <TextField
+              name="mb_id"
+              placeholder="아이디를 입력하세요."
+              size="large"
+              value={state.data.mb_id}
+              maxLength={50}
+              onChange={onChangeSignup}
+              onFocus={onFocusSignup}
+              error={state.invalid.mb_id}
+            />
+            <TextField
+              name="mb_pw"
+              placeholder="비밀번호를 입력하세요"
+              size="large"
+              value={state.data.mb_pw}
+              maxLength={50}
+              onChange={onChangeSignup}
+              onFocus={onFocusSignup}
+              error={state.invalid.mb_pw}
+              type="password"
+            />
+            <TextField
+              name="mb_pw2"
+              placeholder="비밀번호 확인"
+              size="large"
+              value={state.data.mb_pw2}
+              maxLength={50}
+              onChange={onChangeSignup}
+              onFocus={onFocusSignup}
+              error={state.invalid.mb_pw2}
+              type="password"
+            />
+          </>
         )
       }
       section2={
@@ -343,7 +326,14 @@ const Signup: NextPage = () => {
         <>
           {state.page == 1 ? (
             !mb_ph ? (
-              <></>
+              <Button
+                variants="solid"
+                color="primary"
+                size="large"
+                onClick={onClickCertification}
+              >
+                휴대폰 인증
+              </Button>
             ) : (
               <Button
                 variants="solid"
