@@ -417,3 +417,12 @@ export const HomeSkeletonBoardWidgetLayout = () => {
     </>
   );
 };
+
+export const HomeSkeletonBannerLayout = () => {
+  return (
+    <>
+      <Skeleton width="100%" height="6rem" />
+      <Skeleton width="100%" height="6rem" />
+    </>
+  );
+};

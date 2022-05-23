@@ -23,6 +23,7 @@ const Style = {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    background-color: #fff;
     ${props => props.theme.screen.md} {
       grid-column: ${props => `span ${props.col} / span ${props.col}`};
     }
@@ -50,7 +51,7 @@ const Style = {
     Wrapper: styled.div`
       display: flex;
       flex-direction: column;
-      padding: 1.5rem 1.25rem;
+      padding: 0.75rem 1.25rem;
       box-shadow: ${props => props.theme.shadow.inset.both};
       & ~ & {
         box-shadow: ${props => props.theme.shadow.inset.bottom};

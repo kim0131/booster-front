@@ -104,8 +104,8 @@ const Style = {
       }
     `,
     Title: styled.div<IStyle>`
-      font-size: ${props => props.theme.fontSize.header4};
-      line-height: ${props => props.theme.lineHeight.header4};
+      font-size: ${props => props.theme.fontSize.header5};
+      line-height: ${props => props.theme.lineHeight.header5};
       ${props => props.theme.screen.md} {
         font-size: ${props => props.theme.fontSize.header3};
         line-height: ${props => props.theme.lineHeight.header3};
@@ -177,7 +177,6 @@ interface IStateCarousel {
 const Carousel = () => {
   const { isDesktop } = useDesktop();
   const { mainBannerList } = useMainBanner();
-
   const [move, setMove] = useState(false);
   const [isHandled, setIsHandled] = useState(false);
   const [originX, setOriginX] = useState(0);

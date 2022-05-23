@@ -1,3 +1,4 @@
+import { HomeSkeletonBannerLayout } from "@components/layouts/skeleton/home-skeleton";
 import useAdsList from "@core/hook/use-ads";
 import styled from "@emotion/styled";
 import React from "react";
@@ -38,7 +39,7 @@ const Banner = () => {
       />
     ))
   ) : (
-    <></>
+    <HomeSkeletonBannerLayout />
   );
 };
 

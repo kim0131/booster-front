@@ -268,8 +268,7 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
       setComments(result);
     }
   };
-  const onClickLinkButton = async (id: any
-  ) => {
+  const onClickLinkButton = async (id: any) => {
     const idx: any = id;
     if (idx == replydata.wr_parent2) {
       setReply({ ...replydata, wr_parent2: 0, wr_content: "" });
@@ -441,24 +440,24 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
                           menu={
                             !comment.wr_is_comment2
                               ? [
-                                {
-                                  id: 0,
-                                  content: "댓글달기",
-                                  url: comment.idx,
-                                },
-                                {
-                                  id: 1,
-                                  content: "삭제하기",
-                                  url: comment.idx,
-                                },
-                              ]
+                                  {
+                                    id: 0,
+                                    content: "댓글달기",
+                                    url: comment.idx,
+                                  },
+                                  {
+                                    id: 1,
+                                    content: "삭제하기",
+                                    url: comment.idx,
+                                  },
+                                ]
                               : [
-                                {
-                                  id: 1,
-                                  content: "삭제하기",
-                                  url: comment.idx,
-                                },
-                              ]
+                                  {
+                                    id: 1,
+                                    content: "삭제하기",
+                                    url: comment.idx,
+                                  },
+                                ]
                           }
                           onClick={onClickLink}
                           isRight={isDesktop ? true : false}
@@ -519,9 +518,7 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
                         onClick={() => onClickLinkButton(comment.idx)}
                       >
                         <IconComment size={16} color={theme.color.gray[500]} />
-                        <Body3 color={theme.color.gray[500]}>
-                          댓글달기
-                        </Body3>
+                        <Body3 color={theme.color.gray[500]}>댓글달기</Body3>
                       </Style.List.Bottom.Badge>
                     </Style.List.Bottom.Info>
                     <Body3 color={theme.color.gray[500]}>
@@ -531,7 +528,7 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
                 </Style.List.Container>
 
                 {replydata.wr_parent2 == comment.idx &&
-                  !comment.wr_is_comment2 ? (
+                !comment.wr_is_comment2 ? (
                   <Style.AddComment.Container>
                     <Style.AddComment.TextArea
                       rows={3}
@@ -573,7 +570,7 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
         MoveEnd={onClickMoveEnd}
       />
       <Style.AddComment.Container>
-      <Header5>{commentsList && commentsList.length}개의 댓글</Header5>
+        <Header5>{commentsList && commentsList.length}개의 댓글</Header5>
         <Style.AddComment.TextArea
           rows={3}
           name={"wr_content"}
