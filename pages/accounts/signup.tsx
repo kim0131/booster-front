@@ -56,10 +56,6 @@ const Signup: NextPage = () => {
   const onChangeSignup = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.currentTarget;
 
-    if (name == "mb_pw") {
-      value = value.toLowerCase();
-    }
-
     setState({
       ...state,
       data: {
@@ -119,6 +115,8 @@ const Signup: NextPage = () => {
       setState({ ...state, page: state.page + 1 });
     }
   };
+
+  console.log(state.data.mb_pw, state.data.mb_pw2);
 
   const onClickConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
