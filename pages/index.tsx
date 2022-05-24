@@ -16,11 +16,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     localStorage.removeItem("category");
   });
-  const test = async () => {
-    await axios.post("/api3/test").then(res => {
-      console.log(res);
-    });
-  };
+
   return (
     <HomeLayout carousel={<Carousel />} banner={<Banner />}>
       {categoryListHome && hotTopic ? (
@@ -47,7 +43,6 @@ const Home: NextPage = () => {
       ) : (
         <HomeSkeletonBoardWidgetLayout />
       )}
-      <Button onClick={test} />
     </HomeLayout>
   );
 };
