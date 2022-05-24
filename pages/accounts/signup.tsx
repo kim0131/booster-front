@@ -81,17 +81,10 @@ const Signup: NextPage = () => {
   const onChangeSignup = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.currentTarget;
 
-<<<<<<< HEAD
-    if (name == "mb_pw") {
-      value = value.toLowerCase();
-    }
-
     const str = certification?.toString() as String;
     var result = str.replace(" ", "+");
     let mb_name = decode(result as string)[0];
     let mb_ph = decode(result as string)[1];
-=======
->>>>>>> fcfca153d57880d3e741e4e18042f5f10fda32c2
     setState({
       ...state,
       data: {
