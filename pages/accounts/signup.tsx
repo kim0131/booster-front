@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Button from "@components/elements/button";
@@ -8,6 +9,7 @@ import { IAccountsData } from "@core/interfaces/accounts";
 import AccountsLayout from "@components/layouts/accounts-layout";
 import { Body1, Body2, Header4 } from "@components/elements/types";
 import { accountsDescription } from "@core/config/description";
+var CryptoJS = require("crypto-js");
 import {
   mb_email_vaildate,
   mb_id_vaildate,
@@ -26,7 +28,8 @@ interface IStateSignup {
 
 const Signup: NextPage = () => {
   const router = useRouter();
-  const { ph: mb_ph, name: mb_name } = router.query;
+  const { certification: certification } = router.query;
+
   const [state, setState] = useState<IStateSignup>({
     data: {
       mb_id: "",
@@ -53,6 +56,28 @@ const Signup: NextPage = () => {
     page: 1,
   });
 
+  useEffect(() => {
+    if (certification) {
+      const str = certification?.toString() as String;
+      var result = str.replace(" ", "+");
+      if (!Boolean(decode(result)[0])) {
+        alert("인증되지 않는 정보입니다.");
+        router.push("/accounts");
+      }
+    }
+  }, [router]);
+
+  const decode = (ciphertext: string) => {
+    var bytes = CryptoJS.AES.decrypt(
+      ciphertext.toString(),
+      process.env.CHECK_KEY,
+    ).toString(CryptoJS.enc.Utf8);
+
+    let info = bytes.replace(`"`, "").replace(`"`, ``).split(";");
+
+    return info;
+  };
+
   const onChangeSignup = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.currentTarget;
 
@@ -60,6 +85,10 @@ const Signup: NextPage = () => {
       value = value.toLowerCase();
     }
 
+    const str = certification?.toString() as String;
+    var result = str.replace(" ", "+");
+    let mb_name = decode(result as string)[0];
+    let mb_ph = decode(result as string)[1];
     setState({
       ...state,
       data: {
@@ -205,6 +234,7 @@ const Signup: NextPage = () => {
 
   const onClickCertification = () => {
     axios.get("/api3/checkplus_main").then(res => {
+      localStorage.setItem("key", "value");
       const form: HTMLFormElement | null | any =
         document.querySelector("#form_chk");
       window.name = "parent";
@@ -234,7 +264,7 @@ const Signup: NextPage = () => {
       }
       section1={
         state.page === 1 &&
-        mb_ph && (
+        certification && (
           <>
             <Body2>아이디 및 비밀번호 정보</Body2>
             <TextField
@@ -325,7 +355,7 @@ const Signup: NextPage = () => {
       section3={
         <>
           {state.page == 1 ? (
-            !mb_ph ? (
+            !certification ? (
               <Button
                 variants="solid"
                 color="primary"
@@ -339,7 +369,9 @@ const Signup: NextPage = () => {
                 variants="solid"
                 color="primary"
                 size="large"
-                onClick={onClickNext}
+                onClick={e => {
+                  onClickNext(e);
+                }}
               >
                 다음
               </Button>
