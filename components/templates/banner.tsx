@@ -11,15 +11,18 @@ interface IStyle {
 const Style = styled.div<IStyle>`
   width: 100%;
   height: 6rem;
-  /* background-color: #ddd; */
   background-image: ${props => `url(${props.thumbnail})`};
-  background-size: contain;
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-color: #ddd;
   cursor: pointer;
   border-radius: ${props => props.theme.rounded.lg};
 `;
+
+const getImageColor = (img: string) => {
+  var canvas = document.createElement("canvas");
+  var ctx = canvas.getContext("2d");
+};
 
 const Banner = () => {
   const { adsList } = useAdsList();
@@ -30,14 +33,17 @@ const Banner = () => {
   };
 
   return adsList ? (
-    adsList.map((ad: any) => (
-      <Style
-        key={ad.id}
-        thumbnail={ad.imageUrl}
-        data-value={ad.url}
-        onClick={onClickBanner}
-      />
-    ))
+    adsList.map((ad: any) => {
+      console.log(ad.imageUrl);
+      return (
+        <Style
+          key={ad.id}
+          thumbnail={ad.imageUrl}
+          data-value={ad.url}
+          onClick={onClickBanner}
+        />
+      );
+    })
   ) : (
     <HomeSkeletonBannerLayout />
   );
