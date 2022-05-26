@@ -1,5 +1,5 @@
 import { HomeSkeletonBannerLayout } from "@components/layouts/skeleton/home-skeleton";
-import useAdsList from "@core/hook/use-ads";
+import { useAdsList } from "@core/hook/use-ads";
 import styled from "@emotion/styled";
 import React from "react";
 
@@ -19,11 +19,6 @@ const Style = styled.div<IStyle>`
   border-radius: ${props => props.theme.rounded.lg};
 `;
 
-const getImageColor = (img: string) => {
-  var canvas = document.createElement("canvas");
-  var ctx = canvas.getContext("2d");
-};
-
 const Banner = () => {
   const { adsList } = useAdsList();
   const onClickBanner = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -32,20 +27,19 @@ const Banner = () => {
     window.open("http://" + link, "_blank");
   };
 
-  return adsList ? (
-    adsList.map((ad: any) => {
-      console.log(ad.imageUrl);
-      return (
+  return !adsList ? (
+    <HomeSkeletonBannerLayout />
+  ) : (
+    <>
+      {adsList.map((ad: any) => (
         <Style
           key={ad.id}
           thumbnail={ad.imageUrl}
           data-value={ad.url}
           onClick={onClickBanner}
         />
-      );
-    })
-  ) : (
-    <HomeSkeletonBannerLayout />
+      ))}
+    </>
   );
 };
 
