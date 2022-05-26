@@ -8,13 +8,14 @@ module.exports = {
     SECRET: process.env.SECRET,
     CERTIFICATION_TOKEN: process.env.CERTIFICATION_TOKEN,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    CHECK_KEY: process.env.CHECK_KEY,
   },
   async rewrites() {
     return [
       {
         source: "/api3/:path*",
         destination: "http://34.64.244.63:3001/api3/:path*", // Proxy to Backend
-        // destination: 'http://localhost:3001/api3/:path*' // Proxy to Backend
+        // destination: "http://localhost:3001/api3/:path*", // Proxy to Backend
       },
       {
         source: "/api2/:path*",
