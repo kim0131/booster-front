@@ -202,7 +202,6 @@ const Carousel = () => {
         );
         index++;
       }
-      console.log([...addedFront, ...mainBannerList, ...addedLast]);
       setState({
         ...state,
         pages: [...addedFront, ...mainBannerList, ...addedLast],

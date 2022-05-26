@@ -4,8 +4,6 @@ import { ISnbData } from "@core/interfaces/snb";
 import { Body2 } from "@components/elements/types";
 import { IconChevronDown } from "@components/icons";
 import { useDesktop } from "@core/hook/use-desktop";
-import { useEffect } from "react";
-import useHistoryState from "@core/hook/use-history-state";
 
 interface IPropsStyle {
   isRoute?: boolean;

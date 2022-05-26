@@ -383,7 +383,6 @@ const Header = () => {
                 {nav.content}
               </Style.MobileMenu.Menu>
             ))}
-            {/* <Style.MobileMenu.Divider /> */}
           </Style.MobileMenu.Container>
         </Portal>
       )}
