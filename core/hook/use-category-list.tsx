@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import axios from "axios";
-import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { topicfilterfetcher } from "./use-topic-list";
 
@@ -8,7 +7,7 @@ const categoryFetcher = async (url: string) => {
   let result: any = [];
   await axios
     .get("/api2/category")
-    .then((res: any) => {
+    .then(res => {
       const list = res.data.result;
       list.map((item: any, idx: any) => {
         if (!list[idx].wr_view) {
@@ -30,13 +29,13 @@ const categoryFetcher = async (url: string) => {
       });
     })
     .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
-    return result;
-  };
-  
-  const categoryHomeFetcher = async (url: string) => {
+  return result;
+};
+
+const categoryHomeFetcher = async (url: string) => {
   let filterresult: any = [];
   await axios
-  .get("/api2/category")
+    .get("/api2/category")
     .then(async (res: any) => {
       const list = res.data.result;
       for (const item of list) {
@@ -80,7 +79,7 @@ const categoryFetcher = async (url: string) => {
   return filterresult;
 };
 
-const useCategoryList = () => {
+export const useCategoryList = () => {
   const { data: categoryList } = useSWR(
     `/api2/category/list`,
     categoryFetcher,
@@ -88,7 +87,6 @@ const useCategoryList = () => {
   );
   return { categoryList };
 };
-export default useCategoryList;
 
 export const useCategoryListHome = () => {
   const { data: categoryListHome } = useSWR(
