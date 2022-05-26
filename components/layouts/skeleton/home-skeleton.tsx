@@ -3,7 +3,9 @@ import { useDesktop } from "@core/hook/use-desktop";
 import styled from "@emotion/styled";
 
 interface IStyle {
-  col?: number;
+  BoardWidget: {
+    col?: number;
+  };
 }
 
 const Style = {
@@ -30,7 +32,7 @@ const Style = {
     `,
   },
   BoardWidget: {
-    Container: styled.div<IStyle>`
+    Container: styled.div<IStyle["BoardWidget"]>`
       grid-column: span 1 / span 1;
       display: flex;
       flex-direction: column;

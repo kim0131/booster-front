@@ -1,6 +1,6 @@
 import Badge from "@components/elements/badge";
 import Button from "@components/elements/button";
-import { Body3, Header5 } from "@components/elements/types";
+import { Body3 } from "@components/elements/types";
 import {
   IconBookmark,
   IconBookmarkFill,
@@ -15,8 +15,8 @@ import { getCreateTime } from "@core/util/get-create-time";
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+
 interface IPropsStyle {
   thumbnail: {
     photo?: string;

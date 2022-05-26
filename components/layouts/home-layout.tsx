@@ -1,4 +1,3 @@
-import useAdsList from "@core/hook/use-ads";
 import styled from "@emotion/styled";
 
 const Style = {
@@ -36,8 +35,7 @@ const Style = {
     `,
     Right: styled.div`
       display: flex;
-      /* flex-direction: column; */
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 0.75rem;
       order: -9999;
       justify-content: center;
@@ -53,61 +51,6 @@ const Style = {
       }
     `,
   },
-  // Container: styled.div`
-  //   display: flex;
-  //   flex-direction: column;
-  //   padding: 3rem 0;
-  //   gap: 3rem;
-  //   ${props => props.theme.screen.md} {
-  //     flex-direction: row;
-  //     max-width: 72rem;
-  //     margin: 0 auto;
-  //     padding: 3rem;
-  //   }
-  // `,
-  // Content: styled.div`
-  //   flex: 1 1 0%;
-  //   display: grid;
-  //   grid-template-columns: repeat(1, minmax(0, 1fr));
-  //   gap: 3rem;
-  //   order: 9999;
-  //   ${props => props.theme.screen.md} {
-  //     grid-template-columns: repeat(2, minmax(0, 1fr));
-  //     order: -9999;
-  //   }
-  // `,
-  Banner: styled.div<any>`
-    display: flex;
-    /* flex-direction: column; */
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    order: -9999;
-    justify-content: center;
-    align-items: center;
-    padding: 0 1.25rem;
-    ${props => props.theme.screen.md} {
-      flex: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      width: 20rem;
-      order: 9999;
-      padding: 0;
-    }
-  `,
-  Dummy: styled.div<any>`
-    width: 20rem;
-    height: 6rem;
-    ${props => props.theme.screen.md} {
-      width: 20rem;
-    }
-    background-color: #444;
-    background-image: ${props => (props.photo ? `url(${props.photo})` : "")};
-    background-repeat: no-repeat;
-    object-fit: contain;
-    display: flex;
-
-    cursor: pointer;
-  `,
 };
 
 interface IPropsHomeLayout {
@@ -117,37 +60,12 @@ interface IPropsHomeLayout {
 }
 
 const HomeLayout = ({ carousel, banner, children }: IPropsHomeLayout) => {
-  const { adsList } = useAdsList();
-
-  const onClickAdsBanner = (
-    e:
-      | React.MouseEvent<HTMLButtonElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    const { url } = e.currentTarget.dataset;
-    window.open(url, "_blank");
-  };
   return (
     <Style.Container>
       {carousel}
       <Style.Content.Container>
         <Style.Content.Left>{children}</Style.Content.Left>
-        <Style.Content.Right>
-          {banner}
-          {/* <Style.Banner>
-            {adsList &&
-              adsList.map((item: any) => {
-                return (
-                  <Style.Dummy
-                    key={item.id}
-                    photo={item.image_url}
-                    data-url={"http://" + item.url}
-                    onClick={onClickAdsBanner}
-                  />
-                );
-              })}
-          </Style.Banner> */}
-        </Style.Content.Right>
+        <Style.Content.Right>{banner}</Style.Content.Right>
       </Style.Content.Container>
     </Style.Container>
   );
