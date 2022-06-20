@@ -60,9 +60,10 @@ const Signup: NextPage = () => {
     if (certification) {
       const str = certification?.toString() as String;
       var result = str.replace(" ", "+");
+      console.log(result);
       if (!Boolean(decode(result)[0])) {
         alert("인증되지 않는 정보입니다.");
-        router.push("/accounts");
+        // router.push("/accounts");
       }
     }
   }, [router]);
@@ -144,8 +145,6 @@ const Signup: NextPage = () => {
       setState({ ...state, page: state.page + 1 });
     }
   };
-
-  console.log(state.data.mb_pw, state.data.mb_pw2);
 
   const onClickConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
