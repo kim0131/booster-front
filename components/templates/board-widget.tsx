@@ -127,6 +127,7 @@ interface IPropsBoardWidget {
     view?: number;
     likeCnt?: number;
     comments?: number;
+    category_table?: string;
   }[];
 }
 
@@ -151,6 +152,10 @@ const BoardWidget = ({
     }
   };
 
+  const onClickRouterDetail2 = (param: any) => {
+    router.push(`/topics?category=${param}`);
+  };
+
   return (
     <Style.Container col={col}>
       <Style.Header>
@@ -168,7 +173,9 @@ const BoardWidget = ({
         {datas.map(data => (
           <Style.List.Wrapper key={data.id}>
             {isHotTopic && (
-              <Style.List.Category onClick={onClickRouterCategory}>
+              <Style.List.Category
+                onClick={() => onClickRouterDetail2(data.category_table)}
+              >
                 <Badge>{data.category}</Badge>
               </Style.List.Category>
             )}

@@ -32,9 +32,11 @@ const hotTopicFetcher = async (param: any) => {
           } else {
             hotPoint = T + V + C + L ** 2;
           }
+
           result.push({
             id: content.idx,
             category: content.board_name,
+            category_table: content.board_table,
             title: content.wr_subject,
             content: content.wr_content,
             writer: content.mb_name,
