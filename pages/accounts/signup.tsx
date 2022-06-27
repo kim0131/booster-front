@@ -19,6 +19,7 @@ import {
   mb_pw_vaildate,
 } from "@core/validate/signupvalidate";
 import { signIn } from "next-auth/react";
+import useToast from "@core/hook/use-toast";
 
 interface IStateSignup {
   data: IAccountsData;
@@ -29,7 +30,7 @@ interface IStateSignup {
 const Signup: NextPage = () => {
   const router = useRouter();
   const { certification: certification } = router.query;
-
+  const toast = useToast();
   const [state, setState] = useState<IStateSignup>({
     data: {
       mb_id: "",
@@ -62,7 +63,11 @@ const Signup: NextPage = () => {
       var result = str.replace(" ", "+");
       console.log(result);
       if (!Boolean(decode(result)[0])) {
-        alert("인증되지 않는 정보입니다.");
+        toast.setToast({
+          type: "danger",
+          message: "인증되지 않는 정보입니다.",
+        });
+
         // router.push("/accounts");
       }
     }

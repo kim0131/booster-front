@@ -6,11 +6,12 @@ import Snb from "@components/templates/snb";
 import Board from "@components/templates/board";
 import { useSearch } from "@core/hook/use-search";
 import { useEffect, useState } from "react";
-import { checkAuth } from "@core/util/check-auth";
+
 import { useSession } from "next-auth/react";
 import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
 import Loader from "@components/elements/loader";
 import useHistoryState from "@core/hook/use-history-state";
+import useToast from "@core/hook/use-toast";
 
 const Search: NextPage = () => {
   const router = useRouter();
@@ -19,14 +20,13 @@ const Search: NextPage = () => {
   const { status } = useSession();
   const [category, setCategory] = useHistoryState("all", "category");
   const { searchResult } = useSearch(searchTerm, category);
+  const toast = useToast();
 
   const onClickRouter = (param: any) => {
     const urlCategory = param.bo_table;
 
     if (status != "authenticated") {
-      if (checkAuth()) {
-        return router.push("/accounts");
-      }
+      toast.setToast({ type: "danger", message: "로그인이 필요합니다." });
     } else {
       if (param.sector == "topics") {
         router.push(

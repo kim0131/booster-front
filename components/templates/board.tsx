@@ -20,8 +20,10 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useSWRConfig } from "swr";
-import { checkAuth } from "@core/util/check-auth";
+
 import useHistoryState from "@core/hook/use-history-state";
+import checkAuth from "@core/util/check-auth";
+import useToast from "@core/hook/use-toast";
 
 const Style = {
   Container: styled.div`
@@ -156,6 +158,7 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
   const [line, setLine] = useState(10);
   const { id, searchTerm } = router.query;
   const [page, setPage] = useHistoryState(1, "page");
+  const toast = useToast();
 
   useEffect(() => {
     sliceTopicList();
@@ -166,8 +169,8 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
   }, [category]);
   const sliceTopicList = () => {
     const result = datas.slice((page - 1) * line, page * line);
-    for(const res of result){
-      res.content = res.content.replace(/(<([^>]+)>)/ig, " ").trim();
+    for (const res of result) {
+      res.content = res.content.replace(/(<([^>]+)>)/gi, " ").trim();
     }
     setData(result);
   };
@@ -190,9 +193,7 @@ const Board = ({ category, title, datas, onClickRouter }: IPropsBoard) => {
 
   const onClickScrap = async (id: any, bookmark: any) => {
     if (status != "authenticated") {
-      if (checkAuth()) {
-        return router.push("/accounts");
-      }
+      toast.setToast({ type: "danger", message: "로그인이 필요합니다." });
     } else {
       if (bookmark) {
         await axios.post(`/api2/topic/scrap/cancel/${id}`, {

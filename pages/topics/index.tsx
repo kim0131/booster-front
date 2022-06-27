@@ -8,10 +8,12 @@ import Snb from "@components/templates/snb";
 import _ from "lodash";
 import { useCategorySubSide } from "@core/hook/use-category-sub-side";
 import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
-import { checkAuth } from "@core/util/check-auth";
+
 import { useSession } from "next-auth/react";
 import useHistoryState from "@core/hook/use-history-state";
 import { useEffect } from "react";
+import checkAuth from "@core/util/check-auth";
+import useToast from "@core/hook/use-toast";
 
 interface IPropsTopics {
   initCategory: string;
@@ -26,6 +28,7 @@ const Topics: NextPage<IPropsTopics> = () => {
     "category",
   );
 
+  const toast = useToast();
   const { categorySubSide, isCategorySubSideValidating } =
     useCategorySubSide("topic");
   const { topicListFilter, isTopicListValidating } =
@@ -33,9 +36,7 @@ const Topics: NextPage<IPropsTopics> = () => {
   const onClickRouter = (param: any) => {
     if (!param.idx) return;
     if (status != "authenticated") {
-      if (checkAuth()) {
-        return router.push("/accounts");
-      }
+      toast.setToast({ type: "danger", message: "로그인이 필요합니다." });
     } else {
       if (param.sector == "topics") {
         router.push(

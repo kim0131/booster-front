@@ -12,7 +12,7 @@ import * as gtag from "../lib/gtag";
 import { useRouter } from "next/router";
 const isProduction = process.env.NODE_ENV === "production";
 import { useEffect } from "react";
-import { SWRConfig } from "swr";
+import useSWR, { SWRConfig } from "swr";
 import Toast from "@components/elements/toast";
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -26,6 +26,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       router.events.off("routeChangeComplete", handleRouteChange);
     };
   }, [router.events]);
+
   return (
     <ThemeProvider theme={theme}>
       <Head>

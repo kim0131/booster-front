@@ -166,16 +166,15 @@ const BoardWidget = ({
       </Style.Header>
       <Style.List.Container>
         {datas.map(data => (
-          <Style.List.Wrapper
-            key={data.id}
-            onClick={() => onClickRouterDetail(data.id)}
-          >
+          <Style.List.Wrapper key={data.id}>
             {isHotTopic && (
-              <Style.List.Category>
+              <Style.List.Category onClick={onClickRouterCategory}>
                 <Badge>{data.category}</Badge>
               </Style.List.Category>
             )}
-            <Style.List.Title>{data.title}</Style.List.Title>
+            <Style.List.Title onClick={() => onClickRouterDetail(data.id)}>
+              {data.title}
+            </Style.List.Title>
             <Style.List.Info>
               <Style.List.Badge>
                 <IconLike size={16} color={theme.color.gray[500]} />

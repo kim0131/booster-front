@@ -10,10 +10,10 @@ import useInsightList from "@core/hook/use-insight-list";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
-import { checkAuth } from "@core/util/check-auth";
 import { useSession } from "next-auth/react";
 import useHistoryState from "@core/hook/use-history-state";
 import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
+import useToast from "@core/hook/use-toast";
 
 interface IPropsStyle {
   thumbnail: {
@@ -108,7 +108,7 @@ const Post = ({ category }: IPropsPost) => {
   const { id } = router.query;
   const [page, setPage] = useHistoryState(1, "page");
   const { status } = useSession();
-  
+  const toast = useToast();
 
   useEffect(() => {
     if (insightList) {
@@ -143,29 +143,28 @@ const Post = ({ category }: IPropsPost) => {
   const onClickPage = (page?: number) => {
     setPage(page);
   };
-  const onClickRouterMove = (id: any, content:any) => {
+  const onClickRouterMove = (id: any, content: any) => {
     const urlCategory = content;
     if (status != "authenticated") {
-      if (checkAuth()) {
-        return router.push("/accounts");
-      }
+      toast.setToast({ type: "danger", message: "로그인이 필요합니다." });
     } else {
       router.push(`/insights/${id}?category=${urlCategory}`);
     }
-    
   };
   return (
     <>
       {!insightList ? (
         <TopicSnbSkeleton />
-        ) : (
-          <Style.Container setLine={setLine}>
+      ) : (
+        <Style.Container setLine={setLine}>
           {insightList &&
             data.map((content: any) => {
               return (
                 <React.Fragment key={content.idx}>
                   <Style.PostItem.Container
-                    onClick={() => onClickRouterMove(content.idx, content.bo_table)}
+                    onClick={() =>
+                      onClickRouterMove(content.idx, content.bo_table)
+                    }
                   >
                     <Style.PostItem.Thumbnail photo={content.file_full_url} />
                     <Style.PostItem.Badge>

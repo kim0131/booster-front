@@ -21,6 +21,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
 import { useDesktop } from "@core/hook/use-desktop";
+import useToast from "@core/hook/use-toast";
 
 interface IPropsStyle {
   isReply: boolean;
@@ -225,6 +226,7 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
   const [totalCount, setTotalCount] = useState(0);
   const [line, setLine] = useState(5);
   const [currentPage, setcurrentPage] = useState(1);
+  const toast = useToast();
   const [commentdata, setCommentData] = useState({
     mb_id: session?.user?.email,
     mb_name: session?.user?.name,
@@ -248,7 +250,7 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
 
   useEffect(() => {
     if (status != "authenticated") {
-      alert("로그인 후 이용가능합니다.");
+      toast.setToast({ type: "danger", message: "로그인 후 이용가능합니다." });
       router.push("/");
     }
     getUserSet();
@@ -333,21 +335,29 @@ const InsightComment = ({ id, children, count }: IPropsComment) => {
   };
 
   const onClickWriteComment = async () => {
-    if (!commentdata.wr_content.trim()) return alert("댓글내용을 입력해주세요");
+    if (!commentdata.wr_content.trim())
+      return toast.setToast({
+        type: "danger",
+        message: "댓글 내용을 입력해주세요.",
+      });
     await axios
       .post(`/api2/insight/write`, commentdata)
       .then(res => {
-        alert("댓글이 등록되었습니다");
+        toast.setToast({ type: "success", message: "댓글이 등록되었습니다." });
         setCommentData({ ...commentdata, wr_content: "" });
       })
       .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   };
   const onClickWriteReply = async () => {
-    if (!replydata.wr_content.trim()) return alert("댓글내용을 입력해주세요");
+    if (!replydata.wr_content.trim())
+      return toast.setToast({
+        type: "danger",
+        message: "댓글 내용을 입력해주세요.",
+      });
     await axios
       .post(`/api2/insight/write`, replydata)
       .then(res => {
-        alert("댓글이 등록되었습니다");
+        toast.setToast({ type: "success", message: "댓글이 등록되었습니다." });
         setReply({ ...replydata, wr_parent2: 0, wr_content: "" });
       })
       .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));

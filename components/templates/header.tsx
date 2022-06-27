@@ -21,8 +21,10 @@ import {
 import Dropdown from "@components/elements/dropdown";
 import { accountsNavigation } from "@core/config/navigation";
 import Portal from "./portal";
-import { checkAuth } from "@core/util/check-auth";
+
 import useHistoryState from "@core/hook/use-history-state";
+import useToast from "@core/hook/use-toast";
+import checkAuth from "@core/util/check-auth";
 
 interface IPropsStyle {
   isRoute?: boolean;
@@ -193,6 +195,7 @@ const Header = () => {
   const { isDesktop } = useDesktop();
   const { data: session, status } = useSession();
   const router = useRouter();
+  const toast = useToast();
 
   const [state, setState] = useState({
     mobileMenu: false,
@@ -225,9 +228,7 @@ const Header = () => {
 
   const oncClickPUshWrite = () => {
     if (status != "authenticated") {
-      if (checkAuth()) {
-        return router.push("/accounts");
-      }
+      toast.setToast({ type: "danger", message: "로그인이 필요합니다." });
     } else {
       if (localStorage.getItem("category") == null) {
         router.push(`/topics/create`);
@@ -242,12 +243,13 @@ const Header = () => {
   const onKeyPressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key == "Enter") {
       if (status != "authenticated") {
-        if (checkAuth()) {
-          return router.push("/accounts");
-        }
+        toast.setToast({ type: "danger", message: "로그인이 필요합니다." });
       } else {
         if (!state.data.searchTerm.trim())
-          return alert("검색어를 입력해주세요");
+          return toast.setToast({
+            type: "danger",
+            message: "검색어를 입력해주세요!",
+          });
         router.push(`/search?searchTerm=${state.data.searchTerm}`);
         setState({
           ...state,

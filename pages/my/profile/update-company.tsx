@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import useGetUser from "@core/hook/use-user";
+import useToast from "@core/hook/use-toast";
 
 interface IPhoto {
   photo?: string;
@@ -35,7 +36,7 @@ const UpdateCompany: NextPage = () => {
   const { data: session, status }: any = useSession();
   const { userInfo } = useGetUser(session?.user?.idx);
   const hiddenFileInput = React.useRef<any>(null);
-
+  const toast = useToast();
   const [loaded, setLoaded] = useState<any>(false);
   const [image, setImage] = useState<any>({
     image_file: "",
@@ -84,7 +85,11 @@ const UpdateCompany: NextPage = () => {
       mb_business_certify: 4,
     });
     await axios.post(`/api2/upload/business`, formData);
-    alert("업데이트 신청이 접수되었습니다");
+
+    toast.setToast({
+      type: "success",
+      message: "업데이트 신청이 접수되었습니다.",
+    });
     router.push("/my/profile");
   };
 

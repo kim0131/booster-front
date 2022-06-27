@@ -16,6 +16,7 @@ import {
 import theme from "@components/styles/theme";
 import { topicImageUrl } from "@core/config/imgurl";
 import { useDesktop } from "@core/hook/use-desktop";
+import useToast from "@core/hook/use-toast";
 import { getCreateTime } from "@core/util/get-create-time";
 import styled from "@emotion/styled";
 import axios from "axios";
@@ -160,15 +161,15 @@ const TopicContentLayout = ({
   const router = useRouter();
   const topicContent = data;
   const [likeCnt, setLikeCnt] = useState(0);
-  const [like, setLike] = useState(false)
+  const [like, setLike] = useState(false);
   const { isDesktop } = useDesktop();
   const [bookmark, setBookMark] = useState(false);
-
+  const toast = useToast();
   useEffect(() => {
     if (topicContent) {
       setLikeCnt(topicContent.likeCnt);
       setBookMark(topicContent.bookmark ? true : false);
-      checkMeneberLike()
+      checkMeneberLike();
     }
   }, [topicContent]);
 
@@ -188,7 +189,7 @@ const TopicContentLayout = ({
         await axios
           .post(`/api2/topic/delete/${idx}`)
           .then(res => {
-            alert("삭제되었습니다");
+            toast.setToast({ type: "success", message: "삭제되었습니다." });
             router.push("/topics");
           })
           .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
@@ -209,7 +210,7 @@ const TopicContentLayout = ({
               member_idx: parseInt(session?.user?.idx),
             })
             .then(() => {
-              setLike(false)
+              setLike(false);
               setLikeCnt(likeCnt - 1);
             });
         } else {
@@ -218,7 +219,7 @@ const TopicContentLayout = ({
               member_idx: parseInt(session?.user?.idx),
             })
             .then(() => {
-              setLike(true)
+              setLike(true);
               setLikeCnt(likeCnt + 1);
             });
         }
@@ -256,17 +257,17 @@ const TopicContentLayout = ({
   const checkMbName = (writer: string, userName: string) => {
     return Boolean(writer == userName);
   };
-  const checkMeneberLike = ()=>{
+  const checkMeneberLike = () => {
     axios
-    .post(`/api2/topic/like/${id}`, {
-      member_idx: parseInt(session?.user?.idx),
-    })
-    .then(async res => {
-      const result = res.data.result.length;
-      setLike(Boolean(result))
-    })
-    .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
-  }
+      .post(`/api2/topic/like/${id}`, {
+        member_idx: parseInt(session?.user?.idx),
+      })
+      .then(async res => {
+        const result = res.data.result.length;
+        setLike(Boolean(result));
+      })
+      .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
+  };
   return (
     <>
       {topicContent && (
@@ -320,8 +321,11 @@ const TopicContentLayout = ({
             </Style.Body.ImageContainer>
             <Style.Body.Button.Container>
               <Style.Body.Button.Wrapper>
-                <Button color={like ? "primary" : "transparent"} onClick={onClickLikeButton}>
-                <IconLike size={16} color={theme.color.blue[500]} />
+                <Button
+                  color={like ? "primary" : "transparent"}
+                  onClick={onClickLikeButton}
+                >
+                  <IconLike size={16} color={theme.color.blue[500]} />
                   {likeCnt}
                 </Button>
                 <Button color="transparent">

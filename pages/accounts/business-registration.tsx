@@ -11,8 +11,9 @@ import styled from "@emotion/styled";
 import theme from "@components/styles/theme";
 import { useRouter } from "next/router";
 import { useSession, signIn } from "next-auth/react";
-import React, { useEffect, useState } from "react";
+import React, { HTMLProps, useEffect, useState } from "react";
 import axios from "axios";
+import useToast from "@core/hook/use-toast";
 
 // 이 페이지에 접근하려면 로그인 세션이 필요하다.
 
@@ -26,6 +27,7 @@ const BusinessRegistration: NextPage = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const hiddenFileInput = React.useRef<any>(null);
+  const toast = useToast();
   const [userIdx, setUserIdx] = useState({
     idx: "",
     mb_business_num: "",
@@ -49,6 +51,15 @@ const BusinessRegistration: NextPage = () => {
 
   const onLoadFile = (e: any) => {
     e.preventDefault();
+
+    if (!e.target.files[0].type.includes("image")) {
+      toast.setToast({
+        type: "danger",
+        message: "이미지 파일만 업로드 할 수 있습니다.",
+      });
+
+      return;
+    }
     const fileReader = new FileReader();
     if (e.target.files[0]) {
       setLoaded("loading");
@@ -78,12 +89,19 @@ const BusinessRegistration: NextPage = () => {
     formData.append("file", image.image_file);
 
     formData.append("idx", `${userIdx.mb_business_num}`);
-    if (!image.image_file) return alert("사업자등록증을 업로드해주세요");
+    if (!image.image_file)
+      return toast.setToast({
+        type: "danger",
+        message: "사업자등록증을 업로드해주세요",
+      });
     await axios.post(`/api2/user/update/${userIdx.idx}`, {
       mb_business_certify: 1,
     });
     await axios.post(`/api2/upload/business`, formData);
-    alert("사업자 등록증이 접수되었습니다");
+    toast.setToast({
+      type: "success",
+      message: "성공적으로 업로드 되었습니다.",
+    });
     router.push("/");
   };
 
@@ -138,6 +156,7 @@ const BusinessRegistration: NextPage = () => {
               style={{ display: "none" }}
               type="file"
               ref={hiddenFileInput}
+              accept="image/jpeg, image/png, image/jpg"
               onChange={onLoadFile}
             />
           </>

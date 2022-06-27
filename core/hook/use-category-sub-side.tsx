@@ -18,7 +18,7 @@ const categorySnbMenuFetcher = async (url: string) => {
           },
           {
             id: 901,
-            content: "인기글",
+            content: "인기 토픽",
             param: "hot",
           },
         ],

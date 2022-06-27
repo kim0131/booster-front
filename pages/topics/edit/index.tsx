@@ -6,6 +6,7 @@ import TextField from "@components/elements/text-field";
 import TopicCreateLayout from "@components/layouts/topic-create-layout";
 import { topicImageUrl } from "@core/config/imgurl";
 import useCategorySelect from "@core/hook/use-category-seclect";
+import useToast from "@core/hook/use-toast";
 import { useTopicDetail } from "@core/hook/use-topic-detail";
 import axios from "axios";
 import type { NextPage } from "next";
@@ -19,6 +20,7 @@ const EditTopic: NextPage = () => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const { data: session, status } = useSession();
   let { id } = router.query;
+  const toast = useToast();
   const [topicId, setTopicId] = useState(id);
   const { topicDetail } = useTopicDetail(topicId);
   const [data, setData] = useState<any>({
@@ -102,6 +104,14 @@ const EditTopic: NextPage = () => {
 
   const onLoadFile = (e: any) => {
     e.preventDefault();
+    if (!e.target.files[0].type.includes("image")) {
+      toast.setToast({
+        type: "danger",
+        message: "이미지 파일만 업로드 할 수 있습니다.",
+      });
+
+      return;
+    }
     const fileReader = new FileReader();
     if (e.target.files[0]) {
       fileReader.readAsDataURL(e.target.files[0]);
@@ -119,9 +129,21 @@ const EditTopic: NextPage = () => {
 
     formData.append("file", image.image_file);
     formData.append("exist_url", data.file_url);
-    if (!data.board) return alert("카테고리를 선택해주세요");
-    if (!data.wr_subject.trim()) return alert("제목을 작성해주세요");
-    if (!data.wr_content.trim()) return alert("내용을 작성해주세요");
+    if (!data.board)
+      return toast.setToast({
+        type: "danger",
+        message: "카테고리를 선택해주세요.",
+      });
+    if (!data.wr_subject.trim())
+      return toast.setToast({
+        type: "danger",
+        message: "제목을 작성해주세요.",
+      });
+    if (!data.wr_content.trim())
+      return toast.setToast({
+        type: "danger",
+        message: "내용을 작성해주세요.",
+      });
     await axios
       .post(`/api2/topic/update/${id}`, {
         wr_subject: data.wr_subject,
@@ -133,7 +155,10 @@ const EditTopic: NextPage = () => {
           formData.append("idx", `${id}`);
           await axios.post(`/api2/upload/topic`, formData);
         }
-        alert("토픽이 수정되었습니다");
+        toast.setToast({
+          type: "success",
+          message: "토픽이 수정되었습니다.",
+        });
         router.push(`/topics`);
       })
       .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));

@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import router from "next/router";
 import { mb_pw_vaildate } from "@core/validate/signupvalidate";
+import useToast from "@core/hook/use-toast";
 
 const Style = {
   Container: styled.div`
@@ -34,6 +35,7 @@ interface IData {
 const ChangePassword: NextPage = () => {
   const { data: session, status }: any = useSession();
   const { userInfo } = useGetUser(session?.user?.idx);
+  const toast = useToast();
   const [data, setData] = useState<IData>({
     alreadyPw: "",
     newPw: "",
@@ -76,7 +78,11 @@ const ChangePassword: NextPage = () => {
                   mb_pw: data.newPw,
                 })
                 .then(res => {
-                  alert("비밀번호가 수정되었습니다.");
+                  toast.setToast({
+                    type: "success",
+                    message: "비밀번호가 수정되었습니다.",
+                  });
+
                   router.push("/my/profile");
                 })
                 .catch(error =>

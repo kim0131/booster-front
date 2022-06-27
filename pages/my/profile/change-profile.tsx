@@ -14,6 +14,7 @@ import {
   mb_email_vaildate,
   mb_nick_vaildate,
 } from "@core/validate/signupvalidate";
+import useToast from "@core/hook/use-toast";
 
 const Style = {
   Container: styled.div`
@@ -36,6 +37,8 @@ interface IData {
 const ChangeProfile: NextPage = () => {
   const { data: session, status }: any = useSession();
   const { userInfo } = useGetUser(session?.user?.idx);
+
+  const toast = useToast();
   const [data, setData] = useState<IData>({
     mb_nick: "",
     mb_email: "",
@@ -77,25 +80,37 @@ const ChangeProfile: NextPage = () => {
   };
 
   const onClickSubmitProfile = async () => {
-    const mb_nick = await mb_nick_vaildate(data.mb_nick);
+    let mb_nick = "";
+    if (session.user.name != data.mb_nick) {
+      mb_nick = await mb_nick_vaildate(data.mb_nick);
+    }
     const mb_email = await mb_email_vaildate(data.mb_email);
-    
-    if ((mb_nick && data.mb_nick == userInfo.member.mb_nick) && (mb_email && data.mb_email == userInfo.member.mb_email)) {
+
+    if (
+      mb_nick &&
+      data.mb_nick == userInfo.member.mb_nick &&
+      mb_email &&
+      data.mb_email == userInfo.member.mb_email
+    ) {
       setInVaild({ ...inVaild, mb_nick: mb_nick, mb_email: mb_email });
       return;
-    }else{
-      if((mb_nick && data.mb_nick != userInfo.member.mb_nick) || (mb_email && data.mb_email != userInfo.member.mb_email)){
-        setInVaild({ ...inVaild, mb_nick: mb_nick, mb_email: mb_email});
+    } else {
+      if (
+        (mb_nick && data.mb_nick != userInfo.member.mb_nick) ||
+        (mb_email && data.mb_email != userInfo.member.mb_email)
+      ) {
+        setInVaild({ ...inVaild, mb_nick: mb_nick, mb_email: mb_email });
         return;
       }
     }
-    
+
     await axios
-    .post(`/api2/user/update/${userInfo.member.idx}`, data)
-    .then(() => {
-      alert("변경되었습니다.");
-      router.push(`/my/profile`);
-    })
+      .post(`/api2/user/update/${userInfo.member.idx}`, data)
+      .then(() => {
+        toast.setToast({ type: "success", message: "변경되었습니다." });
+
+        router.push(`/my/profile`);
+      })
       .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
   };
   return (

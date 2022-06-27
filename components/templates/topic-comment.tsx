@@ -22,6 +22,7 @@ import React, { LegacyRef, useEffect, useState } from "react";
 import { TopicSnbSkeleton } from "@components/layouts/skeleton/topic-skeleton";
 import { useDesktop } from "@core/hook/use-desktop";
 import { useRef } from "react";
+import useToast from "@core/hook/use-toast";
 interface IPropsStyle {
   isReply: boolean;
 }
@@ -218,6 +219,7 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
   const isDesktop = useDesktop();
   const commentContainerRef = useRef<any>();
   const [currentPage, setcurrentPage] = useState(1);
+  const toast = useToast();
   const [commentdata, setCommentData] = useState({
     wr_content: "",
     mb_id: session?.user?.email,
@@ -241,7 +243,7 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
 
   useEffect(() => {
     if (status != "authenticated") {
-      alert("로그인 후 이용가능합니다.");
+      toast.setToast({ type: "danger", message: "로그인 후 이용가능합니다." });
       router.push("/");
     }
     getUserSet();
@@ -376,12 +378,16 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
       await axios
         .post(`/api2/topic/write`, commentdata)
         .then(res => {
-          alert("댓글이 등록되었습니다");
+          toast.setToast({
+            type: "success",
+            message: "댓글이 등록되었습니다.",
+          });
+
           setCommentData({ ...commentdata, wr_content: "" });
         })
         .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
     } else {
-      alert("댓글을 입력해주세요");
+      toast.setToast({ type: "danger", message: "댓글을 입력해주세요." });
     }
   };
   const onClickWriteReply = async () => {
@@ -389,12 +395,15 @@ const TopicComment = ({ id, children, count }: IPropsComment) => {
       await axios
         .post(`/api2/topic/write`, replydata)
         .then(res => {
-          alert("댓글이 등록되었습니다");
+          toast.setToast({
+            type: "success",
+            message: "댓글이 등록되었습니다.",
+          });
           setReply({ ...replydata, wr_parent2: 0, wr_content: "" });
         })
         .catch(error => alert(`관리자에게 문의하세요 error : ${error}`));
     } else {
-      alert("댓글을 입력해주세요");
+      toast.setToast({ type: "danger", message: "댓글을 입력해주세요." });
     }
   };
   const onChangeTextareaComment = (e: any) => {

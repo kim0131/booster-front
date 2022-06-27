@@ -9,6 +9,7 @@ import { HomeSkeletonBoardWidgetLayout } from "@components/layouts/skeleton/home
 import Banner from "@components/templates/banner";
 import axios from "axios";
 import Button from "@components/elements/button";
+import useToast from "@core/hook/use-toast";
 
 const Home: NextPage = () => {
   const { hotTopic } = useHotTopic();
@@ -16,6 +17,8 @@ const Home: NextPage = () => {
   useEffect(() => {
     localStorage.removeItem("category");
   });
+  const toast = useToast();
+  // toast.setToast({ type: "info", message: "성공" });
 
   return (
     <HomeLayout carousel={<Carousel />} banner={<Banner />}>
