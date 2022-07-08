@@ -41,21 +41,22 @@ export const mb_pw_vaildate = async (mb_pw: string) => {
     return error;
   }
   if (!regExp2.test(mb_pw)) {
-    error = `비밀번호에는 영어가 포함되어야합니다.`;
+    error = `비밀번호는 영어, 숫자, 특수문자 포함 최소8자 이상 최대 16자 이하여야합니다.`;
     return error;
   }
 
   if (!regExp3.test(mb_pw)) {
-    error = `비밀번호에는 숫자가 포함되어야합니다.`;
+    error = `비밀번호는 영어, 숫자, 특수문자 포함 최소8자 이상 최대 16자 이하여야합니다.`;
     return error;
   }
   if (!regExp1.test(mb_pw)) {
-    error = `비밀번호에는 특수문자가 포함되어야합니다.`;
+    error = `비밀번호는 영어, 숫자, 특수문자 포함 최소8자 이상 최대 16자 이하여야합니다.`;
     return error;
   }
 
   if (!validator.isLength(mb_pw, { min: 8, max: 16 })) {
-    error = "비밀번호는 최소 8자 이상 최대 16 이하여야합니다.";
+    error =
+      "비밀번호는 영어, 숫자, 특수문자 포함 최소8자 이상 최대 16자 이하여야합니다.";
     return error;
   }
 

@@ -121,7 +121,11 @@ const BusinessRegistration: NextPage = () => {
       title={
         <>
           <Header4>{accountsDescription.businessRegistration.title}</Header4>
-          <Body1>{accountsDescription.businessRegistration.description}</Body1>
+          <Body1
+            dangerouslySetInnerHTML={{
+              __html: accountsDescription.businessRegistration.description,
+            }}
+          ></Body1>
         </>
       }
       section1={
@@ -191,7 +195,12 @@ const BusinessRegistration: NextPage = () => {
         <Body2
           isLink
           color={theme.color.gray[500]}
-          onClick={() => router.push("/")}
+          onClick={() => {
+            alert(
+              "준회원 가입이 완료되었습니다.\n마이페이지에서 사업자등록증을 업로드 하시면 더 다양한 기능을 사용하실 수 있습니다.",
+            );
+            router.push("/");
+          }}
         >
           나중에 하기
         </Body2>

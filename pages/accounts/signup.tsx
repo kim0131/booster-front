@@ -54,14 +54,13 @@ const Signup: NextPage = () => {
       mb_pw_token: "",
       mb_business_num: "",
     },
-    page: 1,
+    page: 0,
   });
 
   useEffect(() => {
     if (certification) {
       const str = certification?.toString() as String;
-      var result = str.replace(" ", "+");
-      console.log(result);
+      var result = str.replaceAll(" ", "+");
       if (!Boolean(decode(result)[0])) {
         toast.setToast({
           type: "danger",
@@ -69,6 +68,19 @@ const Signup: NextPage = () => {
         });
 
         // router.push("/accounts");
+      } else {
+        let mb_ph = decode(result as string)[1];
+        mb_ph_vaildate(mb_ph).then(res => {
+          if (res == "휴대폰번호가 중복되었습니다.") {
+            toast.setToast({
+              type: "danger",
+              message: "이미 가입된 회원입니다.",
+            });
+            router.push("/accounts");
+          } else {
+            setState({ ...state, page: 1 });
+          }
+        });
       }
     }
   }, [router]);
@@ -84,26 +96,42 @@ const Signup: NextPage = () => {
     return info;
   };
 
-  const onChangeSignup = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeSignup = async (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.currentTarget;
 
     const str = certification?.toString() as String;
-    var result = str.replace(" ", "+");
+    var result = str.replaceAll(" ", "+");
     let mb_name = decode(result as string)[0];
     let mb_ph = decode(result as string)[1];
-    setState({
-      ...state,
-      data: {
-        ...state.data,
-        [name]: value,
-        mb_ph: mb_ph,
-        mb_name: mb_name,
-      },
-      invalid: {
-        ...state.invalid,
-        [name]: "",
-      },
-    });
+
+    if (name == "mb_pw") {
+      const mb_pw = await mb_pw_vaildate(value);
+      setState({
+        ...state,
+        data: {
+          ...state.data,
+          [name]: value,
+          mb_ph: mb_ph,
+          mb_name: mb_name,
+        },
+        invalid: { ...state.invalid, mb_pw: mb_pw },
+      });
+      return;
+    } else {
+      setState({
+        ...state,
+        data: {
+          ...state.data,
+          [name]: value,
+          mb_ph: mb_ph,
+          mb_name: mb_name,
+        },
+        invalid: {
+          ...state.invalid,
+          [name]: "",
+        },
+      });
+    }
   };
 
   const onFocusSignup = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -128,14 +156,14 @@ const Signup: NextPage = () => {
       return;
     }
 
-    const mb_pw = await mb_pw_vaildate(state.data.mb_pw);
-    if (mb_pw) {
-      setState({
-        ...state,
-        invalid: { ...state.invalid, mb_pw: mb_pw },
-      });
-      return;
-    }
+    // const mb_pw = await mb_pw_vaildate(state.data.mb_pw);
+    // if (mb_pw) {
+    //   setState({
+    //     ...state,
+    //     invalid: { ...state.invalid, mb_pw: mb_pw },
+    //   });
+    //   return;
+    // }
 
     if (state.data.mb_pw != state.data.mb_pw2) {
       setState({
@@ -261,7 +289,11 @@ const Signup: NextPage = () => {
       title={
         <>
           <Header4>{accountsDescription.signup.title}</Header4>
-          <Body1>{accountsDescription.signup.description}</Body1>
+          <Body1
+            dangerouslySetInnerHTML={{
+              __html: accountsDescription.signup[`description${state.page}`],
+            }}
+          />
         </>
       }
       section1={
@@ -356,28 +388,26 @@ const Signup: NextPage = () => {
       }
       section3={
         <>
-          {state.page == 1 ? (
-            !certification ? (
-              <Button
-                variants="solid"
-                color="primary"
-                size="large"
-                onClick={onClickCertification}
-              >
-                휴대폰 인증
-              </Button>
-            ) : (
-              <Button
-                variants="solid"
-                color="primary"
-                size="large"
-                onClick={e => {
-                  onClickNext(e);
-                }}
-              >
-                다음
-              </Button>
-            )
+          {!certification ? (
+            <Button
+              variants="solid"
+              color="primary"
+              size="large"
+              onClick={onClickCertification}
+            >
+              휴대폰 인증
+            </Button>
+          ) : state.page == 1 ? (
+            <Button
+              variants="solid"
+              color="primary"
+              size="large"
+              onClick={e => {
+                onClickNext(e);
+              }}
+            >
+              다음
+            </Button>
           ) : (
             <Button
               variants="solid"
