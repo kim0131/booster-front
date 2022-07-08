@@ -156,14 +156,14 @@ const Signup: NextPage = () => {
       return;
     }
 
-    // const mb_pw = await mb_pw_vaildate(state.data.mb_pw);
-    // if (mb_pw) {
-    //   setState({
-    //     ...state,
-    //     invalid: { ...state.invalid, mb_pw: mb_pw },
-    //   });
-    //   return;
-    // }
+    const mb_pw = await mb_pw_vaildate(state.data.mb_pw);
+    if (mb_pw) {
+      setState({
+        ...state,
+        invalid: { ...state.invalid, mb_pw: mb_pw },
+      });
+      return;
+    }
 
     if (state.data.mb_pw != state.data.mb_pw2) {
       setState({

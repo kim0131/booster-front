@@ -89,11 +89,11 @@ const BusinessRegistration: NextPage = () => {
     formData.append("file", image.image_file);
 
     formData.append("idx", `${userIdx.mb_business_num}`);
-    if (!image.image_file)
-      return toast.setToast({
-        type: "danger",
-        message: "사업자등록증을 업로드해주세요",
-      });
+    // if (!image.image_file)
+    //   return toast.setToast({
+    //     type: "danger",
+    //     message: "사업자등록증을 업로드해주세요",
+    //   });
     await axios.post(`/api2/user/update/${userIdx.idx}`, {
       mb_business_certify: 1,
     });
