@@ -24,7 +24,7 @@ const Profile: NextPage = () => {
           <Callout
             size="large"
             color="danger"
-            title="회사 정보 승인을 신청해주세요."
+            title="정규 회원 승인을 위해 회사 정보를 업데이트 해주세요."
             button={
               <Button
                 variants="solid"
@@ -36,8 +36,8 @@ const Profile: NextPage = () => {
             }
             icon={<IconInfo />}
           >
-            회사 업데이트 신청이 접수되면, 관리자가 확인 후 승인할 예정이며 최대
-            24시간 이내로 결과 이메일을 드릴 예정입니다. (영업일 기준)
+            회사 정보 업데이트 신청이 접수되면, 관리자 확인 후 승인이 진행될
+            예정이며, 최대 2일 이내에 결과를 알려드릴 예정입니다. (영업일 기준)
           </Callout>
         );
       case "1":
